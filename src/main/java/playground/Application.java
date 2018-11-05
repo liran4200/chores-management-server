@@ -1,3 +1,5 @@
-public class Application {
+package playground;
 
+public class Application {
+	
 }
