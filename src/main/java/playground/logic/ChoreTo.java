@@ -1,6 +1,6 @@
 package playground.logic;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Map;
 
 public class ChoreTo {
@@ -24,8 +24,7 @@ public class ChoreTo {
 	}
 
 	public ChoreTo(String playground, String id, String name, String type, String creatorPlayground,
-			String creatorEmail, Location location, Date creationDate, Date expirationDate,
-			Map<String, Object> attributes) {
+			String creatorEmail, Location location, Date creationDate, Date expirationDate) {
 		super();
 		this.playground = playground;
 		this.id = id;
@@ -36,7 +35,6 @@ public class ChoreTo {
 		this.location = location;
 		this.creationDate = creationDate;
 		this.expirationDate = expirationDate;
-		this.attributes = attributes;
 	}
 
 	public String getPlayground() {
