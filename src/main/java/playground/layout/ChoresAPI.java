@@ -18,7 +18,8 @@ public class ChoresAPI {
 	private static final String ADMIN_USER = "admin1";
 	private static final String ADMIN_EMAIL = "admin@adminovich.com";
 	
-	private static final String CHORES_URL_PERFIX = "/chores";
+	private static final String ROOMMATE_USER = "rommate1";
+	private static final String USER_EMAIL = "rommate1@userovich.com";
 	
 	
 	@RequestMapping(
@@ -31,6 +32,7 @@ public class ChoresAPI {
 								@PathVariable ("email") String email) throws Exception {
 		//throws exception if not admin and not returning newChore
 		validateAdminUser(userPlayground, email);
+		
 		return newChore;
 	}
 	
@@ -108,14 +110,30 @@ public class ChoresAPI {
 		return chores.toArray(new ChoreTo[0]);		
 	}
 	
-	
-	public boolean validateAdminUser(String userPlayground, String email) throws Exception {
-		if (userPlayground.equals(ADMIN_USER) && email.equals(ADMIN_EMAIL)) {
-			return true;
-		} else {
+	/**
+	 * @param userPlayground
+	 * @param email
+	 * @return true if the user is admin
+	 * @throws Exception
+	 */
+	public void validateAdminUser(String userPlayground, String email) throws Exception {
+		if (!(userPlayground.equals(ADMIN_USER) && email.equals(ADMIN_EMAIL))) {
 			throw new Exception("user is not admin");
 		}
 	}
+	
+	/**
+	 * @param userPlayground
+	 * @param email
+	 * @return true if the user is registered
+	 * @throws Exception
+	 */
+	public void validateRoommateUser(String userPlayground, String email) throws Exception {
+		if (!(userPlayground.equals(ROOMMATE_USER) && email.equals(USER_EMAIL))) {
+			throw new Exception("user is not registered");
+		}
+	}
+	
 }
 
 
