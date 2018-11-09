@@ -33,6 +33,8 @@ public class ChoresAPI {
 		//throws exception if not admin and not returning newChore
 		validateAdminUser(userPlayground, email);
 		
+		//TODO add new choreTO to temp chores list
+		
 		return newChore;
 	}
 	
@@ -46,6 +48,9 @@ public class ChoresAPI {
 							   @PathVariable("playground") String playground,
 							   @PathVariable("id") String id) throws Exception {
 		validateAdminUser(userPlayground, email);
+		
+		//TODO add validate chore exist
+		//TODO add update logic to chore in temp chores list
 	}
 	
 	@RequestMapping(
@@ -55,7 +60,10 @@ public class ChoresAPI {
 	public ChoreTo getChoreByID (@PathVariable("userPlayground") String userPlayground,
 								 @PathVariable("email") String email,
 								 @PathVariable("playground") String playground,
-								 @PathVariable("id") String id) {
+								 @PathVariable("id") String id) throws Exception {
+		//throws exception if not registered user and not returning chore
+		validateRoommateUser(userPlayground, email);
+				
 		//return dummy choreTo with playground and id
 		return new ChoreTo(playground, id, null, null, null, null, null, null, null, null);
 	}
@@ -64,8 +72,11 @@ public class ChoresAPI {
 			method=RequestMethod.GET,
 			path="/chores/{userPlayground}/{email}/all",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] getAllUsersAssignedChores (@PathVariable("userPlayground") String userPlayground,
-			 					   				@PathVariable("email") String email) {
+	public ChoreTo[] getAllChores (@PathVariable("userPlayground") String userPlayground,
+			 					   				@PathVariable("email") String email) throws Exception {
+		//throws exception if not registered user and not returning chores array
+		validateRoommateUser(userPlayground, email);
+				
 		List<ChoreTo> chores = Arrays.asList(
 				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
 				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
@@ -79,11 +90,16 @@ public class ChoresAPI {
 			method=RequestMethod.GET,
 			path="/chores/{userPlayground}/{email}/near/{x}/{y}/{distance}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] getAllUsersAssignedChores (@PathVariable("userPlayground") String userPlayground,
+	public ChoreTo[] getAllNearChores (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("x") double x,
 			 					   				@PathVariable("y") double y,
-			 					   				@PathVariable("distance") double distance) {
+			 					   				@PathVariable("distance") double distance) throws Exception {
+		//throws exception if not registered user and not returning chores array
+		validateRoommateUser(userPlayground, email);
+		
+		//TODO add distance measure logic
+		
 		List<ChoreTo> chores = Arrays.asList(
 				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
 				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
@@ -97,10 +113,15 @@ public class ChoresAPI {
 			method=RequestMethod.GET,
 			path="/chores/{{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] getAllUsersAssignedChores (@PathVariable("userPlayground") String userPlayground,
+	public ChoreTo[] searchChore (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("attributeName") String attributeName,
-			 					   				@PathVariable("value") String value) {
+			 					   				@PathVariable("value") String value) throws Exception{
+		//throws exception if not registered user and not returning chores array
+		validateRoommateUser(userPlayground, email);
+		
+		//TODO add search logic
+		
 		List<ChoreTo> chores = Arrays.asList(
 				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
 				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
