@@ -10,7 +10,8 @@ public class Location {
 	}
 	
 	public Location(double x, double y) {
-		
+		this.x = x;
+		this.y = y;
 	}
 	
 	public double getX() {
