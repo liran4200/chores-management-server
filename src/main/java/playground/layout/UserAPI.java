@@ -57,7 +57,7 @@ public class UserAPI {
 			@PathVariable("email")String email,
 			@RequestBody RoommateTo roommate) throws Exception {
 		
-		//if the user is not user throw exception and don't update roommate
+		//if the user is not exist throw exception and don't update roommate
 		validateUserExist(name, email);
 		
 		//TODO update roommate
