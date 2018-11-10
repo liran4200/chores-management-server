@@ -13,9 +13,12 @@ import playground.logic.RoommateTo;
 @RestController()
 public class UserAPI {
 	 
-	 public static final String PATH = "/playground/users";
-	 public static final String PLAYGROUND_CREATOR = "Liran";
-	 public static final String PLAYGROUND = "chore-management";
+	 private static final String PATH = "/playground/users";
+	 private static final String PLAYGROUND_CREATOR = "Liran";
+	 private static final String PLAYGROUND = "chore-management";
+	 
+	 private static final String USER_EMAIL = "user1@user.com";
+	 private static final String CONFIRMATION_CODE = "1234";
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
@@ -24,10 +27,10 @@ public class UserAPI {
 	public RoommateTo login(
 			@PathVariable("playground") String playground,
 			@PathVariable("email") String email) throws Exception {
-			//check if this user already exists.
-			//if exists return RoommateTo
-			//else throws Exception
-			return new RoommateTo(email, playground, "Liran", "avatar1","roomate",0);
+			// if this user already not exists throw exception and not return toommateTo.
+			validateUserExist(email);
+
+			return new RoommateTo(email, playground, PLAYGROUND_CREATOR, "avatar1","roomate",0);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,
@@ -36,7 +39,9 @@ public class UserAPI {
 	public RoommateTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
 							  @PathVariable("code")String code) throws Exception {
-		//check confirm the given code
+		//if confirmation code is not valid throw exception and not return RoommateTo
+		validateConfirmationCode(code);
+		
 		return new RoommateTo(email, playground, "LiranConfirm", "avatar2", "roommate", 0);
 	}
 	
@@ -62,5 +67,21 @@ public class UserAPI {
 				newRoommate.getRoommateName(), newRoommate.getAvatar(), newRoommate.getRole(), 0);
 	}
 	
+	/**
+	 * @param email
+	 * @throws Exception if user does not exist
+	 */
+	private void validateUserExist(String email) throws Exception {
+		if (!email.equals(USER_EMAIL)) {
+			throw new Exception("this email is not exist");
+		}
+	
+	}
+	
+	private void validateConfirmationCode(String code) throws Exception {
+		if (!code.equals(CONFIRMATION_CODE)) {
+			throw new Exception("illegal confirmation code");
+		}
+	}
 	
 }

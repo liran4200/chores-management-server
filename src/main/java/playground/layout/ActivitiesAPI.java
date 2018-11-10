@@ -42,8 +42,7 @@ public class ActivitiesAPI {
 	/**
 	 * @param userPlayground
 	 * @param email
-	 * @return true if the user is registered
-	 * @throws Exception
+	 * @throws Exception if email and user name is not Roommate's
 	 */
 	public void validateRoommateUser(String userPlayground, String email) throws Exception {
 		if (!(userPlayground.equals(ROOMMATE_USER) && email.equals(USER_EMAIL))) {
