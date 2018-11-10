@@ -17,6 +17,9 @@ public class UserAPI {
 	 private static final String PLAYGROUND_CREATOR = "Liran";
 	 private static final String PLAYGROUND = "chore-management";
 	 
+	 private static final String ADMIN_USER = "admin1";
+		private static final String ADMIN_EMAIL = "admin@adminovich.com";
+	 
 	 private static final String USER_EMAIL = "user1@user.com";
 	 private static final String CONFIRMATION_CODE = "1234";
 	
@@ -27,8 +30,8 @@ public class UserAPI {
 	public RoommateTo login(
 			@PathVariable("playground") String playground,
 			@PathVariable("email") String email) throws Exception {
-			// if this user already not exists throw exception and not return toommateTo.
-			validateUserExist(email);
+			// if this user already exists throw exception and not return toommateTo.
+			validateUserExist(playground, email);
 
 			return new RoommateTo(email, playground, PLAYGROUND_CREATOR, "avatar1","roomate",0);
 	}
@@ -53,7 +56,11 @@ public class UserAPI {
 			@PathVariable("playground") String name,
 			@PathVariable("email")String email,
 			@RequestBody RoommateTo roommate) throws Exception {
-		//update roommate
+		
+		//if the user is not Admin throw exception and don't update roommate
+		validateAdminUser(name, email);
+		
+		//TODO update roommate
 	}
 	
 	@RequestMapping(
@@ -71,9 +78,9 @@ public class UserAPI {
 	 * @param email
 	 * @throws Exception if user does not exist
 	 */
-	private void validateUserExist(String email) throws Exception {
-		if (!email.equals(USER_EMAIL)) {
-			throw new Exception("this email is not exist");
+	private void validateUserExist(String playground, String email) throws Exception {
+		if (email.equals(USER_EMAIL) && (playground.equals(PLAYGROUND))) {
+			throw new Exception("this user is already exist");
 		}
 	
 	}
@@ -81,6 +88,17 @@ public class UserAPI {
 	private void validateConfirmationCode(String code) throws Exception {
 		if (!code.equals(CONFIRMATION_CODE)) {
 			throw new Exception("illegal confirmation code");
+		}
+	}
+	
+	/**
+	 * @param userPlayground
+	 * @param email
+	 * @throws Exception if email and user name is not Admin's
+	 */
+	public void validateAdminUser(String userPlayground, String email) throws Exception {
+		if (!(userPlayground.equals(ADMIN_USER) && email.equals(ADMIN_EMAIL))) {
+			throw new Exception("user is not admin");
 		}
 	}
 	
