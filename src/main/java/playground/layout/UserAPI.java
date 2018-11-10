@@ -11,7 +11,7 @@ import playground.logic.NewRoommateForm;
 import playground.logic.RoommateTo;
 
 @RestController()
-public class UserApi {
+public class UserAPI {
 	 
 	 public static final String PATH = "/playground/users";
 	 public static final String PLAYGROUND_CREATOR = "Liran";

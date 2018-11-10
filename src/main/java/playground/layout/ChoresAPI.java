@@ -15,6 +15,7 @@ import playground.logic.ChoreTo;
 @RestController
 public class ChoresAPI {
 	
+	private static final String PATH = "/playground/chores";
 	private static final String ADMIN_USER = "admin1";
 	private static final String ADMIN_EMAIL = "admin@adminovich.com";
 	
@@ -24,7 +25,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 		method=RequestMethod.POST,
-		path="/chores/{userPlayground}/{email}",
+		path=PATH + "/{userPlayground}/{email}",
 		produces=MediaType.APPLICATION_JSON_VALUE,
 		consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo addNewChore (@RequestBody ChoreTo newChore, 
@@ -40,7 +41,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.PUT,
-			path="/chores/{userPlayground}/{email}/{playground}/{id}",
+			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void updateChore (@RequestBody ChoreTo newChore,
 							   @PathVariable("userPlayground") String userPlayground,
@@ -55,7 +56,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/chores/{userPlayground}/{email}/{playground}/{id}",
+			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo getChoreByID (@PathVariable("userPlayground") String userPlayground,
 								 @PathVariable("email") String email,
@@ -65,12 +66,12 @@ public class ChoresAPI {
 		validateRoommateUser(userPlayground, email);
 				
 		//return dummy choreTo with playground and id
-		return new ChoreTo(playground, id, null, null, null, null, null, null, null, null);
+		return new ChoreTo(playground, id, null, null, null, null, null, null, null);
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/chores/{userPlayground}/{email}/all",
+			path=PATH + "/{userPlayground}/{email}/all",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo[] getAllChores (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email) throws Exception {
@@ -78,9 +79,9 @@ public class ChoresAPI {
 		validateRoommateUser(userPlayground, email);
 				
 		List<ChoreTo> chores = Arrays.asList(
-				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "3", null, null, null, null, null, null, null, null)
+				new ChoreTo("playground", "1", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "2", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "3", null, null, null, null, null, null, null)
 				);
 		
 		return chores.toArray(new ChoreTo[0]);		
@@ -88,7 +89,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/chores/{userPlayground}/{email}/near/{x}/{y}/{distance}",
+			path=PATH + "/{userPlayground}/{email}/near/{x}/{y}/{distance}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo[] getAllNearChores (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
@@ -101,9 +102,9 @@ public class ChoresAPI {
 		//TODO add distance measure logic
 		
 		List<ChoreTo> chores = Arrays.asList(
-				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "3", null, null, null, null, null, null, null, null)
+				new ChoreTo("playground", "1", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "2", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "3", null, null, null, null, null, null, null)
 				);
 		
 		return chores.toArray(new ChoreTo[0]);		
@@ -111,7 +112,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path="/chores/{{userPlayground}/{email}/search/{attributeName}/{value}",
+			path=PATH + "/{{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo[] searchChore (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
@@ -123,13 +124,16 @@ public class ChoresAPI {
 		//TODO add search logic
 		
 		List<ChoreTo> chores = Arrays.asList(
-				new ChoreTo("playground", "1", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "2", null, null, null, null, null, null, null, null),
-				new ChoreTo("playground", "3", null, null, null, null, null, null, null, null)
+				new ChoreTo("playground", "1", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "2", null, null, null, null, null, null, null),
+				new ChoreTo("playground", "3", null, null, null, null, null, null, null)
 				);
 		
 		return chores.toArray(new ChoreTo[0]);		
 	}
+
+	
+	//TODO move validation methods to ValidatorsUtils single tone
 	
 	/**
 	 * @param userPlayground
