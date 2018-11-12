@@ -30,10 +30,10 @@ public class UserAPI {
 	public RoommateTo login(
 			@PathVariable("playground") String playground,
 			@PathVariable("email") String email) throws Exception {
-			// if this user already exists throw exception and not return toommateTo.
-			validateUserExist(playground, email);
+		// if this user not exists throw exception and not return roommateTo.
+		validateUserExist(playground, email);
 
-			return new RoommateTo(email, playground, PLAYGROUND_CREATOR, "avatar1","roomate",0);
+		return new RoommateTo(email, playground, PLAYGROUND_CREATOR, "avatar1","roomate",0);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,
@@ -58,7 +58,7 @@ public class UserAPI {
 			@RequestBody RoommateTo roommate) throws Exception {
 		
 		//if the user is not exist throw exception and don't update roommate
-		validateUserExist(name, email);
+		validateUserNotExist(name, email);
 		
 		//TODO update roommate
 	}
@@ -75,11 +75,12 @@ public class UserAPI {
 	}
 	
 	/**
+	 * @param playground
 	 * @param email
 	 * @throws Exception if user does not exist
 	 */
-	private void validateUserExist(String playground, String email) throws Exception {
-		if (email.equals(USER_EMAIL) && (playground.equals(PLAYGROUND))) {
+	private void validateUserNotExist(String playground, String email) throws Exception {
+		if (email.equals(USER_EMAIL) && playground.equals(PLAYGROUND)) {
 			throw new Exception("this user is already exist");
 		}
 	
@@ -100,6 +101,18 @@ public class UserAPI {
 		if (!(userPlayground.equals(ADMIN_USER) && email.equals(ADMIN_EMAIL))) {
 			throw new Exception("user is not admin");
 		}
+	}
+	
+	/**
+	 * @param playground
+	 * @param email
+	 * @throws Exception if user does exist
+	 */
+	private void validateUserExist(String playground, String email) throws Exception {
+		if (!(email.equals(USER_EMAIL) && playground.equals(PLAYGROUND))) {
+			throw new Exception("this user is not exist");
+		}
+	
 	}
 	
 }

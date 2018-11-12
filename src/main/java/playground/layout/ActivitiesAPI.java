@@ -15,8 +15,8 @@ public class ActivitiesAPI {
 
 	private static final String PATH = "playground/activities";
 	
-	private static final String ROOMMATE_USER = "rommate1";
-	private static final String USER_EMAIL = "rommate1@userovich.com";
+	private static final String ROOMMATE_USER = "roommate1";
+	private static final String USER_EMAIL = "roommate1@userovich.com";
 	
 	private static final int ACTIVITY_SCORE = 10;
 	

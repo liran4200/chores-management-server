@@ -19,8 +19,8 @@ public class ChoresAPI {
 	private static final String ADMIN_USER = "admin1";
 	private static final String ADMIN_EMAIL = "admin@adminovich.com";
 	
-	private static final String ROOMMATE_USER = "rommate1";
-	private static final String USER_EMAIL = "rommate1@userovich.com";
+	private static final String ROOMMATE_USER = "roommate1";
+	private static final String USER_EMAIL = "roommate1@userovich.com";
 	
 	
 	@RequestMapping(
@@ -112,7 +112,7 @@ public class ChoresAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH + "/{{userPlayground}/{email}/search/{attributeName}/{value}",
+			path=PATH + "/{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ChoreTo[] searchChore (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
