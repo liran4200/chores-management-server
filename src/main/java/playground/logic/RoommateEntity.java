@@ -1,6 +1,6 @@
 package playground.logic;
 
-public class RoommateTo {
+public class RoommateEntity {
 	
 	private	String	email;
 	private String	playground;
@@ -9,11 +9,12 @@ public class RoommateTo {
 	private String	role;
 	private long	points;
 	
-	public RoommateTo() {
+	public RoommateEntity() {
 		// TODO Auto-generated constructor stub
 	}
-
-	public RoommateTo(String email, String playground, String roommateName, String avatar, String role, long points) {
+	
+	public RoommateEntity(String email, String playground, String roommateName, String avatar, String role,
+			long points) {
 		super();
 		this.email = email;
 		this.playground = playground;
@@ -70,23 +71,15 @@ public class RoommateTo {
 	public void setPoints(long points) {
 		this.points = points;
 	}
-	
-	
-	/**
-	 * Change RoommateTO object to RoommateEntity
-	 * @return RoommateEntity
-	 */
-	public RoommateEntity toEntity() {
-		RoommateEntity entity = new RoommateEntity();
-		entity.setEmail(this.email);
-		entity.setAvatar(this.avatar);
-		entity.setPlayground(this.playground);
-		entity.setPoints(this.points);
-		entity.setRole(this.role);
-		entity.setRoommateName(this.roommateName);
-		return entity;
+
+	@Override
+	public String toString() {
+		return "RoommateEntity [email=" + email + ", playground=" + playground + ", roommateName=" + roommateName
+				+ ", avatar=" + avatar + ", role=" + role + ", points=" + points + "]";
 	}
 	
 	
-
+	
+	
+	
 }
