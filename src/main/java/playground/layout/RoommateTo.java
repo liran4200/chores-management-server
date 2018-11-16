@@ -1,4 +1,6 @@
-package playground.logic;
+package playground.layout;
+
+import playground.logic.RoommateEntity;
 
 public class RoommateTo {
 	

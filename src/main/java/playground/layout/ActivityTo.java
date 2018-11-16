@@ -1,4 +1,4 @@
-package playground.logic;
+package playground.layout;
 
 import java.util.Map;
 

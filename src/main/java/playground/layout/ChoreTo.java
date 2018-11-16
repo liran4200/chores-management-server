@@ -1,7 +1,9 @@
-package playground.logic;
+package playground.layout;
 
 import java.util.Date;
 import java.util.Map;
+
+import playground.logic.Location;
 
 public class ChoreTo {
 	
