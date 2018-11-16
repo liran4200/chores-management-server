@@ -71,6 +71,11 @@ public class RoommateTo {
 		this.points = points;
 	}
 	
+	
+	/**
+	 * Change RoommateTO object to RoommateEntity
+	 * @return RoommateEntity
+	 */
 	public RoommateEntity toEntity() {
 		RoommateEntity entity = new RoommateEntity();
 		entity.setEmail(this.email);
