@@ -71,7 +71,16 @@ public class RoommateTo {
 		this.points = points;
 	}
 	
-	
+	public RoommateEntity toEntity() {
+		RoommateEntity entity = new RoommateEntity();
+		entity.setEmail(this.email);
+		entity.setAvatar(this.avatar);
+		entity.setPlayground(this.playground);
+		entity.setPoints(this.points);
+		entity.setRole(this.role);
+		entity.setRoommateName(this.roommateName);
+		return entity;
+	}
 	
 	
 
