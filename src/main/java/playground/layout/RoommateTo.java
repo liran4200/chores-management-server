@@ -15,14 +15,14 @@ public class RoommateTo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public RoommateTo(String email, String playground, String roommateName, String avatar, String role, long points) {
+	public RoommateTo(RoommateEntity roommate) {
 		super();
-		this.email = email;
-		this.playground = playground;
-		this.roommateName = roommateName;
-		this.avatar = avatar;
-		this.role = role;
-		this.points = points;
+		this.email = roommate.getEmail();
+		this.playground = roommate.getPlayground();
+		this.roommateName = roommate.getRoommateName();
+		this.avatar = roommate.getAvatar();
+		this.role = roommate.getRole();
+		this.points = roommate.getPoints();
 	}
 
 	public String getEmail() {
