@@ -1,24 +1,32 @@
 package playground.layout;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import playground.logic.InValidConfirmationCodeException;
+import playground.logic.RoommateAlreadyExistsException;
+import playground.logic.RoommateEntity;
+import playground.logic.RoommateNotFoundException;
+import playground.logic.RoommateService;
 
 @RestController()
 public class UserAPI {
+	
+	private static final String PATH = "/playground/users";	
+	private RoommateService roommateService;
+	
 	 
-	 private static final String PATH = "/playground/users";
-	 private static final String PLAYGROUND_CREATOR = "Liran";
-	 private static final String PLAYGROUND = "chore-management";
-	 
-	 private static final String ADMIN_USER = "admin1";
-		private static final String ADMIN_EMAIL = "admin@adminovich.com";
-	 
-	 private static final String USER_EMAIL = "user1@user.com";
-	 private static final String CONFIRMATION_CODE = "1234";
+    @Autowired
+	public void setRoommateService(RoommateService roommateService) {
+		 this.roommateService = roommateService;
+    }
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
@@ -26,11 +34,10 @@ public class UserAPI {
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public RoommateTo login(
 			@PathVariable("playground") String playground,
-			@PathVariable("email") String email) throws Exception {
-		// if this user not exists throw exception and not return roommateTo.
-		validateUserExist(playground, email);
-
-		return new RoommateTo(email, playground, PLAYGROUND_CREATOR, "avatar1","roomate",0);
+			@PathVariable("email") String email) throws RoommateNotFoundException {
+		// if this roommate not exists throw exception and not return roommateTo.
+		RoommateEntity roommate = roommateService.getCustomRoommate(email, playground);
+		return new RoommateTo(roommate);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,
@@ -38,11 +45,11 @@ public class UserAPI {
 					produces= MediaType.APPLICATION_JSON_VALUE)
 	public RoommateTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
-							  @PathVariable("code")String code) throws Exception {
-		//if confirmation code is not valid throw exception and not return RoommateTo
-		validateConfirmationCode(code);
-		
-		return new RoommateTo(email, playground, "LiranConfirm", "avatar2", "roommate", 0);
+							  @PathVariable("code")String code) 
+							  throws  RoommateNotFoundException, InValidConfirmationCodeException{
+		//if confirmation code is not valid or roommate not found throw exception 
+		RoommateEntity roommate = this.roommateService.getConfirmRoommate(email, playground, code);
+		return new RoommateTo(roommate);
 	}
 	
 	@RequestMapping(
@@ -50,14 +57,11 @@ public class UserAPI {
 			path=PATH +"/{playground}/{email}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void updateRoommate (
-			@PathVariable("playground") String name,
+			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
 			@RequestBody RoommateTo roommate) throws Exception {
-		
-		//if the user is not exist throw exception and don't update roommate
-		validateUserNotExist(name, email);
-		
-		//TODO update roommate
+		// should to decide later where to check playground field
+		roommateService.updateRoommate(email, playground,roommate.toEntity());
 	}
 	
 	@RequestMapping(
@@ -65,51 +69,46 @@ public class UserAPI {
 			path=PATH,
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public RoommateTo registerRoommate (@RequestBody NewRoommateForm newRoommate) {
-		// register a new user 
-		return new RoommateTo(newRoommate.getEmail(), PLAYGROUND, 
-				newRoommate.getRoommateName(), newRoommate.getAvatar(), newRoommate.getRole(), 0);
+	public RoommateTo registerRoommate (@RequestBody NewRoommateForm newRoommate) 
+			 throws RoommateAlreadyExistsException{
+		// register a new roommate 
+		// should to decide later where to check playground field
+		RoommateEntity roommate = new RoommateEntity(newRoommate);
+		this.roommateService.createRoommate(roommate);
+		return new RoommateTo(roommate);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ErrorMessage handleSpecificException (RoommateNotFoundException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage handleSpecificException (InValidConfirmationCodeException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.CONFLICT)
+	public ErrorMessage handleSpecificException (RoommateAlreadyExistsException e) {
+		return handleException(e);
 	}
 	
 	/**
-	 * @param playground
-	 * @param email
-	 * @throws Exception if user does not exist
+	 * This method create a error message to client.
+	 * @param  Exception  
+	 * @return ErrorMessage which contain message to client
 	 */
-	private void validateUserNotExist(String playground, String email) throws Exception {
-		if (email.equals(USER_EMAIL) && playground.equals(PLAYGROUND)) {
-			throw new Exception("this user is already exist");
+	private ErrorMessage handleException(Exception e) {
+		String message = e.getMessage();
+		if (message == null) {
+			message = "There is no relevant message";
 		}
-	
+		return new ErrorMessage(message);
 	}
 	
-	private void validateConfirmationCode(String code) throws Exception {
-		if (!code.equals(CONFIRMATION_CODE)) {
-			throw new Exception("illegal confirmation code");
-		}
-	}
 	
-	/**
-	 * @param userPlayground
-	 * @param email
-	 * @throws Exception if email and user name is not Admin's
-	 */
-	public void validateAdminUser(String userPlayground, String email) throws Exception {
-		if (!(userPlayground.equals(ADMIN_USER) && email.equals(ADMIN_EMAIL))) {
-			throw new Exception("user is not admin");
-		}
-	}
-	
-	/**
-	 * @param playground
-	 * @param email
-	 * @throws Exception if user does exist
-	 */
-	private void validateUserExist(String playground, String email) throws Exception {
-		if (!(email.equals(USER_EMAIL) && playground.equals(PLAYGROUND))) {
-			throw new Exception("this user is not exist");
-		}
-	
-	}
-	
+		
 }
