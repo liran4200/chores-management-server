@@ -1,6 +1,10 @@
 package playground.logic;
 
+import playground.layout.NewRoommateForm;
+
 public class RoommateEntity {
+	
+	private static final String PLAYGROUND = "ChoresManagement";
 	
 	private	String	email;
 	private String	playground;
@@ -10,18 +14,24 @@ public class RoommateEntity {
 	private long	points;
 	
 	public RoommateEntity() {
-		// TODO Auto-generated constructor stub
+		this.points = 0;
+		this.playground = PLAYGROUND;
 	}
 	
-	public RoommateEntity(String email, String playground, String roommateName, String avatar, String role,
-			long points) {
-		super();
+	public RoommateEntity(NewRoommateForm newRoommate) {
+		this();
+		this.email = newRoommate.getEmail();
+		this.roommateName = newRoommate.getRoommateName();
+		this.avatar = newRoommate.getAvatar();
+		this.role = newRoommate.getRole();
+	}
+
+	public RoommateEntity(String email, String roommateName, String avatar, String role) {
+		this();
 		this.email = email;
-		this.playground = playground;
 		this.roommateName = roommateName;
 		this.avatar = avatar;
 		this.role = role;
-		this.points = points;
 	}
 
 	public String getEmail() {
