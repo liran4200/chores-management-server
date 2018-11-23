@@ -2,13 +2,12 @@ package playground.logic;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ChoreEntity {
 	
 	private static final String PLAYGROUND = "ChoresManagement";
-	private AtomicLong ID_COUNTER = new AtomicLong(0);
+	private static AtomicLong ID_COUNTER = new AtomicLong(0);
 
 	private String 			   playground;
 	private String 			   id;

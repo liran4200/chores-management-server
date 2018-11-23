@@ -30,6 +30,7 @@ public class ChoresServiceStub implements ChoresService {
 
 	@Override
 	public ChoreEntity createNewChore(ChoreEntity chore, String userPlayground, String email) throws ChoreAlreadyExistsException {
+		//never get the same id.... have to check what is the unique key for chores
 		if (this.chores.containsKey(chore.getId())) {
 			throw new ChoreAlreadyExistsException("chore " + chore.getName() + " with id " + chore.getId() + " is already exists");
 		}
@@ -39,7 +40,7 @@ public class ChoresServiceStub implements ChoresService {
 
 	@Override
 	public void updateChore(ChoreEntity chore, String userPlayground, String email, String playground, String id) throws ChoreNotFoundException {
-		ChoreEntity existingChore = this.chores.get(chore.getId());
+		ChoreEntity existingChore = this.chores.get(id);
 		if (existingChore == null) {
 			throw new ChoreNotFoundException("no chore found for id " + id);
 		}
