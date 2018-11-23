@@ -3,7 +3,7 @@ package playground.layout;
 import java.util.Map;
 
 import playground.logic.ActivityEntity;
-import playground.logic.ChoreEntity;
+
 
 public class ActivityTo {
 	
