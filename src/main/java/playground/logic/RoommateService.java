@@ -4,13 +4,13 @@ public interface RoommateService {
 	
 	public void cleanup();
 	
-	public void createRoommate(RoommateEntity roommate) 
+	public long createRoommate(RoommateEntity roommate) 
 			throws RoommateAlreadyExistsException;
 	
 	public RoommateEntity getCustomRoommate(String email,String playground)
 			throws RoommateNotFoundException;
 	
-	public RoommateEntity getConfirmRoommate(String email, String playground, String code)
+	public RoommateEntity getConfirmRoommate(String email, String playground, long code)
 			throws RoommateNotFoundException, InValidConfirmationCodeException;
 	
 	public void updateRoommate(String email, String playground, RoommateEntity roommate) 
