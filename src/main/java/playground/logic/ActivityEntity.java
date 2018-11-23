@@ -1,11 +1,11 @@
-package playground.layout;
+package playground.logic;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
-import playground.logic.ActivityEntity;
-import playground.logic.ChoreEntity;
-
-public class ActivityTo {
+public class ActivityEntity {
+	private static final String PLAYGROUND = "ChoresManagement";
+	private static AtomicLong ID_COUNTER = new AtomicLong(0);
 	
 	private String				playground;
 	private String 				id;
@@ -16,20 +16,20 @@ public class ActivityTo {
 	private String 				roommateEmail;
 	private Map<String, Object> attributes;
 	
-	public ActivityTo() {
-		// TODO Auto-generated constructor stub
+	public ActivityEntity() {
+		this.playground = PLAYGROUND;
+		this.id = Long.toString(ID_COUNTER.incrementAndGet());
 	}
 	
-	public ActivityTo(ActivityEntity activity) {
-		super();
-		this.playground = activity.getPlayground();
-		this.id = activity.getId();
-		this.type = activity.getType();
-		this.chorePlayground = activity.getChorePlayground();
-		this.choreId = activity.getChoreId();
-		this.roommatePlayground = activity.getRoommatePlayground();
-		this.roommateEmail = activity.getRoommateEmail();
-		this.attributes = activity.getAttributes();
+	public ActivityEntity(String type, String chorePlayground, String choreId,
+			String roommatePlayground, String roommateEmail, Map<String, Object> attributes) {
+		this();
+		this.type = type;
+		this.chorePlayground = chorePlayground;
+		this.choreId = choreId;
+		this.roommatePlayground = roommatePlayground;
+		this.roommateEmail = roommateEmail;
+		this.attributes = attributes;
 	}
 
 	public String getPlayground() {
@@ -94,16 +94,5 @@ public class ActivityTo {
 
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
-	}
-	
-	public ActivityEntity toEntity() {
-		ActivityEntity rv = new ActivityEntity();
-		rv.setAttributes(attributes);
-		rv.setChoreId(choreId);
-		rv.setChorePlayground(chorePlayground);
-		rv.setRoommateEmail(roommateEmail);
-		rv.setRoommatePlayground(roommatePlayground);
-		rv.setType(type);
-		return rv;
 	}
 }
