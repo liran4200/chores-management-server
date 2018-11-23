@@ -10,6 +10,7 @@ public class RoommateTo {
 	private String	avatar;
 	private String	role;
 	private long	points;
+	private long    code;
 	
 	public RoommateTo() {
 		// TODO Auto-generated constructor stub
@@ -23,6 +24,7 @@ public class RoommateTo {
 		this.avatar = roommate.getAvatar();
 		this.role = roommate.getRole();
 		this.points = roommate.getPoints();
+		this.code = roommate.getConfirmCode();
 	}
 
 	public String getEmail() {
@@ -73,6 +75,13 @@ public class RoommateTo {
 		this.points = points;
 	}
 	
+	public long getCode() {
+		return code;
+	}
+	
+	public void setCode(long code) {
+		this.code = code;
+	}
 	
 	/**
 	 * Change RoommateTO object to RoommateEntity
