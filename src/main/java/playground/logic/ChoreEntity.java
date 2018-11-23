@@ -133,4 +133,17 @@ public class ChoreEntity {
 	public double calculateDistance(double x, double y) {
 		return Math.sqrt((y - this.y) * (y - this.y) + (x - this.x) * (x - this.x));
 	}
+	
+	public boolean equals(ChoreEntity otherChore) {
+		if (otherChore == null) {
+			return false;
+		}
+		
+		if (this.name.equals(otherChore.getName()) && 
+			this.attributes.equals(otherChore.getAttributes()) && 
+			this.expirationDate.equals(otherChore.getExpirationDate())) {
+				return true;
+		}
+		return false;
+	}
 }
