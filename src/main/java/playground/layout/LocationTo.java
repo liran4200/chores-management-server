@@ -1,15 +1,15 @@
-package playground.logic;
+package playground.layout;
 
-public class Location {
+public class LocationTo {
 
 	private double x;
 	private double y;
 
-	public Location() {
+	public LocationTo() {
 		
 	}
 	
-	public Location(double x, double y) {
+	public LocationTo(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}

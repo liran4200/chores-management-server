@@ -3,7 +3,7 @@ package playground.layout;
 import java.util.Date;
 import java.util.Map;
 
-import playground.logic.Location;
+import playground.logic.ChoreEntity;
 
 public class ChoreTo {
 	
@@ -14,7 +14,7 @@ public class ChoreTo {
 	private String 			   creatorPlayground;
 	private String 			   creatorEmail;
 	
-	private Location 		   location;
+	private LocationTo 		   location;
 	
 	private Date 			   creationDate;
 	private Date 			   expirationDate;
@@ -25,19 +25,20 @@ public class ChoreTo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ChoreTo(String playground, String id, String name, String type, String creatorPlayground,
-			String creatorEmail, Location location, Date creationDate, Date expirationDate) {
+	public ChoreTo(ChoreEntity chore) {
 		super();
-		this.playground = playground;
-		this.id = id;
-		this.name = name;
-		this.type = type;
-		this.creatorPlayground = creatorPlayground;
-		this.creatorEmail = creatorEmail;
-		this.location = location;
-		this.creationDate = creationDate;
-		this.expirationDate = expirationDate;
+		this.playground = chore.getPlayground();
+		this.id = chore.getId();
+		this.name = chore.getName();
+		this.type = chore.getType();
+		this.creatorPlayground = chore.getCreatorPlayground();
+		this.creatorEmail = chore.getCreatorEmail();
+		this.location = new LocationTo(chore.getX(), chore.getY());
+		this.creationDate = chore.getCreationDate();
+		this.expirationDate = chore.getExpirationDate();
 	}
+	
+	
 
 	public String getPlayground() {
 		return playground;
@@ -87,11 +88,11 @@ public class ChoreTo {
 		this.creatorEmail = creatorEmail;
 	}
 
-	public Location getLocation() {
+	public LocationTo getLocation() {
 		return location;
 	}
 
-	public void setLocation(Location location) {
+	public void setLocation(LocationTo location) {
 		this.location = location;
 	}
 
@@ -117,6 +118,19 @@ public class ChoreTo {
 
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
+	}
+	
+	public ChoreEntity toEntity() {
+		ChoreEntity choreToReturn = new ChoreEntity();
+		choreToReturn.setAttributes(attributes);
+		choreToReturn.setCreatorEmail(creatorEmail);
+		choreToReturn.setExpirationDate(expirationDate);
+		choreToReturn.setName(name);
+		choreToReturn.setCreatorPlayground(creatorPlayground);
+		choreToReturn.setType(type);
+		choreToReturn.setX(location.getX());
+		choreToReturn.setY(location.getY());
+		return choreToReturn;
 	}
 	
 }

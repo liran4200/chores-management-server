@@ -1,19 +1,22 @@
 package playground.logic;
 
+import java.util.List;
+
+import playground.logic.ChoreAlreadyExistsException;
 
 public interface ChoresService {
 	
 	public void cleanup();
 	
-	public void createNewChore(ChoreEntity chore, String userPlayground, String email) throws UserNotAdminException;
+	public ChoreEntity createNewChore(ChoreEntity chore, String userPlayground, String email) throws ChoreAlreadyExistsException;
 	
-	public void updateChore(String userPlayground, String email, String playground, String id) throws UserNotAdminException, ChoreNotFoundException;
+	public void updateChore(ChoreEntity chore, String userPlayground, String email, String playground, String id) throws ChoreNotFoundException;
 	
-	public ChoreEntity getChoreById(String userPlayground, String email, String playground, String id) throws RoommateNotFoundException, ChoreNotFoundException;
+	public ChoreEntity getChoreById(String userPlayground, String email, String playground, String id) throws ChoreNotFoundException;
 	
-	public ChoreEntity[] getAllChores(String userPlayground, String email) throws RoommateNotFoundException;
+	public List<ChoreEntity> getAllChores(String userPlayground, String email, int page, int size);
 	
-	public ChoreEntity[] getAllNearChores(String userPlaygeound, String email, double x, double y, double distance);
+	public List<ChoreEntity> getAllNearChores(String userPlaygeound, String email, double x, double y, double distance, int page, int size);
 	
-	public ChoreEntity[] searchChore(String userplayground, String email, String attributeName, String value);
+	public List<ChoreEntity> searchChore(String userPlaygeound, String email, String attributeName, String value, int page, int size) throws NoSuchAttributeException;
 }
