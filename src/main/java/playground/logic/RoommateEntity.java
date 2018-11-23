@@ -12,10 +12,13 @@ public class RoommateEntity {
 	private String	avatar;
 	private String	role;
 	private long	points;
+	private boolean isActive;
+	private long 	confirmCode;
 	
 	public RoommateEntity() {
 		this.points = 0;
 		this.playground = PLAYGROUND;
+		this.isActive = false;
 	}
 	
 	public RoommateEntity(NewRoommateForm newRoommate) {
@@ -81,11 +84,28 @@ public class RoommateEntity {
 	public void setPoints(long points) {
 		this.points = points;
 	}
+	
+	public boolean getIsActive() {
+		return isActive;
+	}
+	
+	public void setIsActive(boolean isActive) {
+		this.isActive = isActive;
+	}
+	
+	public long getConfirmCode() {
+		return confirmCode;
+	}
+	
+	public void setConfirmCode(long confirmCode) {
+		this.confirmCode = confirmCode;
+	}
 
 	@Override
 	public String toString() {
 		return "RoommateEntity [email=" + email + ", playground=" + playground + ", roommateName=" + roommateName
-				+ ", avatar=" + avatar + ", role=" + role + ", points=" + points + "]";
+				+ ", avatar=" + avatar + ", role=" + role + ", points=" + points + ", isActive=" + isActive
+				+ ", confirmCode=" + confirmCode + "]";
 	}
 	
 	

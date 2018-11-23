@@ -45,7 +45,7 @@ public class UserAPI {
 					produces= MediaType.APPLICATION_JSON_VALUE)
 	public RoommateTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
-							  @PathVariable("code")String code) 
+							  @PathVariable("code")long code) 
 							  throws  RoommateNotFoundException, InValidConfirmationCodeException{
 		//if confirmation code is not valid or roommate not found throw exception 
 		RoommateEntity roommate = this.roommateService.getConfirmRoommate(email, playground, code);
@@ -59,7 +59,7 @@ public class UserAPI {
 	public void updateRoommate (
 			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
-			@RequestBody RoommateTo roommate) throws Exception {
+			@RequestBody RoommateTo roommate) throws RoommateNotFoundException {
 		// should to decide later where to check playground field
 		roommateService.updateRoommate(email, playground,roommate.toEntity());
 	}
@@ -74,7 +74,7 @@ public class UserAPI {
 		// register a new roommate 
 		// should to decide later where to check playground field
 		RoommateEntity roommate = new RoommateEntity(newRoommate);
-		this.roommateService.createRoommate(roommate);
+		long code = this.roommateService.createRoommate(roommate);
 		return new RoommateTo(roommate);
 	}
 	
@@ -95,6 +95,7 @@ public class UserAPI {
 	public ErrorMessage handleSpecificException (RoommateAlreadyExistsException e) {
 		return handleException(e);
 	}
+	
 	
 	/**
 	 * This method create a error message to client.
