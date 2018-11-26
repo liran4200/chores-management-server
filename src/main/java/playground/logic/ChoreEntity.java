@@ -134,6 +134,11 @@ public class ChoreEntity {
 		return Math.sqrt((y - this.y) * (y - this.y) + (x - this.x) * (x - this.x));
 	}
 	
+	
+	/**
+	 * @param otherChore
+	 * @return true if the name, attributes and expirationDate are equals
+	 */
 	public boolean equals(ChoreEntity otherChore) {
 		if (otherChore == null) {
 			return false;
