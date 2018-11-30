@@ -11,45 +11,45 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import playground.logic.InValidConfirmationCodeException;
-import playground.logic.RoommateAlreadyExistsException;
-import playground.logic.RoommateEntity;
-import playground.logic.RoommateNotFoundException;
-import playground.logic.RoommateService;
+import playground.logic.UserAlreadyExistsException;
+import playground.logic.UserEntity;
+import playground.logic.UserNotFoundException;
+import playground.logic.UserService;
 
 @RestController()
 public class UserAPI {
 	
 	private static final String PATH = "/playground/users";	
-	private RoommateService roommateService;
+	private UserService userService;
 	
 	 
     @Autowired
-	public void setRoommateService(RoommateService roommateService) {
-		 this.roommateService = roommateService;
+	public void setUserService(UserService userService) {
+		 this.userService = userService;
     }
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path=PATH+ "/login/{playground}/{email}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public RoommateTo login(
+	public UserTo login(
 			@PathVariable("playground") String playground,
-			@PathVariable("email") String email) throws RoommateNotFoundException {
-		// if this roommate not exists throw exception and not return roommateTo.
-		RoommateEntity roommate = roommateService.getCustomRoommate(email, playground);
-		return new RoommateTo(roommate);
+			@PathVariable("email") String email) throws UserNotFoundException {
+		// if this user not exists throw exception and not return userTo.
+		UserEntity user = userService.getCustomUser(email, playground);
+		return new UserTo(user);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,
 					path=PATH+ "/confirm/{playground}/{email}/{code}",
 					produces= MediaType.APPLICATION_JSON_VALUE)
-	public RoommateTo confirm(@PathVariable("playground")String playground,
+	public UserTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
 							  @PathVariable("code")long code) 
-							  throws  RoommateNotFoundException, InValidConfirmationCodeException{
-		//if confirmation code is not valid or roommate not found throw exception 
-		RoommateEntity roommate = this.roommateService.getConfirmRoommate(email, playground, code);
-		return new RoommateTo(roommate);
+							  throws  UserNotFoundException, InValidConfirmationCodeException{
+		//if confirmation code is not valid or user not found throw exception 
+		UserEntity user = this.userService.getConfirmUser(email, playground, code);
+		return new UserTo(user);
 	}
 	
 	@RequestMapping(
@@ -59,9 +59,10 @@ public class UserAPI {
 	public void updateRoommate (
 			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
-			@RequestBody RoommateTo roommate) throws RoommateNotFoundException {
+			@RequestBody UserTo user) throws UserNotFoundException {
+		
 		// should to decide later where to check playground field
-		roommateService.updateRoommate(email, playground,roommate.toEntity());
+		userService.updateUser(email, playground, user.toEntity());
 	}
 	
 	@RequestMapping(
@@ -69,18 +70,18 @@ public class UserAPI {
 			path=PATH,
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public RoommateTo registerRoommate (@RequestBody NewRoommateForm newRoommate) 
-			 throws RoommateAlreadyExistsException{
-		// register a new roommate 
+	public UserTo registerUser (@RequestBody NewUserForm newUser) 
+			 throws UserAlreadyExistsException{
+		// register a new user 
 		// should to decide later where to check playground field
-		RoommateEntity roommate = new RoommateEntity(newRoommate);
-		long code = this.roommateService.createRoommate(roommate);
-		return new RoommateTo(roommate);
+		UserEntity user = new UserEntity(newUser);
+		long code = this.userService.createUser(user);
+		return new UserTo(user);
 	}
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ErrorMessage handleSpecificException (RoommateNotFoundException e) {
+	public ErrorMessage handleSpecificException (UserNotFoundException e) {
 		return handleException(e);
 	}
 	
@@ -92,7 +93,7 @@ public class UserAPI {
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public ErrorMessage handleSpecificException (RoommateAlreadyExistsException e) {
+	public ErrorMessage handleSpecificException (UserAlreadyExistsException e) {
 		return handleException(e);
 	}
 	

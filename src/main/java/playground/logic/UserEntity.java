@@ -1,38 +1,38 @@
 package playground.logic;
 
-import playground.layout.NewRoommateForm;
+import playground.layout.NewUserForm;
 
-public class RoommateEntity {
+public class UserEntity {
 	
 	private static final String PLAYGROUND = "ChoresManagement";
 	
 	private	String	email;
 	private String	playground;
-	private String  roommateName;
+	private String  userName;
 	private String	avatar;
 	private String	role;
 	private long	points;
 	private boolean isActive;
 	private long 	confirmCode;
 	
-	public RoommateEntity() {
+	public UserEntity() {
 		this.points = 0;
 		this.playground = PLAYGROUND;
 		this.isActive = false;
 	}
 	
-	public RoommateEntity(NewRoommateForm newRoommate) {
+	public UserEntity(NewUserForm newUser) {
 		this();
-		this.email = newRoommate.getEmail();
-		this.roommateName = newRoommate.getRoommateName();
-		this.avatar = newRoommate.getAvatar();
-		this.role = newRoommate.getRole();
+		this.email = newUser.getEmail();
+		this.userName = newUser.getUserName();
+		this.avatar = newUser.getAvatar();
+		this.role = newUser.getRole();
 	}
 
-	public RoommateEntity(String email, String roommateName, String avatar, String role) {
+	public UserEntity(String email, String userName, String avatar, String role) {
 		this();
 		this.email = email;
-		this.roommateName = roommateName;
+		this.userName = userName;
 		this.avatar = avatar;
 		this.role = role;
 	}
@@ -53,12 +53,12 @@ public class RoommateEntity {
 		this.playground = playground;
 	}
 
-	public String getRoommateName() {
-		return roommateName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setRoommateName(String roommateName) {
-		this.roommateName = roommateName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getAvatar() {
@@ -103,7 +103,7 @@ public class RoommateEntity {
 
 	@Override
 	public String toString() {
-		return "RoommateEntity [email=" + email + ", playground=" + playground + ", roommateName=" + roommateName
+		return "UserEntity [email=" + email + ", playground=" + playground + ", userName=" + userName
 				+ ", avatar=" + avatar + ", role=" + role + ", points=" + points + ", isActive=" + isActive
 				+ ", confirmCode=" + confirmCode + "]";
 	}
