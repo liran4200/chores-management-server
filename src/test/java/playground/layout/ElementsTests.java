@@ -20,15 +20,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import playground.logic.ChoresService;
-import playground.logic.ChoreEntity;
+import playground.logic.ElementsService;
+import playground.logic.ElementEntity;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 
-public class ChoresTests {
+public class ElementsTests {
 	@Autowired
-	private ChoresService chores;
+	private ElementsService elements;
 	private RestTemplate restTemplate;
 	private String url;
 	
@@ -40,7 +40,7 @@ public class ChoresTests {
 	@PostConstruct
 	public void init() {
 		this.restTemplate = new RestTemplate();
-		this.url = "http://localhost:" + port + "/playground/chores";
+		this.url = "http://localhost:" + port + "/playground/elements";
 		
 		System.err.println(this.url);
 		
@@ -54,7 +54,7 @@ public class ChoresTests {
 
 	@After
 	public void teardown() {
-		this.chores.cleanup();
+		this.elements.cleanup();
 	}
 
 	
@@ -75,15 +75,15 @@ public class ChoresTests {
 		String ID	= "ID";
 		String userPlayground = "userPlayGround";
 		String email = "Email";
-		ChoreEntity chore = new ChoreEntity(name, type, playground,email, x, y, expirationDate);
+		ElementEntity chore = new ElementEntity(name, type, playground,email, x, y, expirationDate);
 		// And the database contains a Chore with name: "Name and ID: "ID""
-		chores.createNewChore(chore, userPlayground, email);
+		elements.createNewElement(chore, userPlayground, email);
 		
 		// When I GET /Chores/Name and Accept:application/Name
 		// invoke HTTP GET /Chores/Name with header: Accept:application/Name
 		// and create a new Chore object using jackson
-		ChoreTo actualChore = this.restTemplate.getForObject(this.url + "/{userPlayground}/{email}/{playground}/{id}"
-				, ChoreTo.class, ID);
+		ElementTo actualChore = this.restTemplate.getForObject(this.url + "/{userPlayground}/{email}/{playground}/{id}"
+				, ElementTo.class, ID);
 		
 		
 		/*
@@ -106,17 +106,17 @@ public class ChoresTests {
 	@Test
 	public void testShowAtMostFirst5ChoresSuccessfully () throws Exception{
 		
-		ChoreEntity chore1 = new ChoreEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
-		ChoreEntity chore2 = new ChoreEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
-		ChoreEntity chore3 = new ChoreEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
+		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
+		ElementEntity chore2 = new ElementEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
+		ElementEntity chore3 = new ElementEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
 		
-		chores.createNewChore(chore1, "playground1", "email1");
-		chores.createNewChore(chore2, "playground2", "email2");
-		chores.createNewChore(chore3, "playground3", "email3");
+		elements.createNewElement(chore1, "playground1", "email1");
+		elements.createNewElement(chore2, "playground2", "email2");
+		elements.createNewElement(chore3, "playground3", "email3");
 		// given the database contains 3 Chores
 		
 		// when GET /chores 
-		ChoreTo[] actualChores = this.restTemplate.getForObject(this.url + "/{userPlayground}/{email}/all", ChoreTo[].class);
+		ElementTo[] actualChores = this.restTemplate.getForObject(this.url + "/{userPlayground}/{email}/all", ElementTo[].class);
 		
 		// then 
 		assertThat(actualChores)
@@ -127,18 +127,18 @@ public class ChoresTests {
 	@Test
 	public void testShowChoresUsingPaginationSuccessfully() throws Exception{
 		// given the database contains 3 chores
-		ChoreEntity chore1 = new ChoreEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
-		ChoreEntity chore2 = new ChoreEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
-		ChoreEntity chore3 = new ChoreEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
+		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
+		ElementEntity chore2 = new ElementEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
+		ElementEntity chore3 = new ElementEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
 		
-		chores.createNewChore(chore1, "playground1", "email1");
-		chores.createNewChore(chore2, "playground2", "email2");
-		chores.createNewChore(chore3, "playground3", "email3");
+		elements.createNewElement(chore1, "playground1", "email1");
+		elements.createNewElement(chore2, "playground2", "email2");
+		elements.createNewElement(chore3, "playground3", "email3");
 		
 		// when GET /Chores 
-		ChoreTo[] actualChores = this.restTemplate.getForObject(
+		ElementTo[] actualChores = this.restTemplate.getForObject(
 				this.url + "?size={size}&page={page}", 
-				ChoreTo[].class,
+				ElementTo[].class,
 				5, 1);
 		
 		// then 
@@ -151,29 +151,29 @@ public class ChoresTests {
 	public void testShowChoresUsingBadPageNumber() throws Exception{
 		// No chores are stored in DB
 		// when GET /chores 
-		ChoreTo[] actualChores = this.restTemplate.getForObject(
+		ElementTo[] actualChores = this.restTemplate.getForObject(
 				this.url + "?page={page}", 
-				ChoreTo[].class,
+				ElementTo[].class,
 				-1);
 	}
 	
 	@Test
 	public void testAddNewChoreSuccessfully () throws Exception{
 		//given
-		ChoreEntity chore1 = new ChoreEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
+		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
 		String ID = chore1.getId();
-		ChoreTo chore1To = new ChoreTo(chore1);
+		ElementTo chore1To = new ElementTo(chore1);
 		
 		//when POST /chores with body {""name1", "type1", "playground1", "email1", 1,1, the date is the creation date"} 
-		ChoreTo responseChore = this.restTemplate.postForObject(
+		ElementTo responseChore = this.restTemplate.postForObject(
 				this.url + "/{userPlayground}/{email}", // url
 				chore1To, // object in the request body
-				ChoreTo.class // expected response body type
+				ElementTo.class // expected response body type
 					);
 		
 		// then the database contains for the name: "name1"  the following:	{""name1", "type1", "playground1", "email1", 1,1, the date is the creation date"}
-		ChoreEntity expectedChore =  chore1To.toEntity();
-		ChoreEntity actualChoreInDb = this.chores.getChoreById("playground1", "email1", "playground1", ID );
+		ElementEntity expectedChore =  chore1To.toEntity();
+		ElementEntity actualChoreInDb = this.elements.getElementById("playground1", "email1", "playground1", ID );
 		
 		assertThat(actualChoreInDb)
 			.isNotNull()
@@ -191,11 +191,11 @@ public class ChoresTests {
 	@Test(expected=Exception.class)
 	public void testCreateChoreWithExistingKey() throws Exception{
 		//given The database already contains a chore with name: "name1"
-		ChoreEntity chore1 = new ChoreEntity("name1", "type1", "playground1", "email1", 1,1,new Date()); 
-		this.chores.createNewChore(chore1, "playground", "email");
+		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date()); 
+		this.elements.createNewElement(chore1, "playground", "email");
 		
 		//when POST /chores with body {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date} 
-		ChoreTo thePostedChore = new ChoreTo(chore1);
+		ElementTo thePostedChore = new ElementTo(chore1);
 		Map<String, Object> moreAttributes = new HashMap<>();
 		moreAttributes.put("abc", 123);
 		thePostedChore.setAttributes(moreAttributes);
@@ -203,7 +203,7 @@ public class ChoresTests {
 		this.restTemplate.postForObject(
 				this.url, // url
 				chore1, // object in the request body
-				ChoreTo.class // expected response body type
+				ElementTo.class // expected response body type
 					);
 		// then an exception will be thrown by restTemplate 
 	}
@@ -214,13 +214,13 @@ public class ChoresTests {
 		String entityJson = "{\"name\":\"name1\", \"type\":\"type1\", \"playground\":\"playground1\","
 				+ "\"email\":\"email1\",\"location\":{\"x\":1.0, \"y\":1.0}}";
 		// Jackson unmarshallon
-		ChoreEntity entity = this.jacksonMapper.readValue(entityJson, ChoreEntity.class);
-		this.chores.createNewChore(entity, "playground", "email");
+		ElementEntity entity = this.jacksonMapper.readValue(entityJson, ElementEntity.class);
+		this.elements.createNewElement(entity, "playground", "email");
 		
 		// when I PUT /Chores/name1 with body {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
 		String toJson = "{\"name\":\"name1\", \"type\":\"type1\", \"playground\":\"playground1\","
 				+ "\"email\":\"email1\",\"location\":{\"x\":1.0, \"y\":1.0}}";
-				ChoreTo toForPut = this.jacksonMapper.readValue(toJson, ChoreTo.class);
+				ElementTo toForPut = this.jacksonMapper.readValue(toJson, ElementTo.class);
 		
 		this.restTemplate.put(
 				this.url + "/{userPlayground}/{email}/{playground}/{id}", // url 
@@ -228,14 +228,14 @@ public class ChoresTests {
 				entity.getName()); // url parameters
 		
 		// then the database contains for name "name1" {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
-		ChoreEntity actualEntityInDb = this.chores.getChoreById("userPlayground", "email1", "playground1", entity.getId());
+		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getId());
 		actualEntityInDb.setCreationDate(null);
 		
 		String expectedJson = this.jacksonMapper.writeValueAsString(
 				this.jacksonMapper.readValue(
 						"{\"creationDate\":null,\"name\":\"name1\", \"type\":\"type1\", \"playground\":\"playground1\","
 								+ "\"email\":\"email1\",\"location\":{\"x\":1.0, \"y\":1.0}}",
-						ChoreEntity.class)
+						ElementEntity.class)
 				);
 		assertThat(this.jacksonMapper.writeValueAsString(actualEntityInDb))
 			.isEqualTo(expectedJson);
@@ -249,7 +249,7 @@ public class ChoresTests {
 		// when I PUT /chores/name1 with body {"name1" {"name1", "type1", "playground1", "email1", 1.0,1.0} 
 		String toJson = "{\"creationDate\":null,\"name\":\"name1\", \"type\":\"type1\", \"playground\":\"playground1\","
 				+ "\"email\":\"email1\",\"location\":{\"x\":1.0, \"y\":1.0}}";
-		ChoreTo toForPut = this.jacksonMapper.readValue(toJson, ChoreTo.class);
+		ElementTo toForPut = this.jacksonMapper.readValue(toJson, ElementTo.class);
 		
 		this.restTemplate.put(
 				this.url + "/{userPlayground}/{email}/{playground}/{id}", // url 
@@ -263,13 +263,13 @@ public class ChoresTests {
 	public void testShowChoresCreatedAfterACertainDateSuccessfully() throws Exception{
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 		
-		ChoreEntity chore1 = new ChoreEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
-		ChoreEntity chore2 = new ChoreEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
-		ChoreEntity chore3 = new ChoreEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
+		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
+		ElementEntity chore2 = new ElementEntity("name2", "type2", "playground2", "email2", 1,1,new Date());
+		ElementEntity chore3 = new ElementEntity("name3", "type3", "playground3", "email3", 1,1,new Date());
 		
-		chores.createNewChore(chore1, "playground1", "email1");
-		chores.createNewChore(chore2, "playground2", "email2");
-		chores.createNewChore(chore3, "playground3", "email3");
+		elements.createNewElement(chore1, "playground1", "email1");
+		elements.createNewElement(chore2, "playground2", "email2");
+		elements.createNewElement(chore3, "playground3", "email3");
 		// given the database contains 3 Chores
 		
 		chore1.setCreationDate(formatter.parse("31-12-2018"));
@@ -278,10 +278,10 @@ public class ChoresTests {
 		//Given the database contains [{"name":"name1", " name ":"name2", " name ":"name3"}] 
 		//Where name1 and name2 creation date is before 2018-11-19 and name3 creation date is after 2018-11-19
 		// When I Get /chores/searchByCreationDate/01-01-2018
-		ChoreTo[] actualMessages 
+		ElementTo[] actualMessages 
 			= this.restTemplate.getForObject(
 					this.url + "/searchByCreationDate/{date}", 
-					ChoreTo[].class, 
+					ElementTo[].class, 
 					"2018-11-19");
 		
 		// Then the response status is 200 and the body is an array of 1 element: with Chore:"name1"
@@ -289,6 +289,6 @@ public class ChoresTests {
 			.isNotNull()
 			.hasSize(1)
 			.usingElementComparator((c1, c2)->c1.getId().compareTo(c2.getId()))
-			.contains(new ChoreTo(chore1));
+			.contains(new ElementTo(chore1));
 	}
 }

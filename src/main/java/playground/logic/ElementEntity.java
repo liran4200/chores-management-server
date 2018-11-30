@@ -1,12 +1,14 @@
-package playground.layout;
+package playground.logic;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
-import playground.logic.ChoreEntity;
-
-public class ChoreTo {
+public class ElementEntity {
 	
+	private static final String PLAYGROUND = "2019A.yuri";
+	private static AtomicLong ID_COUNTER = new AtomicLong(0);
+
 	private String 			   playground;
 	private String 			   id;
 	private String 			   name;
@@ -14,31 +16,31 @@ public class ChoreTo {
 	private String 			   creatorPlayground;
 	private String 			   creatorEmail;
 	
-	private LocationTo 		   location;
+	private Double			   x;
+	private Double			   y;
 	
 	private Date 			   creationDate;
 	private Date 			   expirationDate;
 	
 	private Map<String,Object> attributes;
 	
-	public ChoreTo() {
-		// TODO Auto-generated constructor stub
+	public ElementEntity() {
+		this.playground = PLAYGROUND;
+		this.creationDate = new Date();
+		this.id = Long.toString(ID_COUNTER.incrementAndGet());
 	}
 
-	public ChoreTo(ChoreEntity chore) {
-		super();
-		this.playground = chore.getPlayground();
-		this.id = chore.getId();
-		this.name = chore.getName();
-		this.type = chore.getType();
-		this.creatorPlayground = chore.getCreatorPlayground();
-		this.creatorEmail = chore.getCreatorEmail();
-		this.location = new LocationTo(chore.getX(), chore.getY());
-		this.creationDate = chore.getCreationDate();
-		this.expirationDate = chore.getExpirationDate();
+	public ElementEntity(String name, String type, String creatorPlayground,
+			String creatorEmail, double x, double y, Date expirationDate) {
+		this();
+		this.name = name;
+		this.type = type;
+		this.creatorPlayground = creatorPlayground;
+		this.creatorEmail = creatorEmail;
+		this.x = x;
+		this.y = y;
+		this.expirationDate = expirationDate;
 	}
-	
-	
 
 	public String getPlayground() {
 		return playground;
@@ -88,14 +90,6 @@ public class ChoreTo {
 		this.creatorEmail = creatorEmail;
 	}
 
-	public LocationTo getLocation() {
-		return location;
-	}
-
-	public void setLocation(LocationTo location) {
-		this.location = location;
-	}
-
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -119,18 +113,42 @@ public class ChoreTo {
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
-	
-	public ChoreEntity toEntity() {
-		ChoreEntity choreToReturn = new ChoreEntity();
-		choreToReturn.setAttributes(attributes);
-		choreToReturn.setCreatorEmail(creatorEmail);
-		choreToReturn.setExpirationDate(expirationDate);
-		choreToReturn.setName(name);
-		choreToReturn.setCreatorPlayground(creatorPlayground);
-		choreToReturn.setType(type);
-		choreToReturn.setX(location.getX());
-		choreToReturn.setY(location.getY());
-		return choreToReturn;
+
+	public Double getX() {
+		return x;
+	}
+
+	public void setX(Double x) {
+		this.x = x;
+	}
+
+	public Double getY() {
+		return y;
+	}
+
+	public void setY(Double y) {
+		this.y = y;
 	}
 	
+	public double calculateDistance(double x, double y) {
+		return Math.sqrt((y - this.y) * (y - this.y) + (x - this.x) * (x - this.x));
+	}
+	
+	
+	/**
+	* @param other
+	* @return true if the name, attributes and expirationDate are equals
+	*/
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof ElementEntity) {
+			ElementEntity entity = (ElementEntity) other;
+			if (this.name.equals(entity.getName()) && 
+				this.attributes.equals(entity.getAttributes()) && 
+				this.expirationDate.equals(entity.getExpirationDate())) {
+					return true;
+			}
+		}
+		return false;
+	}
 }

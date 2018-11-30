@@ -14,24 +14,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import playground.logic.ChoreAlreadyExistsException;
-import playground.logic.ChoreEntity;
-import playground.logic.ChoreNotFoundException;
-import playground.logic.ChoresService;
+import playground.logic.ElementAlreadyExistsException;
+import playground.logic.ElementEntity;
+import playground.logic.ElementNotFoundException;
+import playground.logic.ElementsService;
 import playground.logic.NoSuchAttributeException;
 
 
 @RestController
-public class ChoresAPI {
+public class ElementsAPI {
 	
-	private static final String PATH = "/playground/chores";
+	private static final String PATH = "/playground/Elements";
 
-	private ChoresService choresService;
+	private ElementsService ElementsService;
 	
 	 
     @Autowired
-	public void setChoresService(ChoresService choresService) {
-		 this.choresService = choresService;
+	public void setElementsService(ElementsService elementsService) {
+		 this.ElementsService = elementsService;
     }
 	
 	
@@ -40,90 +40,90 @@ public class ChoresAPI {
 		path=PATH + "/{userPlayground}/{email}",
 		produces=MediaType.APPLICATION_JSON_VALUE,
 		consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo addNewChore (@RequestBody ChoreTo newChore, 
+	public ElementTo addNewElement (@RequestBody ElementTo newElement, 
 								@PathVariable ("userPlayground") String userPlayground, 
-								@PathVariable ("email") String email) throws ChoreAlreadyExistsException {
-		ChoreEntity choreEntity = this.choresService.createNewChore(newChore.toEntity(), userPlayground, email);
-		return new ChoreTo(choreEntity);
+								@PathVariable ("email") String email) throws ElementAlreadyExistsException {
+		ElementEntity elementEntity = this.ElementsService.createNewElement(newElement.toEntity(), userPlayground, email);
+		return new ElementTo(elementEntity);
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.PUT,
 			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void updateChore (@RequestBody ChoreTo newChore,
+	public void updateElement (@RequestBody ElementTo newElement,
 							   @PathVariable("userPlayground") String userPlayground,
 							   @PathVariable("email") String email,
 							   @PathVariable("playground") String playground,
-							   @PathVariable("id") String id) throws ChoreNotFoundException {
-		this.choresService.updateChore(newChore.toEntity(), userPlayground, email, playground, id);
+							   @PathVariable("id") String id) throws ElementNotFoundException {
+		this.ElementsService.updateElement(newElement.toEntity(), userPlayground, email, playground, id);
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo getChoreByID (@PathVariable("userPlayground") String userPlayground,
-								 @PathVariable("email") String email,
-								 @PathVariable("playground") String playground,
-								 @PathVariable("id") String id) throws ChoreNotFoundException {
-		return new ChoreTo(this.choresService.getChoreById(userPlayground, email, playground, id)); 
+	public ElementTo getElementByID (@PathVariable("userPlayground") String userPlayground,
+								 	 @PathVariable("email") String email,
+								 	 @PathVariable("playground") String playground,
+								 	 @PathVariable("id") String id) throws ElementNotFoundException {
+		return new ElementTo(this.ElementsService.getElementById(userPlayground, email, playground, id)); 
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path=PATH + "/{userPlayground}/{email}/all",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] getAllChores (@PathVariable("userPlayground") String userPlayground,
+	public ElementTo[] getAllElements (@PathVariable("userPlayground") String userPlayground,
 			 					   @PathVariable("email") String email,
 			 					   @RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   @RequestParam(name="page", required=false, defaultValue="0") int page) {
-		return this.choresService.getAllChores(userPlayground, email, page, size)
+		return this.ElementsService.getAllElements(userPlayground, email, page, size)
 				.stream()
-				.map(ChoreTo::new)
+				.map(ElementTo::new)
 				.collect(Collectors.toList())
-				.toArray(new ChoreTo[0]);	
+				.toArray(new ElementTo[0]);	
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path=PATH + "/{userPlayground}/{email}/near/{x}/{y}/{distance}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] getAllNearChores (@PathVariable("userPlayground") String userPlayground,
+	public ElementTo[] getAllNearElements (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("x") double x,
 			 					   				@PathVariable("y") double y,
 			 					   				@PathVariable("distance") double distance,
 			 					   				@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   				@RequestParam(name="page", required=false, defaultValue="0") int page) {
-		return this.choresService.getAllNearChores(userPlayground, email, x, y, distance, page, size)
+		return this.ElementsService.getAllNearElements(userPlayground, email, x, y, distance, page, size)
 				.stream()
-				.map(ChoreTo::new)
+				.map(ElementTo::new)
 				.collect(Collectors.toList())
-				.toArray(new ChoreTo[0]);
+				.toArray(new ElementTo[0]);
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
 			path=PATH + "/{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ChoreTo[] searchChore (@PathVariable("userPlayground") String userPlayground,
+	public ElementTo[] searchElement (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("attributeName") String attributeName,
 			 					   				@PathVariable("value") String value,
 			 					   				@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   				@RequestParam(name="page", required=false, defaultValue="0") int page) throws Exception{
 		
-		return this.choresService.searchChore(userPlayground, email, attributeName, value, page, size)
+		return this.ElementsService.searchElement(userPlayground, email, attributeName, value, page, size)
 				.stream()
-				.map(ChoreTo::new)
+				.map(ElementTo::new)
 				.collect(Collectors.toList())
-				.toArray(new ChoreTo[0]);
+				.toArray(new ElementTo[0]);
 	}
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ErrorMessage handleSpecificException (ChoreNotFoundException e) {
+	public ErrorMessage handleSpecificException (ElementNotFoundException e) {
 		return handleException(e);
 	}
 	
@@ -135,7 +135,7 @@ public class ChoresAPI {
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.CONFLICT)
-	public ErrorMessage handleSpecificException (ChoreAlreadyExistsException e) {
+	public ErrorMessage handleSpecificException (ElementAlreadyExistsException e) {
 		return handleException(e);
 	}
 	
