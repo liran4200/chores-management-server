@@ -4,13 +4,24 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Entity(name="Elements")
+@Table(name="ELEMENTS")
 public class ElementEntity {
 	
-	private static final String PLAYGROUND = "2019A.yuri";
-	private static AtomicLong ID_COUNTER = new AtomicLong(0);
-
-	private String 			   playground;
-	private String 			   id;
+	
+	@EmbeddedId
+	private ElementUniqueId	   idAndPlayground;	
+	
 	private String 			   name;
 	private String 			   type;
 	private String 			   creatorPlayground;
@@ -25,9 +36,10 @@ public class ElementEntity {
 	private Map<String,Object> attributes;
 	
 	public ElementEntity() {
-		this.playground = PLAYGROUND;
+		//empty unique id -> will be defined when added to DB
+		this.idAndPlayground = new ElementUniqueId();
+		
 		this.creationDate = new Date();
-		this.id = Long.toString(ID_COUNTER.incrementAndGet());
 	}
 
 	public ElementEntity(String name, String type, String creatorPlayground,
@@ -41,21 +53,13 @@ public class ElementEntity {
 		this.y = y;
 		this.expirationDate = expirationDate;
 	}
-
-	public String getPlayground() {
-		return playground;
+	
+	public ElementUniqueId getIdAndPlayground() {
+		return this.idAndPlayground;
 	}
-
-	public void setPlayground(String playground) {
-		this.playground = playground;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	public void setIdAndPlayground(ElementUniqueId idAndPlayground) {
+		this.idAndPlayground = idAndPlayground;
 	}
 
 	public String getName() {
@@ -89,7 +93,8 @@ public class ElementEntity {
 	public void setCreatorEmail(String creatorEmail) {
 		this.creatorEmail = creatorEmail;
 	}
-
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -98,6 +103,7 @@ public class ElementEntity {
 		this.creationDate = creationDate;
 	}
 
+	@Temporal(TemporalType.TIMESTAMP)
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
@@ -106,12 +112,31 @@ public class ElementEntity {
 		this.expirationDate = expirationDate;
 	}
 
+	@Transient
 	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
 
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
+	}
+	
+	@Lob
+	public String getMoreAttributesJson () {
+		try {
+			return new ObjectMapper().writeValueAsString(this.attributes);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setMoreAttributesJson (String json) {
+		try {
+			this.attributes = new ObjectMapper().readValue(json, Map.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public Double getX() {
@@ -134,21 +159,16 @@ public class ElementEntity {
 		return Math.sqrt((y - this.y) * (y - this.y) + (x - this.x) * (x - this.x));
 	}
 	
-	
 	/**
-	* @param other
-	* @return true if the name, attributes and expirationDate are equals
-	*/
+	 * @param other
+	 * @return true if id and playground are equal
+	 */
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof ElementEntity) {
-			ElementEntity entity = (ElementEntity) other;
-			if (this.name.equals(entity.getName()) && 
-				this.attributes.equals(entity.getAttributes()) && 
-				this.expirationDate.equals(entity.getExpirationDate())) {
-					return true;
-			}
+		if (!(other instanceof ElementEntity)) {
+			return false;
 		}
-		return false;
+		ElementEntity element = (ElementEntity) other;
+		return this.idAndPlayground.equals(element.getIdAndPlayground());
 	}
 }

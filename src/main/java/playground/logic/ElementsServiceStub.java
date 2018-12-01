@@ -43,8 +43,8 @@ public class ElementsServiceStub implements ElementsService {
 							throw new ElementAlreadyExistsException("element " + element.getName() + " is already exists");
 						}
 				   	});
-		this.elements.put(element.getId(), element);
-		return this.elements.get(element.getId());
+		this.elements.put(element.getIdAndPlayground().toString(), element);
+		return this.elements.get(element.getIdAndPlayground().toString());
 	}
 
 	@Override

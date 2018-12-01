@@ -27,8 +27,8 @@ public class ElementTo {
 
 	public ElementTo(ElementEntity element) {
 		super();
-		this.playground = element.getPlayground();
-		this.id = element.getId();
+		this.playground = element.getIdAndPlayground().getPlayground();
+		this.id = element.getIdAndPlayground().getId();
 		this.name = element.getName();
 		this.type = element.getType();
 		this.creatorPlayground = element.getCreatorPlayground();
