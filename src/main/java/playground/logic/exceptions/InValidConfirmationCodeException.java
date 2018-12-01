@@ -1,4 +1,4 @@
-package playground.logic;
+package playground.logic.exceptions;
 
 public class InValidConfirmationCodeException extends Exception {
 	

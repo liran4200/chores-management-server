@@ -1,4 +1,4 @@
-package playground.logic;
+package playground.logic.EntityComponents;
 
 import playground.layout.NewRoommateForm;
 

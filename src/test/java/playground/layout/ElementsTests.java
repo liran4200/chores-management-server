@@ -20,8 +20,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import playground.logic.ElementsService;
-import playground.logic.ElementEntity;
+
+import playground.logic.EntityComponents.ElementEntity;
+import playground.logic.services.ElementsService;
+import playground.layout.TOComponents.ElementTo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)

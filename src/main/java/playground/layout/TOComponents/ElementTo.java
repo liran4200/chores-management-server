@@ -1,14 +1,12 @@
-package playground.logic;
+package playground.layout.TOComponents;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
-public class ElementEntity {
+import playground.logic.EntityComponents.ElementEntity;
+
+public class ElementTo {
 	
-	private static final String PLAYGROUND = "2019A.yuri";
-	private static AtomicLong ID_COUNTER = new AtomicLong(0);
-
 	private String 			   playground;
 	private String 			   id;
 	private String 			   name;
@@ -16,31 +14,31 @@ public class ElementEntity {
 	private String 			   creatorPlayground;
 	private String 			   creatorEmail;
 	
-	private Double			   x;
-	private Double			   y;
+	private LocationTo 		   location;
 	
 	private Date 			   creationDate;
 	private Date 			   expirationDate;
 	
 	private Map<String,Object> attributes;
 	
-	public ElementEntity() {
-		this.playground = PLAYGROUND;
-		this.creationDate = new Date();
-		this.id = Long.toString(ID_COUNTER.incrementAndGet());
+	public ElementTo() {
+		// TODO Auto-generated constructor stub
 	}
 
-	public ElementEntity(String name, String type, String creatorPlayground,
-			String creatorEmail, double x, double y, Date expirationDate) {
-		this();
-		this.name = name;
-		this.type = type;
-		this.creatorPlayground = creatorPlayground;
-		this.creatorEmail = creatorEmail;
-		this.x = x;
-		this.y = y;
-		this.expirationDate = expirationDate;
+	public ElementTo(ElementEntity element) {
+		super();
+		this.playground = element.getPlayground();
+		this.id = element.getId();
+		this.name = element.getName();
+		this.type = element.getType();
+		this.creatorPlayground = element.getCreatorPlayground();
+		this.creatorEmail = element.getCreatorEmail();
+		this.location = new LocationTo(element.getX(), element.getY());
+		this.creationDate = element.getCreationDate();
+		this.expirationDate = element.getExpirationDate();
 	}
+	
+	
 
 	public String getPlayground() {
 		return playground;
@@ -90,6 +88,14 @@ public class ElementEntity {
 		this.creatorEmail = creatorEmail;
 	}
 
+	public LocationTo getLocation() {
+		return location;
+	}
+
+	public void setLocation(LocationTo location) {
+		this.location = location;
+	}
+
 	public Date getCreationDate() {
 		return creationDate;
 	}
@@ -113,42 +119,18 @@ public class ElementEntity {
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
-
-	public Double getX() {
-		return x;
-	}
-
-	public void setX(Double x) {
-		this.x = x;
-	}
-
-	public Double getY() {
-		return y;
-	}
-
-	public void setY(Double y) {
-		this.y = y;
+	
+	public ElementEntity toEntity() {
+		ElementEntity elementToReturn = new ElementEntity();
+		elementToReturn.setAttributes(attributes);
+		elementToReturn.setCreatorEmail(creatorEmail);
+		elementToReturn.setExpirationDate(expirationDate);
+		elementToReturn.setName(name);
+		elementToReturn.setCreatorPlayground(creatorPlayground);
+		elementToReturn.setType(type);
+		elementToReturn.setX(location.getX());
+		elementToReturn.setY(location.getY());
+		return elementToReturn;
 	}
 	
-	public double calculateDistance(double x, double y) {
-		return Math.sqrt((y - this.y) * (y - this.y) + (x - this.x) * (x - this.x));
-	}
-	
-	
-	/**
-	* @param other
-	* @return true if the name, attributes and expirationDate are equals
-	*/
-	@Override
-	public boolean equals(Object other) {
-		if (other instanceof ElementEntity) {
-			ElementEntity entity = (ElementEntity) other;
-			if (this.name.equals(entity.getName()) && 
-				this.attributes.equals(entity.getAttributes()) && 
-				this.expirationDate.equals(entity.getExpirationDate())) {
-					return true;
-			}
-		}
-		return false;
-	}
 }

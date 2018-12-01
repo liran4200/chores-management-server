@@ -16,9 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import playground.logic.RoommateEntity;
-import playground.logic.RoommateService;
-import playground.layout.RoommateTo;
+
+import playground.layout.TOComponents.RoommateTo;
+import playground.logic.EntityComponents.RoommateEntity;
+import playground.logic.services.RoommateService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)

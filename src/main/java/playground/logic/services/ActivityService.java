@@ -1,4 +1,6 @@
-package playground.logic;
+package playground.logic.services;
+
+import playground.logic.EntityComponents.ActivityEntity;
 
 public interface ActivityService {
 	

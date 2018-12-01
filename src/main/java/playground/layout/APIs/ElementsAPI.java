@@ -1,4 +1,4 @@
-package playground.layout;
+package playground.layout.APIs;
 
 import java.util.stream.Collectors;
 
@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import playground.logic.ElementAlreadyExistsException;
-import playground.logic.ElementEntity;
-import playground.logic.ElementNotFoundException;
-import playground.logic.ElementsService;
-import playground.logic.NoSuchAttributeException;
+import playground.layout.ErrorMessage;
+import playground.layout.TOComponents.ElementTo;
+import playground.logic.EntityComponents.ElementEntity;
+import playground.logic.exceptions.ElementAlreadyExistsException;
+import playground.logic.exceptions.ElementNotFoundException;
+import playground.logic.exceptions.NoSuchAttributeException;
+import playground.logic.services.ElementsService;
 
 
 @RestController

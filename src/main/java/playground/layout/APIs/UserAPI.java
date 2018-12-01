@@ -1,4 +1,4 @@
-package playground.layout;
+package playground.layout.APIs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,11 +10,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import playground.logic.InValidConfirmationCodeException;
-import playground.logic.RoommateAlreadyExistsException;
-import playground.logic.RoommateEntity;
-import playground.logic.RoommateNotFoundException;
-import playground.logic.RoommateService;
+
+import playground.layout.ErrorMessage;
+import playground.layout.NewRoommateForm;
+import playground.layout.TOComponents.RoommateTo;
+import playground.logic.EntityComponents.RoommateEntity;
+import playground.logic.exceptions.InValidConfirmationCodeException;
+import playground.logic.exceptions.RoommateAlreadyExistsException;
+import playground.logic.exceptions.RoommateNotFoundException;
+import playground.logic.services.RoommateService;
 
 @RestController()
 public class UserAPI {

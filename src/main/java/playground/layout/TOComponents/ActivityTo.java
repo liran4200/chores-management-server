@@ -1,8 +1,8 @@
-package playground.layout;
+package playground.layout.TOComponents;
 
 import java.util.Map;
 
-import playground.logic.ActivityEntity;
+import playground.logic.EntityComponents.ActivityEntity;
 
 
 public class ActivityTo {

@@ -1,4 +1,4 @@
-package playground.logic;
+package playground.logic.EntityComponents;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;

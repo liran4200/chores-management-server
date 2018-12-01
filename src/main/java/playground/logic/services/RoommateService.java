@@ -1,4 +1,9 @@
-package playground.logic;
+package playground.logic.services;
+
+import playground.logic.EntityComponents.RoommateEntity;
+import playground.logic.exceptions.InValidConfirmationCodeException;
+import playground.logic.exceptions.RoommateAlreadyExistsException;
+import playground.logic.exceptions.RoommateNotFoundException;
 
 public interface RoommateService {
 	

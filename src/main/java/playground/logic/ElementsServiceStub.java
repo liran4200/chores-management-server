@@ -12,6 +12,12 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.stereotype.Service;
 
+import playground.logic.EntityComponents.ElementEntity;
+import playground.logic.exceptions.ElementAlreadyExistsException;
+import playground.logic.exceptions.ElementNotFoundException;
+import playground.logic.exceptions.NoSuchAttributeException;
+import playground.logic.services.ElementsService;
+
 
 @Service
 public class ElementsServiceStub implements ElementsService {

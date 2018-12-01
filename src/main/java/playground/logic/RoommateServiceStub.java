@@ -8,6 +8,12 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
+import playground.logic.EntityComponents.RoommateEntity;
+import playground.logic.exceptions.InValidConfirmationCodeException;
+import playground.logic.exceptions.RoommateAlreadyExistsException;
+import playground.logic.exceptions.RoommateNotFoundException;
+import playground.logic.services.RoommateService;
+
 @Service
 public class RoommateServiceStub implements RoommateService{
 	

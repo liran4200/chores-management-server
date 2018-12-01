@@ -1,6 +1,6 @@
-package playground.layout;
+package playground.layout.TOComponents;
 
-import playground.logic.RoommateEntity;
+import playground.logic.EntityComponents.RoommateEntity;
 
 public class RoommateTo {
 	
