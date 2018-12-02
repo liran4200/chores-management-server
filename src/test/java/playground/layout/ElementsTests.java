@@ -163,7 +163,7 @@ public class ElementsTests {
 	public void testAddNewChoreSuccessfully () throws Exception{
 		//given
 		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
-		String ID = chore1.getId();
+		String ID = chore1.getIdAndPlayground().toString();
 		ElementTo chore1To = new ElementTo(chore1);
 		
 		//when POST /chores with body {""name1", "type1", "playground1", "email1", 1,1, the date is the creation date"} 
@@ -184,7 +184,9 @@ public class ElementsTests {
 				if(0 == rv)
 					rv  = expectedChore.getExpirationDate().compareTo(actualChoreInDb.getExpirationDate());
 				if(0 == rv)
-					rv = expectedChore.getId().compareTo(actualChoreInDb.getId());
+					rv = expectedChore.getIdAndPlayground().getId().compareTo(actualChoreInDb.getIdAndPlayground().getId());
+				if(0 == rv)
+					rv = expectedChore.getIdAndPlayground().getPlayground().compareTo(actualChoreInDb.getIdAndPlayground().getPlayground());
 				return rv;
 			})
 			.isEqualTo(expectedChore);
@@ -230,7 +232,7 @@ public class ElementsTests {
 				entity.getName()); // url parameters
 		
 		// then the database contains for name "name1" {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
-		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getId());
+		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getIdAndPlayground().getId());
 		actualEntityInDb.setCreationDate(null);
 		
 		String expectedJson = this.jacksonMapper.writeValueAsString(
