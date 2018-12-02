@@ -1,4 +1,4 @@
-package playground.layout.APIs;
+package playground.layout.API;
 
 import java.util.stream.Collectors;
 

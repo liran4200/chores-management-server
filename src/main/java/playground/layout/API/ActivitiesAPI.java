@@ -1,4 +1,4 @@
-package playground.layout.APIs;
+package playground.layout.API;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

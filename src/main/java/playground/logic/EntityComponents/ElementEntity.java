@@ -2,7 +2,6 @@ package playground.logic.EntityComponents;
 
 import java.util.Date;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ElementEntity {
 	
 	
-	@EmbeddedId
+	
 	private ElementUniqueId	   idAndPlayground;	
 	
 	private String 			   name;
@@ -54,6 +53,7 @@ public class ElementEntity {
 		this.expirationDate = expirationDate;
 	}
 	
+	@EmbeddedId
 	public ElementUniqueId getIdAndPlayground() {
 		return this.idAndPlayground;
 	}
@@ -122,7 +122,7 @@ public class ElementEntity {
 	}
 	
 	@Lob
-	public String getMoreAttributesJson () {
+	public String getAttributesJson () {
 		try {
 			return new ObjectMapper().writeValueAsString(this.attributes);
 		} catch (Exception e) {
@@ -130,8 +130,7 @@ public class ElementEntity {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void setMoreAttributesJson (String json) {
+	public void setAttributesJson (String json) {
 		try {
 			this.attributes = new ObjectMapper().readValue(json, Map.class);
 		} catch (Exception e) {

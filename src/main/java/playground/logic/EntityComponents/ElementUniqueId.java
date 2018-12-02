@@ -39,7 +39,7 @@ public class ElementUniqueId implements Serializable {
 		return this.id;
 	}
 	
-	public void getId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

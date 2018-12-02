@@ -19,7 +19,7 @@ import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
 
 
-@Service
+
 public class ElementsServiceStub implements ElementsService {
 	
 	private Map<String, ElementEntity> elements;
