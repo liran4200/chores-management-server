@@ -130,6 +130,7 @@ public class ElementEntity {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void setAttributesJson (String json) {
 		try {
 			this.attributes = new ObjectMapper().readValue(json, Map.class);

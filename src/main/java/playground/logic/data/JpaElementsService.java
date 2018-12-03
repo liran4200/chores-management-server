@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ public class JpaElementsService implements ElementsService {
 	@Transactional
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
-		if (!this.elements.existsById(element.getIdAndPlayground().toString())) {
+		if (!this.elements.existsById(element.getIdAndPlayground())) {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
 			String number = "" + temp.getNextNumber();
 			//set new id to element
@@ -88,11 +87,12 @@ public class JpaElementsService implements ElementsService {
 	@Override
 	@Transactional(readOnly=true)
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
-		Optional<ElementEntity> op = this.elements.findById(new ElementUniqueId(id, playground).toString());
+		ElementUniqueId uniqueId = new ElementUniqueId(id, playground);
+		Optional<ElementEntity> op = this.elements.findById(uniqueId);
 		if (op.isPresent()) {
 			return op.get();
 		} else {
-			throw new ElementNotFoundException("no element found for id " + id);
+			throw new ElementNotFoundException("no element found for id " + id + " in playground " + playground);
 		}
 	}
 

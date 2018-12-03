@@ -26,7 +26,7 @@ import playground.logic.services.ElementsService;
 @RestController
 public class ElementsAPI {
 	
-	private static final String PATH = "/playground/Elements";
+	private static final String PATH = "/playground/elements";
 
 	private ElementsService ElementsService;
 	
