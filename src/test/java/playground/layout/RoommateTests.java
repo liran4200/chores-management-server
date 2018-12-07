@@ -130,8 +130,8 @@ public class RoommateTests {
 	
 	// then the database contains for the name "name" the following: {"newName", "newEmail", "avatar", "role"}
 	String actualRommateName  =  rmtTo.toEntity().getUserName();
-	String actualRommatEmail  =  rmtTo.toEntity().getEmail();
-		
+	String actualRommatEmail  =  rmtTo.toEntity().getUserId().getEmail();
+
 	assertThat(actualRommateName)
 		.isNotNull()
 		.isEqualToIgnoringCase(newName);

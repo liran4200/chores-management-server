@@ -1,13 +1,16 @@
 package playground.logic;
 
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 import playground.layout.NewUserForm;
 
+@Entity
+@Table(name="USERS")
 public class UserEntity {
 	
-	private static final String PLAYGROUND = "ChoresManagement";
-	
-	private	String	email;
-	private String	playground;
+	private UserId  userId;
 	private String  userName;
 	private String	avatar;
 	private String	role;
@@ -17,13 +20,12 @@ public class UserEntity {
 	
 	public UserEntity() {
 		this.points = 0;
-		this.playground = PLAYGROUND;
 		this.isActive = false;
 	}
 	
 	public UserEntity(NewUserForm newUser) {
 		this();
-		this.email = newUser.getEmail();
+		this.userId = new UserId(newUser.getEmail());
 		this.userName = newUser.getUserName();
 		this.avatar = newUser.getAvatar();
 		this.role = newUser.getRole();
@@ -31,26 +33,19 @@ public class UserEntity {
 
 	public UserEntity(String email, String userName, String avatar, String role) {
 		this();
-		this.email = email;
+		this.userId = new UserId(email);
 		this.userName = userName;
 		this.avatar = avatar;
 		this.role = role;
 	}
-
-	public String getEmail() {
-		return email;
+	
+	@EmbeddedId
+	public UserId getUserId() {
+		return userId;
 	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPlayground() {
-		return playground;
-	}
-
-	public void setPlayground(String playground) {
-		this.playground = playground;
+	
+	public void setUserId(UserId userId) {
+		this.userId = userId;
 	}
 
 	public String getUserName() {
@@ -103,7 +98,7 @@ public class UserEntity {
 
 	@Override
 	public String toString() {
-		return "UserEntity [email=" + email + ", playground=" + playground + ", userName=" + userName
+		return "UserEntity [email=" + userId.getEmail() + ", playground=" + userId.getPlayground() + ", userName=" + userName
 				+ ", avatar=" + avatar + ", role=" + role + ", points=" + points + ", isActive=" + isActive
 				+ ", confirmCode=" + confirmCode + "]";
 	}

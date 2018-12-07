@@ -1,6 +1,7 @@
 package playground.layout;
 
 import playground.logic.UserEntity;
+import playground.logic.UserId;
 
 public class UserTo {
 	
@@ -16,15 +17,15 @@ public class UserTo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserTo(UserEntity roommate) {
+	public UserTo(UserEntity user) {
 		super();
-		this.email = roommate.getEmail();
-		this.playground = roommate.getPlayground();
-		this.roommateName = roommate.getUserName();
-		this.avatar = roommate.getAvatar();
-		this.role = roommate.getRole();
-		this.points = roommate.getPoints();
-		this.code = roommate.getConfirmCode();
+		this.email = user.getUserId().getEmail();
+		this.playground = user.getUserId().getPlayground();
+		this.roommateName = user.getUserName();
+		this.avatar = user.getAvatar();
+		this.role = user.getRole();
+		this.points = user.getPoints();
+		this.code = user.getConfirmCode();
 	}
 
 	public String getEmail() {
@@ -84,14 +85,14 @@ public class UserTo {
 	}
 	
 	/**
-	 * Change RoommateTO object to RoommateEntity
-	 * @return RoommateEntity
+	 * Change UserTo object to UserEntity
+	 * @return UserEntity
 	 */
 	public UserEntity toEntity() {
 		UserEntity entity = new UserEntity();
-		entity.setEmail(this.email);
+		UserId key = new UserId(this.email);
 		entity.setAvatar(this.avatar);
-		entity.setPlayground(this.playground);
+		entity.setUserId(key);
 		entity.setPoints(this.points);
 		entity.setRole(this.role);
 		entity.setUserName(this.roommateName);
