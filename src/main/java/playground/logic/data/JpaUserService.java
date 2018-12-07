@@ -9,11 +9,12 @@ import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.dal.UserDao;
 import playground.logic.InValidConfirmationCodeException;
-import playground.logic.UserAlreadyExistsException;
-import playground.logic.UserEntity;
-import playground.logic.UserId;
-import playground.logic.UserNotFoundException;
-import playground.logic.UserService;
+import playground.logic.EntityComponents.UserEntity;
+import playground.logic.EntityComponents.UserId;
+import playground.logic.exceptions.UserAlreadyExistsException;
+import playground.logic.exceptions.UserNotActiveException;
+import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.services.UserService;
 
 @Service
 public class JpaUserService implements UserService{

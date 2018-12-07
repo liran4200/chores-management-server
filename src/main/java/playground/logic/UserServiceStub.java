@@ -6,6 +6,12 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
 
+import playground.logic.EntityComponents.UserEntity;
+import playground.logic.EntityComponents.UserId;
+import playground.logic.exceptions.UserAlreadyExistsException;
+import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.services.UserService;
+
 //@Service
 public class UserServiceStub implements UserService{
 	
