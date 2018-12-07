@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
+import playground.logic.exceptions.InValidConfirmationCodeException;
 import playground.logic.exceptions.UserAlreadyExistsException;
 import playground.logic.exceptions.UserNotFoundException;
 import playground.logic.services.UserService;

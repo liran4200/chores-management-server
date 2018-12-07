@@ -1,9 +1,7 @@
 package playground.logic.services;
 
 import playground.logic.EntityComponents.UserEntity;
-import playground.logic.exceptions.UserAlreadyExistsException;
-import playground.logic.exceptions.UserNotActiveException;
-import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.exceptions.*;
 
 public interface UserService {
 	

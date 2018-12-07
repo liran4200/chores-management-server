@@ -17,9 +17,9 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import playground.layout.TOComponents.RoommateTo;
-import playground.logic.EntityComponents.RoommateEntity;
-import playground.logic.services.RoommateService;
+import playground.layout.TOComponents.UserTo;
+import playground.logic.EntityComponents.UserEntity;
+import playground.logic.services.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
@@ -27,7 +27,7 @@ import playground.logic.services.RoommateService;
 public class RoommateTests {
 	
 	@Autowired
-	private RoommateService roommates;
+	private UserService users;
 	private RestTemplate restTemplate;
 	private String url;
 	
@@ -64,19 +64,19 @@ public class RoommateTests {
 	String avatar 	= "avatar";
 	String role		= "role";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	RoommateTo rmtTo = new RoommateTo(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	UserTo rmtTo = new UserTo(rmtE);
 	
 	//when POST /playground/roommate with body {"name", "email", "avatar", "role"}
-	RoommateTo responseRoommate = this.restTemplate.postForObject(
+	UserTo responseRoommate = this.restTemplate.postForObject(
 			this.url, // url
 			rmtTo, // object in the request body
-			RoommateTo.class // expected response body type
+			UserTo.class // expected response body type
 				);
 	
 	// then the database contains for the name "name" the following: {"name", "email", "avatar", "role"}
 	long expectedRommateCode  =  rmtTo.toEntity().getConfirmCode();
-	long actualRoommateCode   =  this.roommates.createRoommate(rmtE);
+	long actualRoommateCode   =  this.users.createUser(rmtE);
 		
 		assertThat(actualRoommateCode)
 			.isNotNull()
@@ -93,15 +93,15 @@ public class RoommateTests {
 	String avatar 	= "avatar";
 	String role		= "role";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	this.roommates.createRoommate(rmtE);
-	RoommateTo rmtTo = new RoommateTo(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	this.users.createUser(rmtE);
+	UserTo rmtTo = new UserTo(rmtE);
 	
 	//when POST /playground/roommate with body {"name", "email", "avatar", "role"}
-	RoommateTo responseActivity = this.restTemplate.postForObject(
+	UserTo responseActivity = this.restTemplate.postForObject(
 			this.url, // url
 			rmtTo, // object in the request body
-			RoommateTo.class // expected response body type
+			UserTo.class // expected response body type
 				);
 	// then RoommateAlreadyExist exception is thrown.
 	}
@@ -117,9 +117,9 @@ public class RoommateTests {
 	String newName  = "newName";
 	String newEmail = "newEmail";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	this.roommates.createRoommate(rmtE);
-	RoommateTo rmtTo = new RoommateTo(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	this.users.createUser(rmtE);
+	UserTo rmtTo = new UserTo(rmtE);
 	
 	//when PUT /playground/roommate with body {"newName", "newEmail"}
 	this.restTemplate.put(
@@ -130,8 +130,8 @@ public class RoommateTests {
 				);
 	
 	// then the database contains for the name "name" the following: {"newName", "newEmail", "avatar", "role"}
-	String actualRommateName  =  rmtTo.toEntity().getRoommateName();
-	String actualRommatEmail  =  rmtTo.toEntity().getEmail();
+	String actualRommateName  =  rmtTo.toEntity().getUserName();
+	String actualRommatEmail  =  rmtTo.toEntity().getUserId().getEmail();
 		
 	assertThat(actualRommateName)
 		.isNotNull()
@@ -151,16 +151,16 @@ public class RoommateTests {
 	String avatar 	= "avatar";
 	String role		= "role";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	this.roommates.createRoommate(rmtE);
-	RoommateTo rmtTo = new RoommateTo(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	this.users.createUser(rmtE);
+	UserTo rmtTo = new UserTo(rmtE);
 	
 	rmtE.setConfirmCode(12345);
 	
 	//when PUT /playground/roommate with body {"newName", "newEmail", "avatar", "role", confirmationCode = 12345}
-	RoommateTo responseRoommate = this.restTemplate.getForObject(
+	UserTo responseRoommate = this.restTemplate.getForObject(
 			this.url + "/confirm/{playground}/{email}/{code}", 
-			RoommateTo.class,
+			UserTo.class,
 			12345);
 	
 		
@@ -178,20 +178,20 @@ public class RoommateTests {
 	String avatar 	= "avatar";
 	String role		= "role";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	this.roommates.createRoommate(rmtE);
-	RoommateTo rmtTo = new RoommateTo(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	this.users.createUser(rmtE);
+	UserTo rmtTo = new UserTo(rmtE);
 	
 	rmtE.setConfirmCode(12345);
 	
 	//when PUT /playground/roommate/ {"newName", "newEmail", "avatar", "role" confirmation code = 12345}
-	RoommateTo responseRoommate = this.restTemplate.getForObject(
+	UserTo responseRoommate = this.restTemplate.getForObject(
 			this.url + "/confirm/{playground}/{email}/{code}", 
-			RoommateTo.class,
+			UserTo.class,
 			email,
 			"playground");
-	RoommateEntity ExpectedRommate =  rmtTo.toEntity();
-	RoommateEntity  actualRommate  =  rmtTo.toEntity();
+	UserEntity ExpectedRommate =  rmtTo.toEntity();
+	UserEntity  actualRommate  =  rmtTo.toEntity();
 		
 	assertThat(ExpectedRommate)
 		.isNotNull()
@@ -206,13 +206,13 @@ public class RoommateTests {
 	String avatar 	= "avatar";
 	String role		= "role";
 	
-	RoommateEntity rmtE = new RoommateEntity(name, email, avatar, role);
-	this.roommates.createRoommate(rmtE);
+	UserEntity rmtE = new UserEntity(name, email, avatar, role);
+	this.users.createUser(rmtE);
 	
 	//when PUT /playground/roommate/ with body {"newName", "newEmail", "avatar", "role"}
-	RoommateTo responseRoommate = this.restTemplate.getForObject(
+	UserTo responseRoommate = this.restTemplate.getForObject(
 			this.url + "/login/{playground}/{email}", 
-			RoommateTo.class,
+			UserTo.class,
 			000000);
 	//then RoommateNotFound Exception shall be thrown
 	}

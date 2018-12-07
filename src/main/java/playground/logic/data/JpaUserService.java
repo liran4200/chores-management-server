@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.dal.UserDao;
-import playground.logic.InValidConfirmationCodeException;
+import playground.logic.exceptions.*;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
 import playground.logic.exceptions.UserAlreadyExistsException;
