@@ -4,15 +4,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.annotation.PostConstruct;
-import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 public class UserServiceStub implements UserService{
 	
 	private AtomicLong codeGen;
-	private Map<String,UserEntity> users;
+	private Map<UserId,UserEntity> users;
 	
 	@PostConstruct
 	public void init() {
@@ -28,9 +26,11 @@ public class UserServiceStub implements UserService{
 
 	@Override
 	public long createUser(UserEntity user)  throws UserAlreadyExistsException{
-		String key = user.getPlayground()+user.getEmail();
+		UserId key = user.getUserId();
+		
 		if(this.users.containsKey(key))
-			throw new UserAlreadyExistsException("User - "+user.getEmail()+" already exists");
+			throw new UserAlreadyExistsException("User - "+key.getEmail()+" already exists");
+		
 		user.setConfirmCode(codeGen.getAndIncrement());
 		this.users.put(key, user);
 		return user.getConfirmCode();
@@ -38,7 +38,7 @@ public class UserServiceStub implements UserService{
 
 	@Override
 	public UserEntity getCustomUser(String email, String playground) throws UserNotFoundException {
-		String key = playground+email;
+		UserId key = new UserId(email);
 		UserEntity user = this.users.get(key);
 		if(user == null)
 			throw new UserNotFoundException("User - "+email+" not found");
@@ -61,7 +61,7 @@ public class UserServiceStub implements UserService{
 	@Override
 	public void updateUser(String email,String playground,UserEntity user)
 			throws UserNotFoundException{
-		String key = playground+email;
+		UserId key = user.getUserId();
 		if(!this.users.containsKey(key))
 			throw new UserNotFoundException("User not exists");
 		
