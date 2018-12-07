@@ -1,22 +1,22 @@
 package playground.layout;
 
-public class NewRoommateForm {
+public class NewUserForm {
 	
-	private String roommateName;
+	private String userName;
 	private String email;
 	private String avatar;
 	private String role;
 	
-	public NewRoommateForm() {
+	public NewUserForm() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public String getRoommateName() {
-		return roommateName;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setRoommateName(String roommateName) {
-		this.roommateName = roommateName;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getEmail() {
