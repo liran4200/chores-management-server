@@ -15,14 +15,18 @@ import playground.logic.UserAlreadyExistsException;
 import playground.logic.UserEntity;
 import playground.logic.UserNotFoundException;
 import playground.logic.UserService;
+import playground.logic.data.UserNotActiveException;
 
+
+/**
+ * @author Liran Yehudar
+ */
 @RestController()
 public class UserAPI {
 	
 	private static final String PATH = "/playground/users";	
 	private UserService userService;
 	
-	 
     @Autowired
 	public void setUserService(UserService userService) {
 		 this.userService = userService;
@@ -34,7 +38,8 @@ public class UserAPI {
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public UserTo login(
 			@PathVariable("playground") String playground,
-			@PathVariable("email") String email) throws UserNotFoundException {
+			@PathVariable("email") String email) throws UserNotFoundException, UserNotActiveException {
+		
 		// if this user not exists throw exception and not return userTo.
 		UserEntity user = userService.getCustomUser(email, playground);
 		return new UserTo(user);
@@ -47,6 +52,7 @@ public class UserAPI {
 							  @PathVariable("email")String email,
 							  @PathVariable("code")long code) 
 							  throws  UserNotFoundException, InValidConfirmationCodeException{
+		
 		//if confirmation code is not valid or user not found throw exception 
 		UserEntity user = this.userService.getConfirmUser(email, playground, code);
 		return new UserTo(user);
@@ -59,9 +65,8 @@ public class UserAPI {
 	public void updateRoommate (
 			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
-			@RequestBody UserTo user) throws UserNotFoundException {
+			@RequestBody UserTo user) throws UserNotFoundException, UserNotActiveException {
 		
-		// should to decide later where to check playground field
 		userService.updateUser(email, playground, user.toEntity());
 	}
 	
@@ -72,12 +77,13 @@ public class UserAPI {
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public UserTo registerUser (@RequestBody NewUserForm newUser) 
 			 throws UserAlreadyExistsException{
+		
 		// register a new user 
-		// should to decide later where to check playground field
 		UserEntity user = new UserEntity(newUser);
-		long code = this.userService.createUser(user);
+		this.userService.createUser(user);
 		return new UserTo(user);
 	}
+	
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
@@ -92,11 +98,16 @@ public class UserAPI {
 	}
 	
 	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage handleSpecificException (UserNotActiveException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public ErrorMessage handleSpecificException (UserAlreadyExistsException e) {
 		return handleException(e);
 	}
-	
 	
 	/**
 	 * This method create a error message to client.
