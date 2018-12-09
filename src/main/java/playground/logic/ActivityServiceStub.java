@@ -21,7 +21,7 @@ public class ActivityServiceStub implements ActivityService {
 	
 	@Override
 	public Object invokeActivity(ActivityEntity activity) {
-		return activity.getAttributes().get("ATTRIB_SCORE");
+		return activity.getAttributes().get(ATTRIB_SCORE);
 	}
 	
 
