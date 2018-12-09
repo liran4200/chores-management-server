@@ -22,10 +22,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.EntityComponents.ElementUniqueId;
+import playground.logic.EntityComponents.ElementId;
 import playground.logic.services.ElementsService;
 import playground.layout.TOComponents.ElementTo;
-import playground.layout.TOComponents.LocationTo;
+
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
