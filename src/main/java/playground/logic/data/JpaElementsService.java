@@ -14,7 +14,7 @@ import playground.dal.ElementDao;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.EntityComponents.ElementUniqueId;
+import playground.logic.EntityComponents.ElementId;
 import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
@@ -47,7 +47,7 @@ public class JpaElementsService implements ElementsService {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
 			String number = "" + temp.getNextNumber();
 			//set new id to element
-			element.setIdAndPlayground(new ElementUniqueId(number));
+			element.setIdAndPlayground(new ElementId(number));
 			this.numberGenerator.delete(temp);
 			return this.elements.save(element);
 		} else {
@@ -87,7 +87,7 @@ public class JpaElementsService implements ElementsService {
 	@Override
 	@Transactional(readOnly=true)
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
-		ElementUniqueId uniqueId = new ElementUniqueId(id, playground);
+		ElementId uniqueId = new ElementId(id, playground);
 		Optional<ElementEntity> op = this.elements.findById(uniqueId);
 		if (op.isPresent()) {
 			return op.get();

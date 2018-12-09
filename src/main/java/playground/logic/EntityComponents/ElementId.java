@@ -7,7 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-public class ElementUniqueId implements Serializable {
+public class ElementId implements Serializable {
 
 	private static final long serialVersionUID = 4294359810914067582L;
 	 
@@ -21,16 +21,16 @@ public class ElementUniqueId implements Serializable {
 	private String	playground;
 
 	
-	public ElementUniqueId() {
+	public ElementId() {
 		
 	}
 	
-	public ElementUniqueId(String id, String playground) {
+	public ElementId(String id, String playground) {
 		this.id = id;
 		this.playground = playground;
 	}
 	
-	public ElementUniqueId(String id) {
+	public ElementId(String id) {
 		this.id = id;
 		this.playground = DEF_PLAYGROUND;
 	}
@@ -56,10 +56,10 @@ public class ElementUniqueId implements Serializable {
 		if (this == o) {
 			return true;
 		}
-		if (!(o instanceof ElementUniqueId)) {
+		if (!(o instanceof ElementId)) {
 			return false;
 		}
-		ElementUniqueId element = (ElementUniqueId) o;
+		ElementId element = (ElementId) o;
 		return Objects.equals(this.id, element.getId()) && Objects.equals(this.playground, element.getPlayground());
 	}
 	
