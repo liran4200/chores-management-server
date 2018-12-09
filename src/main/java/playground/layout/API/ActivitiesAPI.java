@@ -15,8 +15,6 @@ import playground.logic.services.ActivityService;
 
 @RestController
 public class ActivitiesAPI {
-
-	private static final String PATH = "playground/activities";
 	
 	private ActivityService activityService;
 	
@@ -28,7 +26,7 @@ public class ActivitiesAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.POST,
-			path=PATH + "/{userPlayground}/{email}",
+			path="playground/activities/{userPlayground}/{email}",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public Object invokeActivity (@RequestBody ActivityTo activity, 

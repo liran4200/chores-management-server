@@ -26,7 +26,6 @@ import playground.logic.services.UserService;
 @RestController()
 public class UserAPI {
 	
-	private static final String PATH = "/playground/users";	
 	private UserService userService;
 	
     @Autowired
@@ -36,7 +35,7 @@ public class UserAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH+ "/login/{playground}/{email}",
+			path="playground/users/login/{playground}/{email}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public UserTo login(
 			@PathVariable("playground") String playground,
@@ -48,7 +47,7 @@ public class UserAPI {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET,
-					path=PATH+ "/confirm/{playground}/{email}/{code}",
+					path="playground/users/confirm/{playground}/{email}/{code}",
 					produces= MediaType.APPLICATION_JSON_VALUE)
 	public UserTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
@@ -62,7 +61,7 @@ public class UserAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.PUT,
-			path=PATH +"/{playground}/{email}",
+			path="playground/users/{playground}/{email}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void updateRoommate (
 			@PathVariable("playground") String playground,
@@ -74,7 +73,7 @@ public class UserAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.POST,
-			path=PATH,
+			path="playground/users",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public UserTo registerUser (@RequestBody NewUserForm newUser) 
