@@ -56,7 +56,7 @@ public class ActivitiesTests {
 
 	@After
 	public void teardown() {
-
+		
 	}
 
 	@Test
@@ -73,9 +73,12 @@ public class ActivitiesTests {
 		ActivityEntity act1 = new ActivityEntity(type, chorePlayground, choreId, roommatePlayground, roommateEmail, attributes);
 		ActivityTo activityTo = new ActivityTo(act1);
 		
+		String UserEmail = act1.getRoommateEmail();
+		String UserPlayground = act1.getRoommatePlayground();
+		
 		//when POST /playground/activities with body {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		ActivityTo responseActivity = this.restTemplate.postForObject(
-				this.url, // url
+				this.url + "/" + UserPlayground  + "/"+ UserEmail, // url
 				activityTo, // object in the request body
 				ActivityTo.class // expected response body type
 					);
@@ -107,7 +110,7 @@ public class ActivitiesTests {
 		
 		//when POST /playground/activities with body {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		ActivityTo responseActivity = this.restTemplate.postForObject(
-				this.url, // url
+				this.url + "/" + roommatePlayground + "/" + roommateEmail, // url
 				activityTo, // object in the request body
 				ActivityTo.class // expected response body type
 					);
