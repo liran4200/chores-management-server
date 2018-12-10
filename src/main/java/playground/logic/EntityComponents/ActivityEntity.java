@@ -3,12 +3,15 @@ package playground.logic.EntityComponents;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ActivityEntity {
-	private static final String PLAYGROUND = "ChoresManagement";
-	private static AtomicLong ID_COUNTER = new AtomicLong(0);
-	
-	private String				playground;
-	private String 				id;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Lob;
+import javax.persistence.Transient;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class ActivityEntity {	
+	private ActivityId			idAndPlayground;
+
 	private String 				type;
 	private String 				chorePlayground;
 	private String				choreId;
@@ -17,10 +20,9 @@ public class ActivityEntity {
 	private Map<String, Object> attributes;
 	
 	public ActivityEntity() {
-		this.playground = PLAYGROUND;
-		this.id = Long.toString(ID_COUNTER.incrementAndGet());
+		this.idAndPlayground = new ActivityId();
 	}
-	
+
 	public ActivityEntity(String type, String chorePlayground, String choreId,
 			String roommatePlayground, String roommateEmail, Map<String, Object> attributes) {
 		this();
@@ -31,21 +33,14 @@ public class ActivityEntity {
 		this.roommateEmail = roommateEmail;
 		this.attributes = attributes;
 	}
-
-	public String getPlayground() {
-		return playground;
+	
+	@EmbeddedId
+	public ActivityId getIdAndPlayground() {
+		return this.idAndPlayground;
 	}
-
-	public void setPlayground(String playground) {
-		this.playground = playground;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
+	
+	public void setIdAndPlayground(ActivityId idAndPlayground) {
+		this.idAndPlayground = idAndPlayground;
 	}
 
 	public String getType() {
@@ -87,7 +82,8 @@ public class ActivityEntity {
 	public void setRoommateEmail(String roommateEmail) {
 		this.roommateEmail = roommateEmail;
 	}
-
+	
+	@Transient
 	public Map<String, Object> getAttributes() {
 		return attributes;
 	}
@@ -95,4 +91,34 @@ public class ActivityEntity {
 	public void setAttributes(Map<String, Object> attributes) {
 		this.attributes = attributes;
 	}
+	
+	@Lob
+	public String getAttributesJson () {
+		try {
+			return new ObjectMapper().writeValueAsString(this.attributes);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void setAttributesJson (String json) {
+		try {
+			this.attributes = new ObjectMapper().readValue(json, Map.class);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof ActivityEntity)) {
+			return false;
+		}
+		ActivityEntity element = (ActivityEntity) other;
+		return this.idAndPlayground.equals(element.getIdAndPlayground());
+	}
+	
+	
+
 }
