@@ -4,33 +4,40 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
 import javax.persistence.Lob;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@Entity(name="Activity")
+@Table(name="ACTIVITY")
 public class ActivityEntity {	
+	
+	public static final String ATTRIBUTE_ACTION_TO_PREFORM = "ATTRIBUTE_ACTION_TO_PREFORM";
+
 	private ActivityId			idAndPlayground;
 
 	private String 				type;
-	private String 				chorePlayground;
-	private String				choreId;
-	private String 				roommatePlayground;
-	private String 				roommateEmail;
+	private String 				elementPlayground;
+	private String				elementId;
+	private String 				playerPlayground;
+	private String 				playerEmail;
 	private Map<String, Object> attributes;
 	
 	public ActivityEntity() {
 		this.idAndPlayground = new ActivityId();
 	}
 
-	public ActivityEntity(String type, String chorePlayground, String choreId,
-			String roommatePlayground, String roommateEmail, Map<String, Object> attributes) {
+	public ActivityEntity(String type, String elementPlayground, String elementId,
+			String playerPlayground, String playerEmail, Map<String, Object> attributes) {
 		this();
 		this.type = type;
-		this.chorePlayground = chorePlayground;
-		this.choreId = choreId;
-		this.roommatePlayground = roommatePlayground;
-		this.roommateEmail = roommateEmail;
+		this.elementPlayground = elementPlayground;
+		this.elementId = elementId;
+		this.playerPlayground = playerPlayground;
+		this.playerEmail = playerEmail;
 		this.attributes = attributes;
 	}
 	
@@ -51,36 +58,36 @@ public class ActivityEntity {
 		this.type = type;
 	}
 
-	public String getChorePlayground() {
-		return chorePlayground;
+	public String getElementPlayground() {
+		return elementPlayground;
 	}
 
-	public void setChorePlayground(String chorePlayground) {
-		this.chorePlayground = chorePlayground;
+	public void setElementPlayground(String elementPlayground) {
+		this.elementPlayground = elementPlayground;
 	}
 
-	public String getChoreId() {
-		return choreId;
+	public String getElementId() {
+		return elementId;
 	}
 
-	public void setChoreId(String choreId) {
-		this.choreId = choreId;
+	public void setElementId(String elementId) {
+		this.elementId = elementId;
 	}
 
-	public String getRoommatePlayground() {
-		return roommatePlayground;
+	public String getPlayerPlayground() {
+		return playerPlayground;
 	}
 
-	public void setRoommatePlayground(String roommatePlayground) {
-		this.roommatePlayground = roommatePlayground;
+	public void setPlayerPlayground(String playerPlayground) {
+		this.playerPlayground = playerPlayground;
 	}
 
-	public String getRoommateEmail() {
-		return roommateEmail;
+	public String getPlayerEmail() {
+		return playerEmail;
 	}
 
-	public void setRoommateEmail(String roommateEmail) {
-		this.roommateEmail = roommateEmail;
+	public void setPlayerEmail(String playerEmail) {
+		this.playerEmail = playerEmail;
 	}
 	
 	@Transient

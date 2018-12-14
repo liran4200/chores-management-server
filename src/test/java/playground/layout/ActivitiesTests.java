@@ -73,7 +73,7 @@ public class ActivitiesTests {
 		ActivityEntity act1 = new ActivityEntity(type, chorePlayground, choreId, roommatePlayground, roommateEmail, attributes);
 		ActivityTo activityTo = new ActivityTo(act1);
 		
-		String UserEmail = act1.getRoommateEmail();
+		String UserEmail = act1.getPlayerEmail();
 		String UserPlayground = act1.getRoommatePlayground();
 		
 		//when POST /playground/activities with body {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}

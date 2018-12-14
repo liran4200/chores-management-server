@@ -113,8 +113,12 @@ public class JpaUserService implements UserService{
 		}
 		
 		if( user.getRole()!= null &&
-				!user.getRole().equals(user.getRole())) {
+				!user.getRole().equals(existing.getRole())) {
 			existing.setRole(user.getRole());
+		}
+		
+		if( user.getPoints() != existing.getPoints()) {
+			existing.setPoints(user.getPoints());
 		}
 		
 		this.users.save(existing);

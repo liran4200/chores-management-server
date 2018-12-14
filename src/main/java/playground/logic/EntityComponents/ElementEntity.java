@@ -16,9 +16,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Entity(name="Elements")
 @Table(name="ELEMENTS")
 public class ElementEntity {
-	
-	
-	
+	public static final String ATTRIBUTE_SCORE = "Score";
+	public static final String ATTRIBUTE_STATUS = "Status";
+	public static final String ATTRIBUTE_ASSIGNED_TO = "ATTRIBUTE_ASSIGNED_TO";
+	public static final String ASSIGNED_TO_NONE = "";
+	public static final String STATUS_DONE = "Done";
+	public static final String STATUS_ASSIGNED = "Assigned";
+	public static final String STATUS_UNASSIGNED = "Unassigned";
+
 	private ElementId	   idAndPlayground;	
 	
 	private String 			   name;

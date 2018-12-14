@@ -1,9 +1,9 @@
 package playground.logic.services;
 
 import playground.logic.EntityComponents.ActivityEntity;
-import playground.logic.exceptions.NoSuchAttributeException;
+import playground.logic.exceptions.ActivityInvokeFailedException;
 
 public interface ActivityService {
 	
-	public Object invokeActivity(ActivityEntity activity) throws NoSuchAttributeException;
+	public Object invokeActivity(ActivityEntity activity) throws ActivityInvokeFailedException;
 }

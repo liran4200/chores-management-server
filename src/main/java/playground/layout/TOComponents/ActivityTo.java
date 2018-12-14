@@ -10,10 +10,10 @@ public class ActivityTo {
 	private String				playground;
 	private String 				id;
 	private String 				type;
-	private String 				chorePlayground;
-	private String				choreId;
-	private String 				roommatePlayground;
-	private String 				roommateEmail;
+	private String 				elementPlayground;
+	private String				elementId;
+	private String 				playerPlayground;
+	private String 				playerEmail;
 	private Map<String, Object> attributes;
 	
 	public ActivityTo() {
@@ -25,10 +25,10 @@ public class ActivityTo {
 		this.playground = activity.getIdAndPlayground().getPlayground();
 		this.id = activity.getIdAndPlayground().getId();
 		this.type = activity.getType();
-		this.chorePlayground = activity.getChorePlayground();
-		this.choreId = activity.getChoreId();
-		this.roommatePlayground = activity.getRoommatePlayground();
-		this.roommateEmail = activity.getRoommateEmail();
+		this.elementPlayground = activity.getElementPlayground();
+		this.elementId = activity.getElementId();
+		this.playerPlayground = activity.getPlayerPlayground();
+		this.playerEmail = activity.getPlayerEmail();
 		this.attributes = activity.getAttributes();
 	}
 
@@ -56,36 +56,36 @@ public class ActivityTo {
 		this.type = type;
 	}
 
-	public String getChorePlayground() {
-		return chorePlayground;
+	public String getElementPlayground() {
+		return elementPlayground;
 	}
 
-	public void setChorePlayground(String chorePlayground) {
-		this.chorePlayground = chorePlayground;
+	public void setElementPlayground(String elementPlayground) {
+		this.elementPlayground = elementPlayground;
 	}
 
 	public String getChoreId() {
-		return choreId;
+		return elementId;
 	}
 
 	public void setChoreId(String choreId) {
-		this.choreId = choreId;
+		this.elementId = choreId;
 	}
 
-	public String getRoommatePlayground() {
-		return roommatePlayground;
+	public String getPlayerPlayground() {
+		return playerPlayground;
 	}
 
-	public void setRoommatePlayground(String roommatePlayground) {
-		this.roommatePlayground = roommatePlayground;
+	public void setPlayerPlayground(String playerPlayground) {
+		this.playerPlayground = playerPlayground;
 	}
 
-	public String getRoommateEmail() {
-		return roommateEmail;
+	public String getPlayerEmail() {
+		return playerEmail;
 	}
 
-	public void setRoommateEmail(String roommateEmail) {
-		this.roommateEmail = roommateEmail;
+	public void setPlayerEmail(String playerEmail) {
+		this.playerEmail = playerEmail;
 	}
 
 	public Map<String, Object> getAttributes() {
@@ -98,12 +98,12 @@ public class ActivityTo {
 	
 	public ActivityEntity toEntity() {
 		ActivityEntity rv = new ActivityEntity();
-		rv.setAttributes(attributes);
-		rv.setChoreId(choreId);
-		rv.setChorePlayground(chorePlayground);
-		rv.setRoommateEmail(roommateEmail);
-		rv.setRoommatePlayground(roommatePlayground);
-		rv.setType(type);
+		rv.setAttributes(this.attributes);
+		rv.setElementId(this.elementId);
+		rv.setElementPlayground(this.elementPlayground);
+		rv.setPlayerEmail(this.playerEmail);
+		rv.setPlayerPlayground(this.playerPlayground);
+		rv.setType(this.type);
 		return rv;
 	}
 }

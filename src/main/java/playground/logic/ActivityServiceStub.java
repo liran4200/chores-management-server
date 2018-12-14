@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.services.ActivityService;
 
-@Service
 public class ActivityServiceStub implements ActivityService {
 	
 	public static final String ATTRIB_SCORE = "Score";
