@@ -22,8 +22,8 @@ public class ActivityTo {
 	
 	public ActivityTo(ActivityEntity activity) {
 		super();
-		this.playground = activity.getPlayground();
-		this.id = activity.getId();
+		this.playground = activity.getIdAndPlayground().getPlayground();
+		this.id = activity.getIdAndPlayground().getId();
 		this.type = activity.getType();
 		this.chorePlayground = activity.getChorePlayground();
 		this.choreId = activity.getChoreId();

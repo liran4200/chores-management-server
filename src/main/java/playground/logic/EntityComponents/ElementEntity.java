@@ -19,7 +19,7 @@ public class ElementEntity {
 	
 	
 	
-	private ElementUniqueId	   idAndPlayground;	
+	private ElementId	   idAndPlayground;	
 	
 	private String 			   name;
 	private String 			   type;
@@ -36,7 +36,7 @@ public class ElementEntity {
 	
 	public ElementEntity() {
 		//empty unique id -> will be defined when added to DB
-		this.idAndPlayground = new ElementUniqueId();
+		this.idAndPlayground = new ElementId();
 		
 		this.creationDate = new Date();
 	}
@@ -54,11 +54,11 @@ public class ElementEntity {
 	}
 	
 	@EmbeddedId
-	public ElementUniqueId getIdAndPlayground() {
+	public ElementId getIdAndPlayground() {
 		return this.idAndPlayground;
 	}
 	
-	public void setIdAndPlayground(ElementUniqueId idAndPlayground) {
+	public void setIdAndPlayground(ElementId idAndPlayground) {
 		this.idAndPlayground = idAndPlayground;
 	}
 

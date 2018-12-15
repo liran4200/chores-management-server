@@ -22,11 +22,12 @@ import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
 
-
+/**
+ * @author yuriv
+ */
 @RestController
 public class ElementsAPI {
 	
-	private static final String PATH = "/playground/elements";
 
 	private ElementsService ElementsService;
 	
@@ -39,7 +40,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 		method=RequestMethod.POST,
-		path=PATH + "/{userPlayground}/{email}",
+		path="/playground/elements/{userPlayground}/{email}",
 		produces=MediaType.APPLICATION_JSON_VALUE,
 		consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ElementTo addNewElement (@RequestBody ElementTo newElement, 
@@ -51,7 +52,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.PUT,
-			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
+			path="/playground/elements/{userPlayground}/{email}/{playground}/{id}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
 	public void updateElement (@RequestBody ElementTo newElement,
 							   @PathVariable("userPlayground") String userPlayground,
@@ -63,7 +64,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH + "/{userPlayground}/{email}/{playground}/{id}",
+			path="/playground/elements/{userPlayground}/{email}/{playground}/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ElementTo getElementByID (@PathVariable("userPlayground") String userPlayground,
 								 	 @PathVariable("email") String email,
@@ -74,7 +75,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH + "/{userPlayground}/{email}/all",
+			path="/playground/elements/{userPlayground}/{email}/all",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ElementTo[] getAllElements (@PathVariable("userPlayground") String userPlayground,
 			 					   @PathVariable("email") String email,
@@ -89,7 +90,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH + "/{userPlayground}/{email}/near/{x}/{y}/{distance}",
+			path="/playground/elements/{userPlayground}/{email}/near/{x}/{y}/{distance}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ElementTo[] getAllNearElements (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
@@ -107,7 +108,7 @@ public class ElementsAPI {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path=PATH + "/{userPlayground}/{email}/search/{attributeName}/{value}",
+			path="/playground/elements/{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ElementTo[] searchElement (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,

@@ -3,8 +3,8 @@ package playground.dal;
 import org.springframework.data.repository.CrudRepository;
 
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.EntityComponents.ElementId;
+import playground.logic.EntityComponents.ActivityId;
 
-public interface ElementDao extends CrudRepository<ElementEntity, ElementId> {
+public interface ActivityDao extends CrudRepository<ElementEntity, ActivityId> {
 
 }
