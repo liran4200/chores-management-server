@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import playground.aop.logger.MyLog;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.dal.UserDao;
@@ -30,12 +31,14 @@ public class JpaUserService implements UserService{
 	
 	@Override
 	@Transactional
+	@MyLog
 	public void cleanup() {
 		this.users.deleteAll();
 	}
 
 	@Override
 	@Transactional
+	@MyLog
 	public long createUser(UserEntity user) throws UserAlreadyExistsException {
 		UserId key = user.getUserId();
 		
@@ -52,6 +55,7 @@ public class JpaUserService implements UserService{
 	
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
 	public UserEntity getCustomUser(String email, String playground) throws UserNotFoundException, UserNotActiveException {
 		UserId key = new UserId(email);
 		
@@ -70,6 +74,7 @@ public class JpaUserService implements UserService{
 	
 	@Transactional
 	@Override
+	@MyLog
 	public UserEntity getConfirmUser(String email, String playground, long code)
 			throws UserNotFoundException, InValidConfirmationCodeException {
 		UserId key = new UserId(email);	
@@ -92,6 +97,7 @@ public class JpaUserService implements UserService{
 
 	@Override
 	@Transactional
+	@MyLog
 	public void updateUser(String email, String playground, UserEntity user) throws UserNotFoundException, UserNotActiveException {
 		UserId key = user.getUserId();
 		if(!this.users.existsById(key))

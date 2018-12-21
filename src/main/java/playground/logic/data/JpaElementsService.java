@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import playground.aop.logger.MyLog;
 import playground.dal.ElementDao;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
@@ -35,12 +36,14 @@ public class JpaElementsService implements ElementsService {
 	
 	@Override
 	@Transactional
+	@MyLog
 	public void cleanup() {
 		this.elements.deleteAll();
 	}
 
 	@Override
 	@Transactional
+	@MyLog
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
 		if (!this.elements.existsById(element.getIdAndPlayground())) {
@@ -57,6 +60,7 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional
+	@MyLog
 	public void updateElement(ElementEntity element, String userPlayground, String email, String playground, String id)
 			throws ElementNotFoundException {
 		ElementEntity existingElement = this.getElementById(userPlayground, email, playground, id);
@@ -86,6 +90,7 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
 		ElementId uniqueId = new ElementId(id, playground);
 		Optional<ElementEntity> op = this.elements.findById(uniqueId);
@@ -98,6 +103,7 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size) {
 		
 		return getAllValuesFromDao()
@@ -109,6 +115,7 @@ public class JpaElementsService implements ElementsService {
 	
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
 	public List<ElementEntity> getAllNearElements(String userPlaygeound, String email, double x, double y, double distance, int page, int size) {
 		
 		return getAllValuesFromDao()
@@ -121,6 +128,7 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value,
 			int page, int size) throws NoSuchAttributeException {
 		List<ElementEntity> allElements = getAllValuesFromDao();

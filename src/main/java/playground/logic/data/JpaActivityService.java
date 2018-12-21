@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import playground.aop.logger.MyLog;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ActivityService;
@@ -20,6 +21,7 @@ public class JpaActivityService implements ActivityService {
 	
 	@Override
 	@Transactional
+	@MyLog
 	public Object invokeActivity(ActivityEntity activity) throws NoSuchAttributeException {
 		Object toReturn = activity.getAttributes().get(ATTRIB_SCORE);
 		if(toReturn == null) {
