@@ -3,8 +3,6 @@ package playground.logic;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Service;
-
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.services.ActivityService;
 

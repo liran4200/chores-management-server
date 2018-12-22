@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 import playground.aop.logger.LoggerAspect;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
+import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.UserNotActiveException;
 import playground.logic.exceptions.UserNotFoundException;
 import playground.logic.services.UserService;
@@ -38,7 +39,7 @@ public class UserValidationAspect {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Around("@annotation(playground.aop.userValidation.PlaygroundUserValidation) && args (userPlayground, email,..) || @annotation(playground.aop.userValidation.PlaygroundUserValidation) && args (*, userPlayground, email,..)")
+	@Around("@annotation(playground.aop.userValidation.PlaygroundUserValidation) && args (userPlayground, email,..)")
 	public Object validateActiveUser(ProceedingJoinPoint jp, String userPlayground, String email) throws Throwable {
 		try {
 			log.info("******************** User Validation ********************");
@@ -59,7 +60,7 @@ public class UserValidationAspect {
 					 if (((ElementEntity) rv).getExpirationDate().compareTo(now) > 0) {
 						 return rv;
 					 } else {
-						 return null;
+						 throw new ElementNotFoundException("no element found");
 					 }
 				 }
 			 }

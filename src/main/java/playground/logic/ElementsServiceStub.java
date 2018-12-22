@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Service;
-
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
