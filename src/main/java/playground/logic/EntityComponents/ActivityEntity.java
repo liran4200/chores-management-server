@@ -13,12 +13,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Entity(name="Activity")
 @Table(name="ACTIVITY")
-public class ActivityEntity {	
+public class ActivityEntity {
 	
-	public static final String ATTRIBUTE_ACTION_TO_PREFORM = "ATTRIBUTE_ACTION_TO_PREFORM";
+	// Type Possible Values
+	public static final String MARK_AS_ASSIGENED_PLUGIN = "MarkAsAssigenedPlugin";
+	public static final String MARK_AS_DOEN_PLUGIN = "MarkAsDonePlugin";
+	public static final String MARK_AS_UNASSIGENED_PLUGIN = "MarkAsUnassigenedPlugin";
+	public static final String GET_MESSAGE_BORD_PLUGIN = "GetMessageBordPlugin";
+	// Message Attribute
+	public static final String ATTRIBUTE_MESSAGE = "ATTRIBUTE_MESSAGE";
 
 	private ActivityId			idAndPlayground;
-
 	private String 				type;
 	private String 				elementPlayground;
 	private String				elementId;
@@ -90,6 +95,10 @@ public class ActivityEntity {
 		this.playerEmail = playerEmail;
 	}
 	
+	public void setMessageAttribute(String m) {
+		this.attributes.put(ATTRIBUTE_MESSAGE, m);
+	}
+	
 	@Transient
 	public Map<String, Object> getAttributes() {
 		return attributes;
@@ -125,7 +134,4 @@ public class ActivityEntity {
 		ActivityEntity element = (ActivityEntity) other;
 		return this.idAndPlayground.equals(element.getIdAndPlayground());
 	}
-	
-	
-
 }
