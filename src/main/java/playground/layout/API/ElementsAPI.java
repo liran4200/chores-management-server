@@ -20,9 +20,13 @@ import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
+import playground.logic.exceptions.UserNotActiveException;
+import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.exceptions.UserNotManagerException;
 import playground.logic.services.ElementsService;
 
 /**
+ * Rest API for Elements component
  * @author yuriv
  */
 @RestController
@@ -139,6 +143,24 @@ public class ElementsAPI {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.CONFLICT)
 	public ErrorMessage handleSpecificException (ElementAlreadyExistsException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage handleSpecificException (UserNotActiveException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	public ErrorMessage handleSpecificException (UserNotFoundException e) {
+		return handleException(e);
+	}
+	
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorMessage handleSpecificException (UserNotManagerException e) {
 		return handleException(e);
 	}
 	

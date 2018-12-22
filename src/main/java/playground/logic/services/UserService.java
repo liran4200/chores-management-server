@@ -18,5 +18,5 @@ public interface UserService {
 	
 	public void updateUser(String email, String playground, UserEntity user) 
 			throws UserNotFoundException,UserNotActiveException;
-	
+		
 }

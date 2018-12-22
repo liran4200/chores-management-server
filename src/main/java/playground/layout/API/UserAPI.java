@@ -63,7 +63,7 @@ public class UserAPI {
 			method=RequestMethod.PUT,
 			path="playground/users/{playground}/{email}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public void updateRoommate (
+	public void updateUser (
 			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
 			@RequestBody UserTo user) throws UserNotFoundException, UserNotActiveException {

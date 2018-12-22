@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import playground.dal.ActivityDao;
+import playground.aop.logger.MyLog;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ActivityInvokeFailedException;
@@ -36,6 +37,7 @@ public class JpaActivityService implements ActivityService {
 	
 	@Override
 	@Transactional
+	@MyLog
 	public Object invokeActivity(ActivityEntity activity) throws ActivityInvokeFailedException {
 		Object content;
 		try {

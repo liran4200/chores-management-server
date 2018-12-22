@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import playground.aop.logger.MyLog;
+import playground.aop.userValidation.PlaygroundManagerValidation;
+import playground.aop.userValidation.PlaygroundUserValidation;
 import playground.dal.ElementDao;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
@@ -20,6 +23,10 @@ import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
 
+/**
+ * JPA service for Elements component - using DB to store data
+ * @author yuriv
+ */
 @Service
 public class JpaElementsService implements ElementsService {
 	
@@ -35,12 +42,15 @@ public class JpaElementsService implements ElementsService {
 	
 	@Override
 	@Transactional
+	@MyLog
 	public void cleanup() {
 		this.elements.deleteAll();
 	}
 
 	@Override
 	@Transactional
+	@MyLog
+	@PlaygroundManagerValidation
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
 		if (!this.elements.existsById(element.getIdAndPlayground())) {
@@ -57,6 +67,8 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional
+	@MyLog
+	@PlaygroundManagerValidation
 	public void updateElement(ElementEntity element, String userPlayground, String email, String playground, String id)
 			throws ElementNotFoundException {
 		ElementEntity existingElement = this.getElementById(userPlayground, email, playground, id);
@@ -86,6 +98,8 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
+	@PlaygroundUserValidation
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
 		ElementId uniqueId = new ElementId(id, playground);
 		Optional<ElementEntity> op = this.elements.findById(uniqueId);
@@ -98,6 +112,8 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
+	@PlaygroundUserValidation
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size) {
 		
 		return getAllValuesFromDao()
@@ -109,6 +125,8 @@ public class JpaElementsService implements ElementsService {
 	
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
+	@PlaygroundUserValidation
 	public List<ElementEntity> getAllNearElements(String userPlaygeound, String email, double x, double y, double distance, int page, int size) {
 		
 		return getAllValuesFromDao()
@@ -121,6 +139,8 @@ public class JpaElementsService implements ElementsService {
 
 	@Override
 	@Transactional(readOnly=true)
+	@MyLog
+	@PlaygroundUserValidation
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value,
 			int page, int size) throws NoSuchAttributeException {
 		List<ElementEntity> allElements = getAllValuesFromDao();

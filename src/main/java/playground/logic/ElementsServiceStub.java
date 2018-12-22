@@ -10,8 +10,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.stereotype.Service;
-
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
@@ -19,7 +17,11 @@ import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
 
 
-
+/**
+ * service stub for Elements component - using synchronized map to store data
+ * @author yuriv
+ *
+ */
 public class ElementsServiceStub implements ElementsService {
 	
 	private Map<String, ElementEntity> elements;
