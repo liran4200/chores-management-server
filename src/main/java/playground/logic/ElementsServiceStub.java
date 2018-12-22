@@ -19,7 +19,11 @@ import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
 
 
-
+/**
+ * service stub for Elements component - using synchronized map to store data
+ * @author yuriv
+ *
+ */
 public class ElementsServiceStub implements ElementsService {
 	
 	private Map<String, ElementEntity> elements;

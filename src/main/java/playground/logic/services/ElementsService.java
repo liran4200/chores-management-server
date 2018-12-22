@@ -7,6 +7,11 @@ import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
 
+
+/**
+ * service interface for Elements component
+ * @author yuriv
+ */
 public interface ElementsService {
 	
 	public void cleanup();
