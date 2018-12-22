@@ -54,11 +54,11 @@ public class ElementEntity {
 	}
 	
 	@EmbeddedId
-	public ElementId getelementId() {
+	public ElementId getElementId() {
 		return this.elementId;
 	}
 	
-	public void setelementId(ElementId elementId) {
+	public void setElementId(ElementId elementId) {
 		this.elementId = elementId;
 	}
 
@@ -169,6 +169,6 @@ public class ElementEntity {
 			return false;
 		}
 		ElementEntity element = (ElementEntity) other;
-		return this.elementId.equals(element.getelementId());
+		return this.elementId.equals(element.getElementId());
 	}
 }
