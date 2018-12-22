@@ -81,8 +81,8 @@ public class ElementsTests {
 		ElementEntity chore = new ElementEntity(name, type, userPlayground,email, x, y, expirationDate);
 		// And the database contains a Chore with name: "Name and ID: 
 		ElementEntity ExpectedChore = elements.createNewElement(chore, userPlayground, email);
-		String ExpectedPlayground = ExpectedChore.getIdAndPlayground().getPlayground();
-		String ExpectedID		  = ExpectedChore.getIdAndPlayground().getId();
+		String ExpectedPlayground = ExpectedChore.getelementId().getPlayground();
+		String ExpectedID		  = ExpectedChore.getelementId().getId();
 
 		
 		
@@ -238,8 +238,8 @@ public class ElementsTests {
 		// Jackson unmarshallon
 		ElementEntity entity = this.jacksonMapper.readValue(entityJson, ElementEntity.class);
 		this.elements.createNewElement(entity, "playground", "email");
-		String playground = entity.getIdAndPlayground().getPlayground();
-		String ID 		  = entity.getIdAndPlayground().getId(); 
+		String playground = entity.getelementId().getPlayground();
+		String ID 		  = entity.getelementId().getId(); 
 	
 		// when I PUT /Chores/name1 with body {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
 		String toJson = "{\"name\":\"NEWname\", \"type\":\"type1\", \"layground\":\"playground1\","
@@ -253,7 +253,7 @@ public class ElementsTests {
 				entity.getName()); // url parameters
 		
 		// then the database contains for name "name1" {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
-		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getIdAndPlayground().getId());
+		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getelementId().getId());
 		actualEntityInDb.setCreationDate(null);
 		
 		String expectedJson = this.jacksonMapper.writeValueAsString(

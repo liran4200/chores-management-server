@@ -19,24 +19,24 @@ public class ElementEntity {
 	
 	
 	
-	private ElementId	   idAndPlayground;	
+	private ElementId	   		elementId;	
 	
-	private String 			   name;
-	private String 			   type;
-	private String 			   creatorPlayground;
-	private String 			   creatorEmail;
+	private String 				name;
+	private String 				type;
+	private String 				creatorPlayground;
+	private String 				creatorEmail;
 	
-	private Double			   x;
-	private Double			   y;
+	private Double				x;
+	private Double				y;
 	
-	private Date 			   creationDate;
-	private Date 			   expirationDate;
+	private Date 				creationDate;
+	private Date 				expirationDate;
 	
-	private Map<String,Object> attributes;
+	private Map<String,Object> 	attributes;
 	
 	public ElementEntity() {
 		//empty unique id -> will be defined when added to DB
-		this.idAndPlayground = new ElementId();
+		this.elementId = new ElementId();
 		
 		this.creationDate = new Date();
 	}
@@ -54,12 +54,12 @@ public class ElementEntity {
 	}
 	
 	@EmbeddedId
-	public ElementId getIdAndPlayground() {
-		return this.idAndPlayground;
+	public ElementId getelementId() {
+		return this.elementId;
 	}
 	
-	public void setIdAndPlayground(ElementId idAndPlayground) {
-		this.idAndPlayground = idAndPlayground;
+	public void setelementId(ElementId elementId) {
+		this.elementId = elementId;
 	}
 
 	public String getName() {
@@ -169,6 +169,6 @@ public class ElementEntity {
 			return false;
 		}
 		ElementEntity element = (ElementEntity) other;
-		return this.idAndPlayground.equals(element.getIdAndPlayground());
+		return this.elementId.equals(element.getelementId());
 	}
 }

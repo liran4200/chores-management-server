@@ -53,11 +53,11 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundManagerValidation
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
-		if (!this.elements.existsById(element.getIdAndPlayground())) {
+		if (!this.elements.existsById(element.getelementId())) {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
 			String number = "" + temp.getNextNumber();
 			//set new id to element
-			element.setIdAndPlayground(new ElementId(number));
+			element.setelementId(new ElementId(number));
 			this.numberGenerator.delete(temp);
 			return this.elements.save(element);
 		} else {
