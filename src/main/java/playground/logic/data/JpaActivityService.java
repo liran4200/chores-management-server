@@ -7,8 +7,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import playground.dal.ActivityDao;
 import playground.aop.logger.MyLog;
 import playground.logic.EntityComponents.ActivityEntity;
@@ -24,13 +22,10 @@ public class JpaActivityService implements ActivityService {
 	private ConfigurableApplicationContext spring;
 	private ElementEntity activityHistoryBoard;
 	
-	private ObjectMapper jackson;
-
 	@Autowired
 	public JpaActivityService(ActivityDao activitiesDal, ConfigurableApplicationContext spring) {
 		this.activitiesDal = activitiesDal;
 		this.spring = spring;
-		this.jackson = new ObjectMapper();
 		this.activityHistoryBoard = new ElementEntity();
 		activityHistoryBoard.setAttributes(new HashMap<String,Object>());
 	}
