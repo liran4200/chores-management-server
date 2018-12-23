@@ -6,10 +6,8 @@ import javax.annotation.PostConstruct;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.services.ActivityService;
 
-<<<<<<< HEAD
-=======
+
 //@Service
->>>>>>> master
 public class ActivityServiceStub implements ActivityService {
 	
 	public static final String ATTRIB_SCORE = "Score";
