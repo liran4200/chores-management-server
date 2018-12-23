@@ -1,12 +1,12 @@
 package playground.logic.data;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,11 +53,11 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundManagerValidation
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
-		if (!this.elements.existsById(element.getIdAndPlayground())) {
+		if (!this.elements.existsById(element.getElementId())) {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
 			String number = "" + temp.getNextNumber();
 			//set new id to element
-			element.setIdAndPlayground(new ElementId(number));
+			element.setElementId(new ElementId(number));
 			this.numberGenerator.delete(temp);
 			return this.elements.save(element);
 		} else {
@@ -115,12 +115,7 @@ public class JpaElementsService implements ElementsService {
 	@MyLog
 	@PlaygroundUserValidation
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size) {
-		
-		return getAllValuesFromDao()
-				.stream()
-				.skip(page * size)
-				.limit(size)
-				.collect(Collectors.toList());
+		return this.elements.findAll(PageRequest.of(page, size, Direction.DESC, "creationDate")).getContent();
 	}
 	
 	@Override
@@ -128,13 +123,12 @@ public class JpaElementsService implements ElementsService {
 	@MyLog
 	@PlaygroundUserValidation
 	public List<ElementEntity> getAllNearElements(String userPlaygeound, String email, double x, double y, double distance, int page, int size) {
+		double xTop = x + distance;
+		double xBottom = x - distance;
+		double yTop = y + distance;
+		double yBottom = y - distance;
 		
-		return getAllValuesFromDao()
-				.stream()
-				.filter(element -> element.calculateDistance(x, y) < distance)
-				.skip(page * size)
-				.limit(size)
-				.collect(Collectors.toList());
+		return this.elements.findAllByXBetweenAndYBetween(xBottom, xTop, yBottom, yTop, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 	}
 
 	@Override
@@ -143,36 +137,14 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundUserValidation
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value,
 			int page, int size) throws NoSuchAttributeException {
-		List<ElementEntity> allElements = getAllValuesFromDao();
-		
-		if (attributeName.equals("name")) {
-			return allElements
-					.stream()
-					.filter(element -> element.getName().equals(value))
-					.skip(page * size)
-					.limit(size)
-					.collect(Collectors.toList());
-		} else if (attributeName.equals("type")) {
-			return allElements
-					.stream()
-					.filter(element -> element.getType().equals(value))
-					.skip(page * size)
-					.limit(size)
-					.collect(Collectors.toList());
+		if (Objects.equals("name", attributeName)) {
+			return this.elements.findAllByNameLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
+		} else if (Objects.equals("type", attributeName)) {
+			return this.elements.findAllByTypeLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 		} else {
 			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");
 		}
 	}
 	
-	/**
-	 * @return all elements from DB as List
-	 */
-	private List<ElementEntity> getAllValuesFromDao() {
-		List<ElementEntity> allList = new ArrayList<>();
-		this.elements.findAll()
-			.forEach(allList::add);
-		
-		return allList;
-	}
 
 }
