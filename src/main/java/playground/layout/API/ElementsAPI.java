@@ -33,12 +33,12 @@ import playground.logic.services.ElementsService;
 public class ElementsAPI {
 	
 
-	private ElementsService ElementsService;
+	private ElementsService elementsService;
 	
 	 
     @Autowired
 	public void setElementsService(ElementsService elementsService) {
-		 this.ElementsService = elementsService;
+		 this.elementsService = elementsService;
     }
 	
 	
@@ -50,7 +50,7 @@ public class ElementsAPI {
 	public ElementTo addNewElement (@RequestBody ElementTo newElement, 
 								@PathVariable ("userPlayground") String userPlayground, 
 								@PathVariable ("email") String email) throws ElementAlreadyExistsException {
-		ElementEntity elementEntity = this.ElementsService.createNewElement(newElement.toEntity(), userPlayground, email);
+		ElementEntity elementEntity = this.elementsService.createNewElement(newElement.toEntity(), userPlayground, email);
 		return new ElementTo(elementEntity);
 	}
 	
@@ -63,7 +63,7 @@ public class ElementsAPI {
 							   @PathVariable("email") String email,
 							   @PathVariable("playground") String playground,
 							   @PathVariable("id") String id) throws ElementNotFoundException {
-		this.ElementsService.updateElement(newElement.toEntity(), userPlayground, email, playground, id);
+		this.elementsService.updateElement(newElement.toEntity(), userPlayground, email, playground, id);
 	}
 	
 	@RequestMapping(
@@ -74,7 +74,7 @@ public class ElementsAPI {
 								 	 @PathVariable("email") String email,
 								 	 @PathVariable("playground") String playground,
 								 	 @PathVariable("id") String id) throws ElementNotFoundException {
-		return new ElementTo(this.ElementsService.getElementById(userPlayground, email, playground, id)); 
+		return new ElementTo(this.elementsService.getElementById(userPlayground, email, playground, id)); 
 	}
 	
 	@RequestMapping(
@@ -85,7 +85,7 @@ public class ElementsAPI {
 			 					   @PathVariable("email") String email,
 			 					   @RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   @RequestParam(name="page", required=false, defaultValue="0") int page) {
-		return this.ElementsService.getAllElements(userPlayground, email, page, size)
+		return this.elementsService.getAllElements(userPlayground, email, page, size)
 				.stream()
 				.map(ElementTo::new)
 				.collect(Collectors.toList())
@@ -103,7 +103,7 @@ public class ElementsAPI {
 			 					   				@PathVariable("distance") double distance,
 			 					   				@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   				@RequestParam(name="page", required=false, defaultValue="0") int page) {
-		return this.ElementsService.getAllNearElements(userPlayground, email, x, y, distance, page, size)
+		return this.elementsService.getAllNearElements(userPlayground, email, x, y, distance, page, size)
 				.stream()
 				.map(ElementTo::new)
 				.collect(Collectors.toList())
@@ -121,7 +121,7 @@ public class ElementsAPI {
 			 					   				@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			 					   				@RequestParam(name="page", required=false, defaultValue="0") int page) throws Exception{
 		
-		return this.ElementsService.searchElement(userPlayground, email, attributeName, value, page, size)
+		return this.elementsService.searchElement(userPlayground, email, attributeName, value, page, size)
 				.stream()
 				.map(ElementTo::new)
 				.collect(Collectors.toList())
