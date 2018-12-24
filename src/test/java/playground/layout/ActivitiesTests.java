@@ -74,7 +74,7 @@ public class ActivitiesTests {
 		ActivityTo activityTo = new ActivityTo(act1);
 		
 		String UserEmail = act1.getPlayerEmail();
-		String UserPlayground = act1.getRoommatePlayground();
+		String UserPlayground = act1.getPlayerPlayground();
 		
 		//when POST /playground/activities with body {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		ActivityTo responseActivity = this.restTemplate.postForObject(
