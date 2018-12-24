@@ -1,6 +1,7 @@
 package playground.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
@@ -11,6 +12,7 @@ import playground.logic.exceptions.UserNotActiveException;
 import playground.logic.exceptions.UserNotFoundException;
 import playground.logic.services.UserService;
 
+@Component
 public class MarkAsDonePlugin extends AbsChangeElementStatusPlugin {
 	
 	private UserService usersApi;

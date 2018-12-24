@@ -64,12 +64,12 @@ public class ActivityTo {
 		this.elementPlayground = elementPlayground;
 	}
 
-	public String getChoreId() {
+	public String getElementId() {
 		return elementId;
 	}
 
-	public void setChoreId(String choreId) {
-		this.elementId = choreId;
+	public void setElementId(String elementId) {
+		this.elementId = elementId;
 	}
 
 	public String getPlayerPlayground() {

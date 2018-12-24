@@ -1,5 +1,6 @@
 package playground.plugins;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public abstract class AbsChangeElementStatusPlugin implements Plugin {
 				activity.getElementId()
 				);
 		Map<String,Object> newAttributes = toUpdate.getAttributes();
+		if (newAttributes == null) {
+			newAttributes = new HashMap<String, Object>();
+		}
 		newAttributes.put(ElementEntity.ATTRIBUTE_STATUS, status);
 		newAttributes.put(ElementEntity.ATTRIBUTE_ASSIGNED_TO,userId);
 		toUpdate.setAttributes(newAttributes);

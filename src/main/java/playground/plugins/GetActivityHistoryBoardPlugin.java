@@ -1,10 +1,12 @@
 package playground.plugins;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import playground.dal.ActivityDao;
 import playground.logic.EntityComponents.ActivityEntity;
 
+@Component
 public class GetActivityHistoryBoardPlugin implements Plugin {
 	
 	private ActivityDao activitiesDal;

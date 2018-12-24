@@ -1,9 +1,12 @@
 package playground.plugins;
 
+import org.springframework.stereotype.Component;
+
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ElementNotFoundException;
 
+@Component
 public class MarkAsUnassigenedPlugin extends AbsChangeElementStatusPlugin {
 
 	@Override

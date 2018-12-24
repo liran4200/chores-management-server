@@ -2,6 +2,8 @@ package playground.logic.data;
 
 import java.util.HashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,11 @@ public class JpaActivityService implements ActivityService {
 	public JpaActivityService(ActivityDao activitiesDal, ConfigurableApplicationContext spring) {
 		this.activitiesDal = activitiesDal;
 		this.spring = spring;
+		
+	}
+	
+	@PostConstruct
+	public void init() {
 		this.activityHistoryBoard = new ElementEntity();
 		activityHistoryBoard.setAttributes(new HashMap<String,Object>());
 	}
