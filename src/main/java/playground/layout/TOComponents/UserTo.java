@@ -7,7 +7,7 @@ public class UserTo {
 	
 	private	String	email;
 	private String	playground;
-	private String  roommateName;
+	private String  UserName;
 	private String	avatar;
 	private String	role;
 	private long	points;
@@ -21,7 +21,7 @@ public class UserTo {
 		super();
 		this.email = user.getUserId().getEmail();
 		this.playground = user.getUserId().getPlayground();
-		this.roommateName = user.getUserName();
+		this.UserName = user.getUserName();
 		this.avatar = user.getAvatar();
 		this.role = user.getRole();
 		this.points = user.getPoints();
@@ -44,12 +44,12 @@ public class UserTo {
 		this.playground = playground;
 	}
 
-	public String getRoommateName() {
-		return roommateName;
+	public String getUserName() {
+		return UserName;
 	}
 
-	public void setRoommateName(String roommateName) {
-		this.roommateName = roommateName;
+	public void setUserName(String UserName) {
+		this.UserName = UserName;
 	}
 
 	public String getAvatar() {
@@ -95,7 +95,7 @@ public class UserTo {
 		entity.setUserId(key);
 		entity.setPoints(this.points);
 		entity.setRole(this.role);
-		entity.setUserName(this.roommateName);
+		entity.setUserName(this.UserName);
 		return entity;
 	}
 	

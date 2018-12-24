@@ -2,10 +2,8 @@ package playground.layout;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.text.SimpleDateFormat;
+import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.junit.After;
@@ -19,150 +17,330 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.EntityComponents.ElementId;
+import playground.logic.EntityComponents.UserEntity;
+import playground.logic.exceptions.UserAlreadyExistsException;
 import playground.logic.services.ElementsService;
+import playground.logic.services.UserService;
 import playground.layout.TOComponents.ElementTo;
-
+import playground.layout.TOComponents.NewUserForm;
+import playground.layout.TOComponents.UserTo;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=WebEnvironment.RANDOM_PORT)
 
 public class ElementsTests {
 	@Autowired
-	private ElementsService elements;
-	private RestTemplate restTemplate;
-	private String url;
+	private ElementsService  elements;
+	@Autowired
+	private UserService      users;
+	private RestTemplate	 restTemplate;
+	private String 			 url;
+	private String			 users_url;
 	
+	private String 			 ManagerJason = 
+			"{\"userName\":\"name_manager\","
+		    +"\"email\":\"yuri.vn@gmail.com\","
+		    +"\"avatar\":\"avatar\","
+		    +"\"role\":\"manager\"}";
+
+	private Long 			theManagerCode;
+	private String 			theManagerPlayground;
+	private String 			theManagerEmail;
+	
+	
+	private String 			 UserJason = 
+			"{\"userName\":\"name_user\","
+		    +"\"email\":\"David.kr@gmail.com\","
+		    +"\"avatar\":\"avatar\","
+		    +"\"role\":\"user\"}";
+
+	private Long 			theUserCode;
+	private String 			theUserPlayground;
+	private String 			theUserEmail;
+	
+
 	@LocalServerPort
 	private int port;
-	
+
 	private ObjectMapper jacksonMapper;
-	
 	@PostConstruct
-	public void init() {
+	public void init() throws JsonParseException, JsonMappingException, IOException, UserAlreadyExistsException {
 		this.restTemplate = new RestTemplate();
 		this.url = "http://localhost:" + port + "/playground/elements";
-		
+		this.users_url = "http://localhost:" + port + "/playground/users";
+
 		System.err.println(this.url);
-		
+		System.err.println(this.users_url);
+
 		this.jacksonMapper = new ObjectMapper();
+		
+		
+//		/**
+//		 * Create Confirmed user with Manager role:
+//		 */
+//		NewUserForm manager = this.jacksonMapper.readValue(ManagerJason, NewUserForm.class);
+//		UserEntity  managerEntity = new UserEntity(manager);
+//		
+//		theManagerCode = users.createUser(managerEntity);
+//		theManagerEmail = managerEntity.getUserId().getEmail();
+//		theManagerPlayground = managerEntity.getUserId().getPlayground();
+//		
+//		// confirm the user just created to make is active.
+//		UserTo ResponseManager = this.restTemplate.getForObject(
+//				this.users_url  + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+//				UserTo.class,
+//				theManagerCode);
+//
+//		/**
+//		 * Create Confirmed user with User role:
+//		 */
+//
+//		NewUserForm user = this.jacksonMapper.readValue(UserJason, NewUserForm.class);
+//		UserEntity  userEntity = new UserEntity(manager);
+//		
+//		theUserCode = users.createUser(userEntity);
+//		theUserEmail = userEntity.getUserId().getEmail();
+//		theUserPlayground = userEntity.getUserId().getPlayground();
+//		
+//		// confirm the user just created to make is active.
+//		UserTo ResponseUser = this.restTemplate.getForObject(
+//				this.url + "/" + "confirm" + "/" + theUserPlayground + "/" + theUserEmail + "/"  + theUserCode , 
+//				UserTo.class,
+//				theUserCode);
+
 	}
-	
+
 	@Before
 	public void setup () {
-		
+		this.elements.cleanup();
+		this.users.cleanup();
 	}
 
 	@After
 	public void teardown() {
-		this.elements.cleanup();
+	
 	}
 
-	
+
 	@Test
-	public void testServerInitializesProperly() throws Exception {
-		
-	}
-	
-	@Test
-	public void testGetSpecificChoreByIDSuccessfully() throws Exception {
+	public void testGetSpecificElementByIDSuccessfully() throws Exception {
 		//Given the server is up - do nothing
-		
 		String name = "Name";
 		String type = "Type";
 		double x = 1;
 		double y = 1;
 		Date expirationDate = new Date();
-		String userPlayground = "UserPlayground";
-		String email = "Email";
-		ElementEntity chore = new ElementEntity(name, type, userPlayground,email, x, y, expirationDate);
+		String ID	= "ID";
+		
+		/**
+		 * Create Confirmed user with Manager role:
+		 */
+		NewUserForm manager = this.jacksonMapper.readValue(ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+
+		ElementEntity chore = new ElementEntity(name, type, theManagerPlayground, theManagerEmail, x, y, expirationDate);
 		// And the database contains a Chore with name: "Name and ID: 
-		ElementEntity ExpectedChore = elements.createNewElement(chore, userPlayground, email);
+		ElementEntity ExpectedChore = elements.createNewElement(chore, theManagerPlayground, theManagerEmail);
 		String ExpectedPlayground = ExpectedChore.getElementId().getPlayground();
 		String ExpectedID		  = ExpectedChore.getElementId().getId();
 
-		
-		
-		
 		// When I GET /Chores/Name and Accept:application/Name
-		// invoke HTTP GET /Chores/Name with header: Accept:application/Name
+		// invoke HTTP GET /Element/Name with header: Accept:application/Name
 		// and create a new Chore object using jackson
 		ElementTo actualChore = this.restTemplate.getForObject(
-				this.url + "/" + userPlayground + "/" + email + "/" + ExpectedPlayground + "/" + ExpectedID,
+				this.url + "/" + theManagerPlayground + "/" + theManagerEmail + "/" + ExpectedPlayground + "/" + ExpectedID,
 				ElementTo.class
 				);
-		
-		
-		/*
-			Then the return status is 200
-			And the returned value is:
-			{
-			"Chore":"Name",
-			"creationDate":current date and time,
-			"location": x = 1, y = 1,
-			"moreAttributes":any Name
-			}
-		 */
-		// do nothing about status
-		// get chore from Chore and check that it states ""
+
 		assertThat(actualChore)
-			.isNotNull()
-			.extracting("id")
-			.containsExactly(ExpectedID);
-	}
-	@Test
-	public void testShowAtMostFirst5ChoresSuccessfully () throws Exception{
-		
-		String playground = "playground1";
-		String email	  = "email1";
-		ElementEntity chore1 = new ElementEntity("name1", "type1", playground, email, 1,1,new Date());
-		ElementEntity chore2 = new ElementEntity("name2", "type2", playground, email, 1,1,new Date());
-		ElementEntity chore3 = new ElementEntity("name3", "type3", playground, email, 1,1,new Date());
-		
-		elements.createNewElement(chore1, playground, email);
-		elements.createNewElement(chore2, playground, email);
-		elements.createNewElement(chore3, playground, email);
-		// given the database contains 3 Chores
-		
-		// when GET /chores 
-		ElementTo[] actualChores = this.restTemplate.getForObject(this.url + "/" + playground + "/" + email + "/" + "all", ElementTo[].class);
-		
-		// then 
-		assertThat(actualChores)
-			.isNotNull()
-			.hasSize(3);
+		.isNotNull()
+		.extracting("id")
+		.containsExactly(ExpectedID);
 	}
 	
+	
 	@Test
-	public void testShowChoresUsingPaginationSuccessfully() throws Exception{
-		// given the database contains 3 chores
+	public void testShowAtMostFirst10ChoresSuccessfully () throws Exception{
+
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
 		
-		String playground = "playground";
-		String email      = "email";
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
 		
-		ElementEntity chore1 = new ElementEntity("name1", "type1", playground, email, 1,1,new Date());
-		ElementEntity chore2 = new ElementEntity("name2", "type2", playground, email, 1,1,new Date());
-		ElementEntity chore3 = new ElementEntity("name3", "type3", playground, email, 1,1,new Date());
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
 		
-		elements.createNewElement(chore1, playground, email);
-		elements.createNewElement(chore2, playground, email);
-		elements.createNewElement(chore3, playground, email);
-		
-		// when GET /Chores 
-		ElementTo[] actualChores = this.restTemplate.getForObject(
-				this.url + "/" + playground + "/" + email + "/"  + "all" +  "?size={size}&page={page}", 
-				ElementTo[].class,
-				3, 1);
-		
+		/**********************************************************************************************************/
+
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1,1,new Date());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1,1,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1,1,new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+		// given the database contains 3 elements
+
+		// when GET /Element
+		ElementTo[] actualElement = this.restTemplate.getForObject(this.url + "/" + theManagerPlayground+ "/" + theManagerEmail + "/" + "all", ElementTo[].class);
+
 		// then 
-		assertThat(actualChores)
-			.isNotNull()
-			.hasSize(0);
+		assertThat(actualElement)
+		.isNotNull()
+		.hasSize(3);
 	}
 
+	@Test
+	public void testShowElementsUsingPaginationSuccessfully() throws Exception{
+		
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		// given the database contains 3 chores
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+
+		// when GET /size=3&page=0
+		ElementTo[] actualChores = this.restTemplate.getForObject(
+				this.url + "/" + theManagerPlayground + "/"  + theManagerEmail + "/" + "all" + "?size={size}&page={page}", 
+				ElementTo[].class,
+				3, 0);
+
+		// then 
+		assertThat(actualChores)
+		.isNotNull()
+		.hasSize(3);
+	}
+
+	
+	@Test
+	public void testShowEmptyElementsPageUsingPagination() throws Exception{
+		
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		// given the database contains 3 chores
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+
+		// when GET /size=3&page=0
+		ElementTo[] actualChores = this.restTemplate.getForObject(
+				this.url + "/" + theManagerPlayground + "/"  + theManagerEmail + "/" + "all" + "?size={size}&page={page}", 
+				ElementTo[].class,
+				3, 1);
+
+		// then 
+		assertThat(actualChores)
+		.isNotNull()
+		.hasSize(0); //size 0 for the empty page
+	}
+
+	
+	@Test
+	public void testShowElementInNextPageUsingPaginationSuccessfully() throws Exception{
+		
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		// given the database contains 3 chores
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+
+		// when GET /size=3&page=0
+		ElementTo[] actualChores = this.restTemplate.getForObject(
+				this.url + "/" + theManagerPlayground + "/"  + theManagerEmail + "/" + "all" + "?size={size}&page={page}", 
+				ElementTo[].class,
+				2, 1);
+
+		// then 
+		assertThat(actualChores)
+		.isNotNull()
+		.hasSize(1);
+	}
+
+	
 	@Test(expected=Exception.class)
 	public void testShowChoresUsingBadPageNumber() throws Exception{
 		// No chores are stored in DB
@@ -172,144 +350,304 @@ public class ElementsTests {
 				ElementTo[].class,
 				-1);
 	}
-	
-	/*  will be used in the future when user will be validated.
+
 	@Test
-	public void testAddNewChoreSuccessfully () throws Exception{
-		//given
-		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date());
-		String ID = chore1.getIdAndPlayground().toString();
-		String UserPlayground = chore1.getCreatorPlayground();
-		ElementTo chore1To = new ElementTo(chore1);
+	public void testAddNewElementSuccessfully() throws Exception{
 		
-		//when POST /chores with body {""name1", "type1", "playground1", "email1", 1,1, the date is the creation date"} 
-		ElementTo responseChore = this.restTemplate.postForObject(
-				this.url + "/" + "playground1" + "/" + "email1" + "/" + "playground1" + "/" + ID, // url
-				chore1To, // object in the request body
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make it active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		
+		//given
+		ElementEntity element1 = new ElementEntity("element1", "type1", theManagerPlayground, theManagerEmail, 1.0,1.0,new Date());
+		ElementTo elementTO = new ElementTo(element1);
+
+		//when POST /element with body {"name1", "type1", "2019a.yuri", "yuri.vn@gmail.com", 1.0,1.0"} 
+		ElementTo responseElement = this.restTemplate.postForObject(
+				this.url + "/" + theManagerPlayground + "/" + theManagerEmail, // url
+				elementTO, // object in the request body
 				ElementTo.class // expected response body type
 					);
+		String ElementPlayground = responseElement.getPlayground();
+		String ID = responseElement.getId();
 		
-		// then the database contains for the name: "name1"  the following:	{""name1", "type1", "playground1", "email1", 1,1, the date is the creation date"}
-		ElementEntity expectedChore =  chore1To.toEntity();
-		ElementEntity actualChoreInDb = this.elements.getElementById("playground1", "email1", "playground1", ID );
-		
-		assertThat(actualChoreInDb)
+		// then the database contains for the name: "name1"  the following:	{"name1", "type1", "2019a.yuri", "yuri.vn@gmail.com", 1.0,1.0"} 
+		ElementEntity expectedElement =  elementTO.toEntity();
+		ElementEntity actualElementInDb = this.elements.getElementById(theManagerPlayground, theManagerEmail, ElementPlayground, ID );
+
+		assertThat(actualElementInDb)
 			.isNotNull()
-			.usingComparator((m1,m2)->{
-				int rv  = expectedChore.getName().compareTo(actualChoreInDb.getName());
+			.usingComparator((e1,es2)->{
+				int rv  = expectedElement.getName().compareTo(actualElementInDb.getName());
 				if(0 == rv)
-					rv  = expectedChore.getExpirationDate().compareTo(actualChoreInDb.getExpirationDate());
+					rv  = expectedElement.getExpirationDate().compareTo(actualElementInDb.getExpirationDate());
 				if(0 == rv)
-					rv = expectedChore.getIdAndPlayground().getId().compareTo(actualChoreInDb.getIdAndPlayground().getId());
+					rv = expectedElement.getElementId().getId().compareTo(actualElementInDb.getElementId().getId());
 				if(0 == rv)
-					rv = expectedChore.getIdAndPlayground().getPlayground().compareTo(actualChoreInDb.getIdAndPlayground().getPlayground());
+					rv = expectedElement.getElementId().getPlayground().compareTo(actualElementInDb.getElementId().getPlayground());
 				return rv;
-			})
-			.isEqualTo(expectedChore);
+			});
 	}
-	*/
 	
 	@Test(expected=Exception.class)
-	public void testCreateChoreWithExistingKey() throws Exception{
-		//given The database already contains a chore with name: "name1"
-		ElementEntity chore1 = new ElementEntity("name1", "type1", "playground1", "email1", 1,1,new Date()); 
-		this.elements.createNewElement(chore1, "playground", "email");
+	public void testPreventionAddingNewElementByRegularUser() throws Exception{
 		
-		//when POST /chores with body {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date} 
-		ElementTo thePostedChore = new ElementTo(chore1);
-		Map<String, Object> moreAttributes = new HashMap<>();
-		moreAttributes.put("abc", 123);
-		thePostedChore.setAttributes(moreAttributes);
+		/***********************************************************************************************************
+		 * Create Confirmed user with User role:
+		 */
+
+		NewUserForm user = this.jacksonMapper.readValue(UserJason, NewUserForm.class);
+		UserEntity  userEntity = new UserEntity(user);
 		
-		this.restTemplate.postForObject(
-				this.url, // url
-				chore1, // object in the request body
+		theUserCode = users.createUser(userEntity);
+		theUserEmail = userEntity.getUserId().getEmail();
+		theUserPlayground = userEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseUser = this.restTemplate.getForObject(
+				this.users_url  + "/" + "confirm" + "/" + theUserPlayground + "/" + theUserEmail + "/"  + theUserCode , 
+				UserTo.class,
+				theUserCode);
+
+		
+		/**********************************************************************************************************/
+
+		
+		//given
+		ElementEntity element1 = new ElementEntity("element1", "type1", theUserPlayground, theUserEmail, 1.0,1.0,new Date());
+		ElementTo elementTO = new ElementTo(element1);
+
+		//when POST /element with body {"name1", "type1", "2019a.yuri", "David.Kr@gmail.com", 1.0,1.0"} 
+		ElementTo responseElement = this.restTemplate.postForObject(
+				this.url + "/" + theUserPlayground + "/" + theUserEmail, // url
+				elementTO, // object in the request body
 				ElementTo.class // expected response body type
 					);
-		// then an exception will be thrown by restTemplate 
-	}
-	
+		// then exception shall be thrown due to user that is not manager trying to add new element
+}
+
 	@Test
 	public void testUpdateChoreSuccessfully () throws Exception {
-
-		// given the database contains {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date} 
-		String entityJson = "{\"name\":\"name1\", \"type\":\"type1\", \"creatorPlayground\":\"playground1\","
-				+ "\"creatorEmail\":\"email1\",\"x\":1.0, \"y\":1.0}";
-		// Jackson unmarshallon
-		ElementEntity entity = this.jacksonMapper.readValue(entityJson, ElementEntity.class);
-		this.elements.createNewElement(entity, "playground", "email");
-		String playground = entity.getElementId().getPlayground();
-		String ID 		  = entity.getElementId().getId(); 
-	
-		// when I PUT /Chores/name1 with body {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
-		String toJson = "{\"name\":\"NEWname\", \"type\":\"type1\", \"layground\":\"playground1\","
-				+ "\"creatorEmail\":\"email1\", \"Location\":{\"x\":1.0, \"y\":1.0}";
-				ElementTo toForPut = this.jacksonMapper.readValue(toJson, ElementTo.class);
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
 		
-				
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make it active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		// given the database contains {"name1", "type1", "playground1", "email1", Location: 1.0, 1.0, current date} 
+		String entityJson =
+				"{\"name\":\"name\","
+				+"\"type\":\"type1\","
+				+"\"creatorPlayground\":\"ChoreManagement\","
+				+"\"creatorEmail\":\"yuri.vn@gmail.com\","
+				+"\"x\":1.0,"
+				+"\"y\":1.0}";
+
+		// Jackson unmarshallon		
+
+		ElementEntity entity = this.jacksonMapper.readValue(entityJson, ElementEntity.class);
+		// store the element that just created and stored in the db:
+		ElementEntity ExpectedElement = this.elements.createNewElement(entity, theManagerPlayground, theManagerEmail);
+		// set the NEWname as the name of the reference element (for comparing):
+		ExpectedElement.setName("NEWname");
+
+		// get URL Variables:
+		String ElementPlayground = entity.getElementId().getPlayground();
+		String ID 		 		 = entity.getElementId().getId();
+		
+		//get comparison Variables:
+		Date creationDate = entity.getCreationDate(); 
+
+		//creating Jason contains the updated elements to be sent to the server:
+		String toJson = 
+				"{\"name\":\"NEWname\","
+				+ "\"type\":\"type1\", "
+				+ "\"playground\":\"ChoreManagement\","
+				+ "\"creatorEmail\":\"yuri.vn@gmail.com\","
+				+ "\"location\": {\"x\": 1.0, \"y\": 1.0}}";
+		
+		//creating ElementTO to be sent to the server:
+		ElementTo toForPut = this.jacksonMapper.readValue(toJson, ElementTo.class);
+
+
 		this.restTemplate.put(
-				this.url + "/playground1/email1" + "/" + playground + "/" + ID , // url 
+				this.url + "/"  + theManagerPlayground + "/" + theManagerEmail + "/" + ElementPlayground + "/" + ID , // url 
 				toForPut, // object to send 
 				entity.getName()); // url parameters
-		
+
 		// then the database contains for name "name1" {"name1", "type1", "playground1", "email1", 1,1 and the chore creation date}
-		ElementEntity actualEntityInDb = this.elements.getElementById("userPlayground", "email1", "playground1", entity.getElementId().getId());
-		actualEntityInDb.setCreationDate(null);
-		
-		String expectedJson = this.jacksonMapper.writeValueAsString(
-				this.jacksonMapper.readValue(
-						"{\"creationDate\":\"null\",\"name\":\" NEWname\", \"type\":\"type1\", \"creatorPlayground\":\"playground1\","
-								+ "\"creatorEmail\":\"email1\",\"x\":1.0, \"y\":1.0}",
-						ElementEntity.class)
-				);
+		ElementEntity actualEntityInDb = this.elements.getElementById(theManagerPlayground, theManagerEmail, ElementPlayground, entity.getElementId().getId());		
 		assertThat(this.jacksonMapper.writeValueAsString(actualEntityInDb))
-			.isEqualTo(expectedJson);
+		.isEqualTo(this.jacksonMapper.writeValueAsString(ExpectedElement));
 	}
-	
-	@Test(expected=Exception.class)
-	public void testUpdateNonExistingChore () throws Exception {
-		// given - nothing
-		
-		// when I PUT /chores/name1 with body {"name1" {"name1", "type1", "playground1", "email1", 1.0,1.0} 
-		String toJson = "{\"creationDate\":null,\"name\":\"name1\", \"type\":\"type1\", \"playground\":\"playground1\","
-				+ "\"email\":\"email1\",\"location\":{\"x\":1.0, \"y\":1.0}}";
-		ElementTo toForPut = this.jacksonMapper.readValue(toJson, ElementTo.class);
-		
-		this.restTemplate.put(
-				this.url + "/playground1/email1/playground1/{id}", // url 
-				toForPut, // object to send 
-				toForPut.getId()); // url parameters
-		
-		// then the return status is <> 2xx 
-	}
-	
+
 	@Test
-	public void testShowChoresCreatedAfterACertainDateSuccessfully() throws Exception{
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+	public void testSrearchElementByNameSuccessfully() throws Exception{
+
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
 		
-		String playground = "playground";
-		String email      = "email";
-		ElementEntity chore1 = new ElementEntity("boolseye", "type1", playground, email, 1,1,new Date());
-		ElementEntity chore2 = new ElementEntity("name2", "type2", playground, email, 1,1,new Date());
-		ElementEntity chore3 = new ElementEntity("name3", "type3", playground, email, 1,1,new Date());
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
 		
-		elements.createNewElement(chore1, playground, email);
-		elements.createNewElement(chore2, playground, email);
-		elements.createNewElement(chore3, playground, email);
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		ElementEntity element1 = new ElementEntity("boolseye", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
 		//Given the database contains {"name":"boolseye", " name ":"name2", " name ":"name3"}] 
-		
+
 		// When I Get /chores/playground/email/search/name/boolseye
 		ElementTo[] actualMessages = this.restTemplate.getForObject(
-					this.url + "/" + playground + "/" + email + "/" + "search" + "/" + "{attributeName}/{value}", 
-					ElementTo[].class,
-					"name",
-					"boolseye");
-		
+				this.url + "/" + theManagerPlayground + "/" + theManagerEmail + "/" + "search" + "/" + "{attributeName}/{value}", 
+				ElementTo[].class,
+				"name",
+				"boolseye");
+
 		// Then the response status is 200 and the body is an array of 1 element: with Chore:"boolseye"
 		assertThat(actualMessages)
-			.isNotNull()
-			.hasSize(1)
-			.usingElementComparator((c1, c2)->c1.getId().compareTo(c2.getId()))
-			.contains(new ElementTo(chore1));
+		.isNotNull()
+		.hasSize(1)
+		.usingElementComparator((c1, c2)->c1.getId().compareTo(c2.getId()))
+		.contains(new ElementTo(element1));
+	}
+
+	
+
+	@Test
+	public void testSrearchElementByTypeSuccessfully() throws Exception{
+		
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make is active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		ElementEntity element1 = new ElementEntity("name1", "boolseye", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+		//Given the database contains {"name":"boolseye", " name ":"name2", " name ":"name3"}] 
+
+		// When I Get /chores/playground/email/search/name/boolseye
+		ElementTo[] actualMessages = this.restTemplate.getForObject(
+				this.url + "/" + theManagerPlayground + "/" + theManagerEmail + "/" + "search" + "/" + "{attributeName}/{value}", 
+				ElementTo[].class,
+				"type",
+				"boolseye");
+
+		// Then the response status is 200 and the body is an array of 1 element: with Chore:"boolseye"
+		assertThat(actualMessages)
+		.isNotNull()
+		.hasSize(1)
+		.usingElementComparator((c1, c2)->c1.getId().compareTo(c2.getId()))
+		.contains(new ElementTo(element1));
+	}
+	
+
+	@Test
+	public void testSrearchElementwithInvalidAtrribute() throws Exception{
+		
+		//given:
+		//Database contains a "manager" user
+		//Database contains 3 elements 
+		//{element1,type1, 2019a.yuri, yuri.vn@gmail.com, 1.0, 1.0}
+		//{element2,type2, 2019a.yuri, yuri.vn@gmail.com, 1.0, 1.0}
+		//{element3,type3, 2019a.yuri, yuri.vn@gmail.com, 1.0, 1.0}
+		/**
+		 * Create Confirmed user with Manager role:
+		 *********************************************************************************************************/
+		NewUserForm manager = this.jacksonMapper.readValue(this.ManagerJason, NewUserForm.class);
+		UserEntity  managerEntity = new UserEntity(manager);
+		
+		theManagerCode = users.createUser(managerEntity);
+		theManagerEmail = managerEntity.getUserId().getEmail();
+		theManagerPlayground = managerEntity.getUserId().getPlayground();
+		
+		// confirm the user just created to make it active.
+		UserTo ResponseManager = this.restTemplate.getForObject(
+				this.users_url + "/" + "confirm" + "/" + theManagerPlayground + "/" + theManagerEmail + "/"  + theManagerCode, 
+				UserTo.class,
+				theManagerCode);
+		
+		/**********************************************************************************************************/
+
+		
+
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+
+		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
+		elements.createNewElement(element3, theManagerPlayground, theManagerEmail);
+		
+		// When I Get /chores/playground/email/search/name/wrongAttribute
+		ElementTo[] actualElements = this.restTemplate.getForObject(
+				this.url + "/" + theManagerPlayground + "/" + theManagerEmail + "/" + "search" + "/" + "{attributeName}/{value}", 
+				ElementTo[].class,
+				"name",
+				"worngAttribute");
+
+		// Then the response status is 200 and the body is an array of 0 elements
+		assertThat(actualElements)
+		.isNotNull()
+		.hasSize(0);
 	}
 }
