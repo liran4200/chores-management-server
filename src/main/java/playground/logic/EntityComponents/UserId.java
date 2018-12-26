@@ -16,6 +16,7 @@ public class UserId  implements Serializable{
 
 	
 	private static final String PLAYGROUND = "ChoresManagement";
+	private static final String DEL = "$$";
 	
 	@Column(name = "playground")
 	private String playground;
@@ -73,6 +74,11 @@ public class UserId  implements Serializable{
 		UserId other = (UserId) obj;
 		return (other.email.equals(this.email) &&
 				other.playground.equals(this.playground));
+	}
+	
+	@Override
+	public String toString() {
+		return this.playground + DEL + this.email;
 	}
 	
 	

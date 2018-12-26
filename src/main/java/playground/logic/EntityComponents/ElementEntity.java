@@ -18,8 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ElementEntity {
 	public static final String ATTRIBUTE_SCORE = "Score";
 	public static final String ATTRIBUTE_STATUS = "Status";
-	public static final String ATTRIBUTE_ASSIGNED_TO = "ATTRIBUTE_ASSIGNED_TO";
-	public static final String ATTRIBUTE_MESSAGE = "ATTRIBUTE_MESSAGE";
+	public static final String ATTRIBUTE_ASSIGNED_TO = "Assigned to";
+	public static final String ATTRIBUTE_MESSAGE = "Message";
 	public static final String ASSIGNED_TO_NONE = "";
 	public static final String STATUS_DONE = "Done";
 	public static final String STATUS_ASSIGNED = "Assigned";
@@ -48,7 +48,7 @@ public class ElementEntity {
 	}
 
 	public ElementEntity(String name, String type, String creatorPlayground,
-			String creatorEmail, double x, double y, Date expirationDate) {
+			String creatorEmail, double x, double y, Date expirationDate, Map<String, Object> attributes) {
 		this();
 		this.name = name;
 		this.type = type;
@@ -57,6 +57,7 @@ public class ElementEntity {
 		this.x = x;
 		this.y = y;
 		this.expirationDate = expirationDate;
+		this.attributes = attributes;
 	}
 	
 	@EmbeddedId

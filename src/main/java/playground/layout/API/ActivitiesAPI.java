@@ -32,7 +32,7 @@ public class ActivitiesAPI {
 	public Object invokeActivity (@RequestBody ActivityTo activity, 
 								  @PathVariable ("userPlayground") String userPlayground, 
 								  @PathVariable ("email") String email) throws Exception {
-		return this.activityService.invokeActivity(activity.toEntity());
+		return this.activityService.invokeActivity(userPlayground, email, activity.toEntity());
 	}
 	
 }

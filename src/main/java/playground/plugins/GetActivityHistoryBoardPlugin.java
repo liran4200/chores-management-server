@@ -20,10 +20,10 @@ public class GetActivityHistoryBoardPlugin implements Plugin {
 	public Object execute(ActivityEntity activity) throws Exception {
 		ActivityHistoryBoard activityHistoryBoard = new ActivityHistoryBoard();
 		this.activitiesDal.findAll()
-			.forEach(activite -> activityHistoryBoard.addHistoryRecored(
-					(String)activite.getAttributes().get(ActivityEntity.ATTRIBUTE_MESSAGE))
+			.forEach(act -> activityHistoryBoard.addHistoryRecored(
+					(String)act.getAttributes().get(ActivityEntity.ATTRIBUTE_MESSAGE))
 					);
-		activity.setMessageAttribute("User " + activity.getPlayerEmail() + " as asked to view activity history board");
+		activity.setMessageAttribute("User " + activity.getPlayerEmail() + " asked to view activity history board");
 		return activityHistoryBoard;
 	}
 

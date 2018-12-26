@@ -4,6 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.junit.After;
@@ -135,6 +138,7 @@ public class ElementsTests {
 		double y = 1;
 		Date expirationDate = new Date();
 		String ID	= "ID";
+		Map<String, Object> attributes = new HashMap<>();
 		
 		/**
 		 * Create Confirmed user with Manager role:
@@ -152,7 +156,7 @@ public class ElementsTests {
 				UserTo.class,
 				theManagerCode);
 
-		ElementEntity chore = new ElementEntity(name, type, theManagerPlayground, theManagerEmail, x, y, expirationDate);
+		ElementEntity chore = new ElementEntity(name, type, theManagerPlayground, theManagerEmail, x, y, expirationDate, attributes);
 		// And the database contains a Chore with name: "Name and ID: 
 		ElementEntity ExpectedChore = elements.createNewElement(chore, theManagerPlayground, theManagerEmail);
 		String ExpectedPlayground = ExpectedChore.getElementId().getPlayground();
@@ -194,9 +198,9 @@ public class ElementsTests {
 		
 		/**********************************************************************************************************/
 
-		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1,1,new Date());
-		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1,1,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1,1,new Date());
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1,1,new Date(), new HashMap<String, Object>());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1,1,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1,1,new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -234,9 +238,9 @@ public class ElementsTests {
 		/**********************************************************************************************************/
 
 		// given the database contains 3 chores
-		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -277,9 +281,9 @@ public class ElementsTests {
 		/**********************************************************************************************************/
 
 		// given the database contains 3 chores
-		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -320,9 +324,9 @@ public class ElementsTests {
 		/**********************************************************************************************************/
 
 		// given the database contains 3 chores
-		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -374,7 +378,7 @@ public class ElementsTests {
 
 		
 		//given
-		ElementEntity element1 = new ElementEntity("element1", "type1", theManagerPlayground, theManagerEmail, 1.0,1.0,new Date());
+		ElementEntity element1 = new ElementEntity("element1", "type1", theManagerPlayground, theManagerEmail, 1.0,1.0,new Date(), new HashMap<String, Object>());
 		ElementTo elementTO = new ElementTo(element1);
 
 		//when POST /element with body {"name1", "type1", "2019a.yuri", "yuri.vn@gmail.com", 1.0,1.0"} 
@@ -429,7 +433,7 @@ public class ElementsTests {
 
 		
 		//given
-		ElementEntity element1 = new ElementEntity("element1", "type1", theUserPlayground, theUserEmail, 1.0,1.0,new Date());
+		ElementEntity element1 = new ElementEntity("element1", "type1", theUserPlayground, theUserEmail, 1.0,1.0,new Date(), new HashMap<String, Object>());
 		ElementTo elementTO = new ElementTo(element1);
 
 		//when POST /element with body {"name1", "type1", "2019a.yuri", "David.Kr@gmail.com", 1.0,1.0"} 
@@ -529,9 +533,9 @@ public class ElementsTests {
 		
 		/**********************************************************************************************************/
 
-		ElementEntity element1 = new ElementEntity("boolseye", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
-		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element1 = new ElementEntity("boolseye", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
+		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -576,9 +580,9 @@ public class ElementsTests {
 		
 		/**********************************************************************************************************/
 
-		ElementEntity element1 = new ElementEntity("name1", "boolseye", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
-		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element1 = new ElementEntity("name1", "boolseye", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
+		ElementEntity element2  = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0 ,new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);
@@ -630,9 +634,9 @@ public class ElementsTests {
 
 		
 
-		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date());
-		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
-		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date());
+		ElementEntity element1 = new ElementEntity("name1", "type1", theManagerPlayground, theManagerEmail, 1.0, 1.0,new Date(), new HashMap<String, Object>());
+		ElementEntity element2 = new ElementEntity("name2", "type2", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
+		ElementEntity element3 = new ElementEntity("name3", "type3", theManagerPlayground, theManagerEmail, 1.0, 1.0, new Date(), new HashMap<String, Object>());
 
 		elements.createNewElement(element1, theManagerPlayground, theManagerEmail);
 		elements.createNewElement(element2, theManagerPlayground, theManagerEmail);

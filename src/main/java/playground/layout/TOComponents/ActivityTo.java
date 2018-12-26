@@ -22,8 +22,8 @@ public class ActivityTo {
 	
 	public ActivityTo(ActivityEntity activity) {
 		super();
-		this.playground = activity.getIdAndPlayground().getPlayground();
-		this.id = activity.getIdAndPlayground().getId();
+		this.playground = activity.getActivityId().getPlayground();
+		this.id = activity.getActivityId().getId();
 		this.type = activity.getType();
 		this.elementPlayground = activity.getElementPlayground();
 		this.elementId = activity.getElementId();

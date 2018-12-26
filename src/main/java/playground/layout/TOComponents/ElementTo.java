@@ -36,6 +36,7 @@ public class ElementTo {
 		this.location = new LocationTo(element.getX(), element.getY());
 		this.creationDate = element.getCreationDate();
 		this.expirationDate = element.getExpirationDate();
+		this.attributes = element.getAttributes();
 	}
 	
 	

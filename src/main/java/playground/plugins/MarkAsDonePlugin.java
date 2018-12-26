@@ -1,5 +1,6 @@
 package playground.plugins;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,10 +31,14 @@ public class MarkAsDonePlugin extends AbsChangeElementStatusPlugin {
 				assigenTo);
 		// Create and update the user in DB
 		UserEntity userToUpdate = this.usersApi.getCustomUser(activity.getPlayerEmail(),activity.getPlayerPlayground());
-		userToUpdate.setPoints(userToUpdate.getPoints() + (Integer)toUpdate.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE));
-		this.usersApi.updateUser(activity.getPlayerEmail(), activity.getPlayerPlayground(), userToUpdate);
+		try {
+			userToUpdate.setPoints(userToUpdate.getPoints() + (Integer) Integer.valueOf((String)toUpdate.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE)));
+			this.usersApi.updateUser(activity.getPlayerEmail(), activity.getPlayerPlayground(), userToUpdate);
+		} catch (NumberFormatException e) {
+			//do nothing
+		}
 		// Set a message for this activity
-		activity.setMessageAttribute("User " + activity.getPlayerEmail() + " as marked chore " + toUpdate.getName() + " as done");
+		activity.setMessageAttribute("User " + activity.getPlayerEmail() + " marked chore " + toUpdate.getName() + " as done");
 		return activity;
 	}
 }

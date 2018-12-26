@@ -19,9 +19,8 @@ public class ActivityServiceStub implements ActivityService {
 	}
 	
 	@Override
-	public Object invokeActivity(ActivityEntity activity) {
+	public Object invokeActivity(String userPlayground, String email, ActivityEntity activity) {
 		return activity.getAttributes().get(ATTRIB_SCORE);
 	}
-	
 
 }

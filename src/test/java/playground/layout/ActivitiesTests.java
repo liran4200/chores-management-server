@@ -62,7 +62,7 @@ public class ActivitiesTests {
 	@Test
 	public void testInvokeActivitySuccessfully() throws Exception {
 		//given nothing
-		String type = "type";
+		String type = "MarkAsDone";
 		String chorePlayground = "chorePlayground";
 		String choreId = "choreId";
 		String roommatePlayground = "roommatePlayground";
@@ -76,7 +76,7 @@ public class ActivitiesTests {
 		String UserEmail = act1.getPlayerEmail();
 		String UserPlayground = act1.getPlayerPlayground();
 		
-		//when POST /playground/activities with body {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
+		//when POST /playground/activities with body {"MarkAsDone", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		ActivityTo responseActivity = this.restTemplate.postForObject(
 				this.url + "/" + UserPlayground  + "/"+ UserEmail, // url
 				activityTo, // object in the request body
@@ -85,7 +85,7 @@ public class ActivitiesTests {
 		
 		// then the database contains the following: {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		int expectedActivityResult =  (int) activityTo.toEntity().getAttributes().get("Score");
-		int actualActivityResult   =  (int) this.activities.invokeActivity(act1);
+		int actualActivityResult   =  (int) this.activities.invokeActivity(UserPlayground, UserEmail, act1);
 		
 		assertThat(actualActivityResult)
 			.isNotNull()
@@ -116,7 +116,7 @@ public class ActivitiesTests {
 					);
 		// then the database contains the following: {"type", "chorePlayground", "ChoreId", "roommatePlayground", "roommateEmail"}
 		int expectedActivityResult =  (int) activityTo.toEntity().getAttributes().get(ErrorAttributeKey);
-		int actualActivityResult   =  (int) this.activities.invokeActivity(act1);
+		int actualActivityResult   =  (int) this.activities.invokeActivity(roommatePlayground, roommateEmail, act1);
 		
 		assertThat(actualActivityResult)
 			.isNotNull()

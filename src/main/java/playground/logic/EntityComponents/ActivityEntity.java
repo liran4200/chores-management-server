@@ -1,5 +1,6 @@
 package playground.logic.EntityComponents;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EmbeddedId;
@@ -22,7 +23,7 @@ public class ActivityEntity {
 	// Message Attribute
 	public static final String ATTRIBUTE_MESSAGE = "ATTRIBUTE_MESSAGE";
 
-	private ActivityId			idAndPlayground;
+	private ActivityId			activityId;
 	private String 				type;
 	private String 				elementPlayground;
 	private String				elementId;
@@ -31,7 +32,7 @@ public class ActivityEntity {
 	private Map<String, Object> attributes;
 	
 	public ActivityEntity() {
-		this.idAndPlayground = new ActivityId();
+		this.activityId = new ActivityId();
 	}
 
 	public ActivityEntity(String type, String elementPlayground, String elementId,
@@ -46,12 +47,12 @@ public class ActivityEntity {
 	}
 	
 	@EmbeddedId
-	public ActivityId getIdAndPlayground() {
-		return this.idAndPlayground;
+	public ActivityId getActivityId() {
+		return this.activityId;
 	}
 	
-	public void setIdAndPlayground(ActivityId idAndPlayground) {
-		this.idAndPlayground = idAndPlayground;
+	public void setActivityId(ActivityId activityId) {
+		this.activityId = activityId;
 	}
 
 	public String getType() {
@@ -131,6 +132,6 @@ public class ActivityEntity {
 			return false;
 		}
 		ActivityEntity element = (ActivityEntity) other;
-		return this.idAndPlayground.equals(element.getIdAndPlayground());
+		return this.activityId.equals(element.getActivityId());
 	}
 }

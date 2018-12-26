@@ -5,5 +5,6 @@ import playground.logic.exceptions.ActivityInvokeFailedException;
 
 public interface ActivityService {
 	
-	public Object invokeActivity(ActivityEntity activity) throws ActivityInvokeFailedException;
+	public Object invokeActivity(String userPlayground, String emil, ActivityEntity activity) throws ActivityInvokeFailedException;
+	
 }
