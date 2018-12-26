@@ -46,7 +46,7 @@ public class JpaActivityService implements ActivityService {
 	@Override
 	@Transactional
 	@MyLog
-//	@PlaygroundUserValidation
+	@PlaygroundUserValidation
 	public Object invokeActivity(String userPlayground, String email, ActivityEntity activity) throws ActivityInvokeFailedException {
 		Object content;
 		try {

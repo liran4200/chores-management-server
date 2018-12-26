@@ -1,6 +1,5 @@
 package playground.logic.EntityComponents;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.EmbeddedId;
