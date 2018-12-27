@@ -20,6 +20,8 @@ public class ElementEntity {
 	public static final String ATTRIBUTE_STATUS = "Status";
 	public static final String ATTRIBUTE_ASSIGNED_TO = "Assigned to";
 	public static final String ATTRIBUTE_MESSAGE = "Message";
+	public static final String ATTRIBUTE_IS_RECURRING = "isRecurring";
+	public static final String ATTRIBUTE_DESCRIPTION = "Description";
 	public static final String ASSIGNED_TO_NONE = "";
 	public static final String STATUS_DONE = "Done";
 	public static final String STATUS_ASSIGNED = "Assigned";
