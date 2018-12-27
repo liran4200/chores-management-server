@@ -92,6 +92,12 @@ public class JpaElementsService implements ElementsService {
 		if(element.getY() != null && !Objects.equals(existingElement.getY(), element.getY())) {
 			existingElement.setY(element.getY());
 		}
+		//manager can update only the Score attribute of an Element
+		if (element.getAttributes() != null && element.getAttributes().containsKey(ElementEntity.ATTRIBUTE_SCORE)) {	
+			if (!Objects.equals(element.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE), existingElement.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE))) {
+				existingElement.setAttributes(element.getAttributes());
+			}
+		}
 		
 		this.elements.save(existingElement);
 	}
