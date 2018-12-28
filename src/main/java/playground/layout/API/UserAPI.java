@@ -3,6 +3,7 @@ package playground.layout.API;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,7 @@ public class UserAPI {
 			method=RequestMethod.GET,
 			path="playground/users/login/{playground}/{email}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public UserTo login(
 			@PathVariable("playground") String playground,
 			@PathVariable("email") String email) throws UserNotFoundException, UserNotActiveException {
@@ -49,6 +51,7 @@ public class UserAPI {
 	@RequestMapping(method=RequestMethod.GET,
 					path="playground/users/confirm/{playground}/{email}/{code}",
 					produces= MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public UserTo confirm(@PathVariable("playground")String playground,
 							  @PathVariable("email")String email,
 							  @PathVariable("code")long code) 
@@ -63,6 +66,7 @@ public class UserAPI {
 			method=RequestMethod.PUT,
 			path="playground/users/{playground}/{email}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public void updateUser (
 			@PathVariable("playground") String playground,
 			@PathVariable("email")String email,
@@ -76,6 +80,7 @@ public class UserAPI {
 			path="playground/users",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public UserTo registerUser (@RequestBody NewUserForm newUser) 
 			 throws UserAlreadyExistsException{
 		

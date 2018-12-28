@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +48,7 @@ public class ElementsAPI {
 		path="/playground/elements/{userPlayground}/{email}",
 		produces=MediaType.APPLICATION_JSON_VALUE,
 		consumes=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ElementTo addNewElement (@RequestBody ElementTo newElement, 
 								@PathVariable ("userPlayground") String userPlayground, 
 								@PathVariable ("email") String email) throws ElementAlreadyExistsException {
@@ -58,6 +60,7 @@ public class ElementsAPI {
 			method=RequestMethod.PUT,
 			path="/playground/elements/{userPlayground}/{email}/{playground}/{id}",
 			consumes=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public void updateElement (@RequestBody ElementTo newElement,
 							   @PathVariable("userPlayground") String userPlayground,
 							   @PathVariable("email") String email,
@@ -70,6 +73,7 @@ public class ElementsAPI {
 			method=RequestMethod.GET,
 			path="/playground/elements/{userPlayground}/{email}/{playground}/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ElementTo getElementByID (@PathVariable("userPlayground") String userPlayground,
 								 	 @PathVariable("email") String email,
 								 	 @PathVariable("playground") String playground,
@@ -81,6 +85,7 @@ public class ElementsAPI {
 			method=RequestMethod.GET,
 			path="/playground/elements/{userPlayground}/{email}/all",
 			produces=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ElementTo[] getAllElements (@PathVariable("userPlayground") String userPlayground,
 			 					   @PathVariable("email") String email,
 			 					   @RequestParam(name="size", required=false, defaultValue="10") int size, 
@@ -96,6 +101,7 @@ public class ElementsAPI {
 			method=RequestMethod.GET,
 			path="/playground/elements/{userPlayground}/{email}/near/{x}/{y}/{distance}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ElementTo[] getAllNearElements (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("x") double x,
@@ -114,6 +120,7 @@ public class ElementsAPI {
 			method=RequestMethod.GET,
 			path="/playground/elements/{userPlayground}/{email}/search/{attributeName}/{value}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ElementTo[] searchElement (@PathVariable("userPlayground") String userPlayground,
 			 					   				@PathVariable("email") String email,
 			 					   				@PathVariable("attributeName") String attributeName,
