@@ -13,7 +13,7 @@ import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.services.ElementsService;
 
 @Component
-public class AddChorePlugin implements Plugin {
+public class EditChorePlugin implements Plugin {
 	
 	private ElementsService elements;
 	private ObjectMapper mapper = new ObjectMapper();
@@ -27,12 +27,12 @@ public class AddChorePlugin implements Plugin {
 	public Object execute(ActivityEntity activity) throws Exception {
 		if (activity.getAttributes().containsKey("chore")) {
 			String jsonStringChore = this.mapper.writeValueAsString(activity.getAttributes().get("chore"));
-			ElementEntity elementToAdd = createChoreElement(jsonStringChore);
-			ElementEntity rv = elements.createNewElement(elementToAdd);
-			if (rv != null) {
+			ElementEntity elementToEdit = createChoreElement(jsonStringChore);
+			ElementEntity updatedElement = elements.updateChoreElement(elementToEdit, activity.getElementPlayground(), activity.getElementId());
+			if (updatedElement != null) {
 				// Set a message for this activity
-				activity.setMessageAttribute("User " + activity.getPlayerEmail() + " added new chore");
-				return new ElementTo(rv);
+				activity.setMessageAttribute("User " + activity.getPlayerEmail() + " updated chore " + updatedElement.getElementId().toString());
+				return new ElementTo(updatedElement);
 			}
 		}
 		return null;

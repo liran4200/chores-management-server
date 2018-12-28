@@ -112,6 +112,11 @@ public class JpaElementsService implements ElementsService {
 	@MyLog
 	@PlaygroundUserValidation
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
+		return this.getElementById(playground, id);
+	}
+	
+	@Override
+	public ElementEntity getElementById(String playground, String id) throws ElementNotFoundException {
 		ElementId uniqueId = new ElementId(id, playground);
 		Optional<ElementEntity> op = this.elements.findById(uniqueId);
 		if (op.isPresent()) {
@@ -173,6 +178,26 @@ public class JpaElementsService implements ElementsService {
 		}
 		return null;
 	}
-	
+
+	@Override
+	public ElementEntity updateChoreElement(ElementEntity element, String playground, String id) throws ElementNotFoundException {
+		if (element.getType().equals("chore")) {
+			ElementEntity existingElement = this.getElementById(playground, id);
+			
+			if (element.getExpirationDate() != null && !Objects.equals(existingElement.getExpirationDate(), element.getExpirationDate())) {
+				existingElement.setExpirationDate(element.getExpirationDate());
+			}
+			
+			if (element.getName() != null && !Objects.equals(existingElement.getName(), element.getName())) {
+				existingElement.setName(element.getName());
+			}
+			
+			if (element.getAttributes() != null && !Objects.equals(existingElement.getAttributes(), element.getAttributes())) {
+				existingElement.setAttributes(element.getAttributes());
+			}
+			return this.elements.save(existingElement);
+		}
+		return null;
+	}
 
 }

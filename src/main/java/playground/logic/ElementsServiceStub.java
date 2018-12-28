@@ -168,6 +168,19 @@ public class ElementsServiceStub implements ElementsService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public ElementEntity updateChoreElement(ElementEntity element, String playground, String id)
+			throws ElementNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ElementEntity getElementById(String playground, String id) throws ElementNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

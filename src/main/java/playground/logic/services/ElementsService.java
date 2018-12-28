@@ -24,6 +24,8 @@ public interface ElementsService {
 	
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException;
 	
+	public ElementEntity getElementById(String playground, String id) throws ElementNotFoundException;
+	
 	public boolean isElementExistsByType(String type) throws ElementNotFoundException;
 	
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size);
@@ -33,5 +35,7 @@ public interface ElementsService {
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value, int page, int size) throws NoSuchAttributeException;
 	
 	public ElementEntity getConstantElementByType(String type) throws NoSuchAttributeException;
+	
+	public ElementEntity updateChoreElement(ElementEntity element, String playground, String id) throws ElementNotFoundException;
 
 }
