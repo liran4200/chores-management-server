@@ -18,10 +18,10 @@ import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.ElementId;
-import playground.logic.exceptions.ElementAlreadyExistsException;
-import playground.logic.exceptions.ElementNotFoundException;
-import playground.logic.exceptions.NoSuchAttributeException;
+import playground.logic.services.ElementAlreadyExistsException;
+import playground.logic.services.ElementNotFoundException;
 import playground.logic.services.ElementsService;
+import playground.logic.services.NoSuchAttributeException;
 import playground.utils.PlaygroundConstants;
 
 /**

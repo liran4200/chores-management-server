@@ -18,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import playground.layout.ErrorMessage;
 import playground.layout.TOComponents.ElementTo;
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.exceptions.ElementAlreadyExistsException;
-import playground.logic.exceptions.ElementNotFoundException;
-import playground.logic.exceptions.NoSuchAttributeException;
-import playground.logic.exceptions.UserNotActiveException;
-import playground.logic.exceptions.UserNotFoundException;
-import playground.logic.exceptions.UserNotManagerException;
+import playground.logic.services.ElementAlreadyExistsException;
+import playground.logic.services.ElementNotFoundException;
 import playground.logic.services.ElementsService;
+import playground.logic.services.NoSuchAttributeException;
+import playground.logic.services.UserNotActiveException;
+import playground.logic.services.UserNotFoundException;
+import playground.logic.services.UserNotManagerException;
 
 /**
  * Rest API for Elements component

@@ -21,9 +21,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import playground.layout.TOComponents.NewUserForm;
 import playground.layout.TOComponents.UserTo;
 import playground.logic.EntityComponents.UserEntity;
-import playground.logic.exceptions.UserAlreadyExistsException;
-import playground.logic.exceptions.UserNotActiveException;
-import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.services.UserAlreadyExistsException;
+import playground.logic.services.UserNotActiveException;
+import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserService;
 
 @RunWith(SpringRunner.class)

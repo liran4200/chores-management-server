@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.exceptions.ElementNotFoundException;
+import playground.logic.services.ElementNotFoundException;
 import playground.logic.services.ElementsService;
 import playground.utils.PlaygroundConstants;
 

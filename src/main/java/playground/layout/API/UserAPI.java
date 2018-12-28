@@ -17,6 +17,10 @@ import playground.layout.TOComponents.NewUserForm;
 import playground.layout.TOComponents.UserTo;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.exceptions.*;
+import playground.logic.services.InValidConfirmationCodeException;
+import playground.logic.services.UserAlreadyExistsException;
+import playground.logic.services.UserNotActiveException;
+import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserService;
 
 

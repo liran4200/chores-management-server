@@ -1,4 +1,4 @@
-package playground.logic.exceptions;
+package playground.logic.services;
 
 public class ActivityAlreadyExistsException extends Exception {
 

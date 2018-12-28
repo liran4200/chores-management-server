@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import playground.aop.logger.LoggerAspect;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
-import playground.logic.exceptions.ElementNotFoundException;
-import playground.logic.exceptions.UserNotActiveException;
-import playground.logic.exceptions.UserNotFoundException;
+import playground.logic.services.ElementNotFoundException;
+import playground.logic.services.UserNotActiveException;
+import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserService;
 import playground.utils.PlaygroundConstants;
 

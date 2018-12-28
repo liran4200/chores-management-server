@@ -17,8 +17,8 @@ import playground.aop.userValidation.PlaygroundUserValidation;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ActivityId;
 import playground.logic.EntityComponents.ElementEntity;
-import playground.logic.exceptions.ActivityAlreadyExistsException;
-import playground.logic.exceptions.ActivityInvokeFailedException;
+import playground.logic.services.ActivityAlreadyExistsException;
+import playground.logic.services.ActivityInvokeFailedException;
 import playground.logic.services.ActivityService;
 import playground.plugins.Plugin;
 
