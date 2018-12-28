@@ -22,6 +22,7 @@ import playground.logic.exceptions.ElementAlreadyExistsException;
 import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.NoSuchAttributeException;
 import playground.logic.services.ElementsService;
+import playground.utils.PlaygroundConstants;
 
 /**
  * JPA service for Elements component - using DB to store data
@@ -97,9 +98,9 @@ public class JpaElementsService implements ElementsService {
 			existingElement.setY(element.getY());
 		}
 		//manager can update only the Score attribute of an Element
-		if (element.getAttributes() != null && element.getAttributes().containsKey(ElementEntity.ATTRIBUTE_SCORE) 
-				&& existingElement.getAttributes() != null && existingElement.getAttributes().containsKey(ElementEntity.ATTRIBUTE_SCORE)) {	
-			if (!Objects.equals(element.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE), existingElement.getAttributes().get(ElementEntity.ATTRIBUTE_SCORE))) {
+		if (element.getAttributes() != null && element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE) 
+				&& existingElement.getAttributes() != null && existingElement.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE)) {	
+			if (!Objects.equals(element.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE), existingElement.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE))) {
 				existingElement.setAttributes(element.getAttributes());
 			}
 		}
@@ -153,9 +154,9 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundUserValidation
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value,
 			int page, int size) throws NoSuchAttributeException {
-		if (Objects.equals("name", attributeName)) {
+		if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_NAME, attributeName)) {
 			return this.elements.findAllByNameLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
-		} else if (Objects.equals("type", attributeName)) {
+		} else if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_TYPE, attributeName)) {
 			return this.elements.findAllByTypeLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 		} else {
 			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");

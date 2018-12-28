@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import playground.dal.ActivityDao;
 import playground.logic.EntityComponents.ActivityEntity;
+import playground.utils.PlaygroundConstants;
 
 @Component
 public class GetActivityHistoryBoardPlugin implements Plugin {
@@ -21,7 +22,7 @@ public class GetActivityHistoryBoardPlugin implements Plugin {
 		ActivityHistoryBoard activityHistoryBoard = new ActivityHistoryBoard();
 		this.activitiesDal.findAll()
 			.forEach(act -> activityHistoryBoard.addHistoryRecored(
-					(String)act.getAttributes().get(ActivityEntity.ATTRIBUTE_MESSAGE)));
+					(String)act.getAttributes().get(PlaygroundConstants.ACTIVITY_ATTRIBUTE_MESSAGE)));
 		activity.setMessageAttribute("User " + activity.getPlayerEmail() + " asked to view activity history board");
 		return activityHistoryBoard;
 	}

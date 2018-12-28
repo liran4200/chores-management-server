@@ -27,7 +27,6 @@ public class JpaActivityService implements ActivityService {
 	
 	private ActivityDao activitiesDal;
 	private ConfigurableApplicationContext spring;
-	private ElementEntity activityHistoryBoard;
 	private NumberGeneratorDao numberGenerator;
 	
 	@Autowired
@@ -35,12 +34,6 @@ public class JpaActivityService implements ActivityService {
 		this.activitiesDal = activitiesDal;
 		this.spring = spring;
 		this.numberGenerator = numberGenerator;
-	}
-	
-	@PostConstruct
-	public void init() {
-		this.activityHistoryBoard = new ElementEntity();
-		activityHistoryBoard.setAttributes(new HashMap<String,Object>());
 	}
 	
 	@Override

@@ -11,6 +11,7 @@ import playground.layout.TOComponents.ElementTo;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.services.ElementsService;
+import playground.utils.PlaygroundConstants;
 
 @Component
 public class AddChorePlugin implements Plugin {
@@ -25,8 +26,8 @@ public class AddChorePlugin implements Plugin {
 
 	@Override
 	public Object execute(ActivityEntity activity) throws Exception {
-		if (activity.getAttributes().containsKey("chore")) {
-			String jsonStringChore = this.mapper.writeValueAsString(activity.getAttributes().get("chore"));
+		if (activity.getAttributes().containsKey(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
+			String jsonStringChore = this.mapper.writeValueAsString(activity.getAttributes().get(PlaygroundConstants.ELEMENT_TYPE_CHORE));
 			ElementEntity elementToAdd = createChoreElement(jsonStringChore);
 			ElementEntity rv = elements.createNewElement(elementToAdd);
 			if (rv != null) {
@@ -46,7 +47,7 @@ public class AddChorePlugin implements Plugin {
 	private ElementEntity createChoreElement(String elementJsonAsString) throws IOException {
 		try {
 			ElementEntity element = this.mapper.readValue(elementJsonAsString, ElementEntity.class);
-			if (element.getType().equals("chore")) {
+			if (element.getType().equals(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
 				return element;
 			}
 			return null;

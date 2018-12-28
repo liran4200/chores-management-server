@@ -5,12 +5,13 @@ import java.util.Objects;
 
 import javax.persistence.Column;
 
+import playground.utils.PlaygroundConstants;
+
 public class ActivityId implements Serializable {
 
 	private static final long serialVersionUID = 4294359810914067582L;
 	 
 	private static final String DEL = "$$";
-	private static final String DEF_PLAYGROUND = "2019A.yuri";
 	
 	@Column(name="id")
 	private String	id;
@@ -30,7 +31,7 @@ public class ActivityId implements Serializable {
 	
 	public ActivityId(String id) {
 		this.id = id;
-		this.playground = DEF_PLAYGROUND;
+		this.playground = PlaygroundConstants.PLAYGROUND_CONST;
 	}
 	
 	public String getId() {

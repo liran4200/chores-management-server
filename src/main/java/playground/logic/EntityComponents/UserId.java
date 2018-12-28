@@ -6,16 +6,14 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import playground.utils.PlaygroundConstants;
+
 @Embeddable
 public class UserId  implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -732348286029050522L;
 
 	
-	private static final String PLAYGROUND = "ChoresManagement";
 	private static final String DEL = "$$";
 	
 	@Column(name = "playground")
@@ -31,7 +29,7 @@ public class UserId  implements Serializable{
 	
 	public UserId(String email) {
 		this.email = email;
-		playground = PLAYGROUND;
+		playground = PlaygroundConstants.PLAYGROUND_CONST;
 	}
 	
 	public UserId(String playground, String email) {

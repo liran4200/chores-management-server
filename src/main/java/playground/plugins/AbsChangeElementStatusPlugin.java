@@ -9,6 +9,7 @@ import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.services.ElementsService;
+import playground.utils.PlaygroundConstants;
 
 public abstract class AbsChangeElementStatusPlugin implements Plugin {
 	
@@ -32,8 +33,8 @@ public abstract class AbsChangeElementStatusPlugin implements Plugin {
 		if (newAttributes == null) {
 			newAttributes = new HashMap<String, Object>();
 		}
-		newAttributes.put(ElementEntity.ATTRIBUTE_STATUS, status);
-		newAttributes.put(ElementEntity.ATTRIBUTE_ASSIGNED_TO,userId);
+		newAttributes.put(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS, status);
+		newAttributes.put(PlaygroundConstants.ELEMENT_ATTRIBUTE_ASSIGNED_TO, userId);
 		toUpdate.setAttributes(newAttributes);
 		elementsApi.updateElement(toUpdate, activity.getPlayerPlayground(),
 				activity.getPlayerEmail(), activity.getElementPlayground(), activity.getElementId());

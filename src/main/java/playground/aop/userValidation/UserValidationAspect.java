@@ -19,6 +19,7 @@ import playground.logic.exceptions.ElementNotFoundException;
 import playground.logic.exceptions.UserNotActiveException;
 import playground.logic.exceptions.UserNotFoundException;
 import playground.logic.services.UserService;
+import playground.utils.PlaygroundConstants;
 
 
 /**
@@ -48,7 +49,7 @@ public class UserValidationAspect {
 			 Date now = new Date();
 			 
 			 //filter not expired elements for not manager users
-			 if (!user.getRole().equals("manager")) {
+			 if (!user.getRole().equals(PlaygroundConstants.USER_ATTRIBUTE_ROLE_MANAGER)) {
 				 //if this method return a list of elements - return only elements which are not expired
 				 if (rv instanceof List<?>) {
 					 if (((List<?>) rv).get(0) instanceof ElementEntity) {

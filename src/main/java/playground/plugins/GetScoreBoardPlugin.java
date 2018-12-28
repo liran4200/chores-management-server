@@ -12,6 +12,7 @@ import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.services.ElementsService;
 import playground.logic.services.UserService;
+import playground.utils.PlaygroundConstants;
 
 @Component
 public class GetScoreBoardPlugin implements Plugin {
@@ -27,7 +28,7 @@ public class GetScoreBoardPlugin implements Plugin {
 
 	@Override
 	public Object execute(ActivityEntity command) throws Exception {
-		if (!elements.isElementExistsByType("ScoreBoard")) {
+		if (!elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD)) {
 			ElementEntity historyBoard = new ElementEntity();
 			historyBoard.setType("ScoreBoard");
 			Map<String, Object> attributes = fetchScoreBoardToAttributes();
@@ -35,7 +36,7 @@ public class GetScoreBoardPlugin implements Plugin {
 			elements.createNewElement(historyBoard);
 			return historyBoard;
 		} else {
-			return elements.getConstantElementByType("ScoreBoard");
+			return elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
 		}
 	}
 	

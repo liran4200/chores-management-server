@@ -10,18 +10,12 @@ import javax.persistence.Transient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import playground.utils.PlaygroundConstants;
+
 @Entity(name="Activity")
 @Table(name="ACTIVITY")
 public class ActivityEntity {
 	
-	// Type Possible Values
-	public static final String MARK_AS_ASSIGENED_PLUGIN = "MarkAsAssigenedPlugin";
-	public static final String MARK_AS_DOEN_PLUGIN = "MarkAsDonePlugin";
-	public static final String MARK_AS_UNASSIGENED_PLUGIN = "MarkAsUnassigenedPlugin";
-	public static final String GET_MESSAGE_BORD_PLUGIN = "GetMessageBordPlugin";
-	// Message Attribute
-	public static final String ATTRIBUTE_MESSAGE = "ATTRIBUTE_MESSAGE";
-
 	private ActivityId			activityId;
 	private String 				type;
 	private String 				elementPlayground;
@@ -95,7 +89,7 @@ public class ActivityEntity {
 	}
 	
 	public void setMessageAttribute(String m) {
-		this.attributes.put(ATTRIBUTE_MESSAGE, m);
+		this.attributes.put(PlaygroundConstants.ACTIVITY_ATTRIBUTE_MESSAGE, m);
 	}
 	
 	@Transient
