@@ -1,10 +1,15 @@
 package playground.dal;
 
-import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
 
-public interface UserDao extends CrudRepository<UserEntity, UserId>{
-
+@RepositoryRestResource
+public interface UserDao extends PagingAndSortingRepository<UserEntity, UserId>{
+	
+	public List<UserEntity> findAllByOrderByPointsDesc();
 }

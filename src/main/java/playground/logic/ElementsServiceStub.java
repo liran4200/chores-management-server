@@ -150,6 +150,24 @@ public class ElementsServiceStub implements ElementsService {
 			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");
 		}
 	}
+
+	@Override
+	public ElementEntity createNewElement(ElementEntity element) throws ElementAlreadyExistsException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isElementExistsByType(String type) throws ElementNotFoundException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ElementEntity getConstantElementByType(String type) throws NoSuchAttributeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

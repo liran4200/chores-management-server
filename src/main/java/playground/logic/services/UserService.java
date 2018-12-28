@@ -1,5 +1,7 @@
 package playground.logic.services;
 
+import java.util.List;
+
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.exceptions.*;
 
@@ -18,5 +20,7 @@ public interface UserService {
 	
 	public void updateUser(String email, String playground, UserEntity user) 
 			throws UserNotFoundException,UserNotActiveException;
+	
+	public List<UserEntity> getAllUsers();
 		
 }

@@ -2,6 +2,7 @@ package playground.logic;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.PostConstruct;
@@ -97,6 +98,12 @@ public class UserServiceStub implements UserService{
 			this.users.put(key, existing);
 		}
 		
+	}
+
+	@Override
+	public List<UserEntity> getAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

@@ -53,6 +53,10 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundManagerValidation
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
+		return this.createNewElement(element);
+	}
+	
+	public ElementEntity createNewElement(ElementEntity element) throws ElementAlreadyExistsException {
 		if (!this.elements.existsById(element.getElementId())) {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
 			String number = "" + temp.getNextNumber();
@@ -151,6 +155,23 @@ public class JpaElementsService implements ElementsService {
 		} else {
 			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");
 		}
+	}
+
+	@Override
+	public boolean isElementExistsByType(String type) throws ElementNotFoundException {
+		if (!this.elements.findAllByTypeLike(type, null).isEmpty()) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public ElementEntity getConstantElementByType(String type) throws NoSuchAttributeException {
+		List<ElementEntity> rv = this.elements.findAllByTypeLike(type, null);
+		if (!rv.isEmpty()) {
+			return rv.get(0);
+		}
+		return null;
 	}
 	
 
