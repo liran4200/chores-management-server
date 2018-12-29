@@ -3,7 +3,9 @@ package playground.logic.data;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
@@ -199,6 +201,30 @@ public class JpaElementsService implements ElementsService {
 			return this.elements.save(existingElement);
 		}
 		return null;
+	}
+
+	@Override
+	public List<ElementEntity> getChoreElementsWithStatusNotDone() {
+		List<ElementEntity> allElements = Lists.newArrayList(this.elements.findAll());
+		return allElements.stream()
+						.filter(element -> this.isElementChoreNotDone(element))
+						.collect(Collectors.toList()); 
+	}
+	
+	/**
+	 * @param element
+	 * @return true if an element is in type "chore" and its status is NOT done
+	 */
+	private boolean isElementChoreNotDone(ElementEntity element) {
+		if (element.getType().equals(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
+			if (!element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS)) {
+				return true;
+			}
+			else if (!element.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS).equals(PlaygroundConstants.ELEMENT_CHORE_STATUS_DONE)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

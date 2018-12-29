@@ -181,6 +181,12 @@ public class ElementsServiceStub implements ElementsService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public List<ElementEntity> getChoreElementsWithStatusNotDone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

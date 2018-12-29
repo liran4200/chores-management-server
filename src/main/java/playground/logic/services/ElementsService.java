@@ -34,5 +34,7 @@ public interface ElementsService {
 	public ElementEntity getConstantElementByType(String type) throws NoSuchAttributeException;
 	
 	public ElementEntity updateChoreElement(ElementEntity element, String playground, String id) throws ElementNotFoundException;
+	
+	public List<ElementEntity> getChoreElementsWithStatusNotDone();
 
 }
