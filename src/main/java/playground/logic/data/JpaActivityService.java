@@ -1,6 +1,7 @@
 package playground.logic.data;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.google.common.collect.Lists;
 
 import playground.dal.ActivityDao;
 import playground.dal.NumberGenerator;
@@ -69,5 +72,10 @@ public class JpaActivityService implements ActivityService {
 		} else {
 			throw new ActivityAlreadyExistsException("activity " + activity.getActivityId() + " is already exists");
 		}
+	}
+
+	@Override
+	public List<ActivityEntity> getAllActivities() {
+		return Lists.newArrayList(activitiesDal.findAll());
 	}
 }

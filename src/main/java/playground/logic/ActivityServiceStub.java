@@ -1,6 +1,8 @@
 package playground.logic;
 
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 
 import playground.logic.EntityComponents.ActivityEntity;
@@ -21,6 +23,12 @@ public class ActivityServiceStub implements ActivityService {
 	@Override
 	public Object invokeActivity(String userPlayground, String email, ActivityEntity activity) {
 		return activity.getAttributes().get(ATTRIB_SCORE);
+	}
+
+	@Override
+	public List<ActivityEntity> getAllActivities() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

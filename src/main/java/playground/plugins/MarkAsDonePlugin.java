@@ -33,7 +33,7 @@ public class MarkAsDonePlugin extends AbsChangeElementStatusPlugin {
 		// Create and update the user in DB
 		UserEntity userToUpdate = this.usersApi.getCustomUser(activity.getPlayerEmail(),activity.getPlayerPlayground());
 		try {
-			userToUpdate.setPoints(userToUpdate.getPoints() + (Integer) Integer.valueOf((String)toUpdate.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE)));
+			userToUpdate.setPoints(userToUpdate.getPoints() + (Integer) Integer.valueOf((String)toUpdate.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE)));
 			this.usersApi.updateUser(activity.getPlayerEmail(), activity.getPlayerPlayground(), userToUpdate);
 		} catch (NumberFormatException e) {
 			//do nothing

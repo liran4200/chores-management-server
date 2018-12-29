@@ -13,17 +13,17 @@ import playground.utils.PlaygroundConstants;
 
 public abstract class AbsChangeElementStatusPlugin implements Plugin {
 	
-	private ElementsService elementsApi;
+	private ElementsService elements;
 
 	@Autowired
-	public void setElementsApi(ElementsService elementsApi) {
-		this.elementsApi = elementsApi;
+	public void setElementsApi(ElementsService elements) {
+		this.elements = elements;
 	}
 	
 	abstract public Object execute(ActivityEntity command) throws Exception;
 	
 	protected ElementEntity changeElementStatus(ActivityEntity activity, String status, String userId) throws ElementNotFoundException {
-		ElementEntity toUpdate = elementsApi.getElementById(
+		ElementEntity toUpdate = elements.getElementById(
 				activity.getPlayerPlayground(),
 				activity.getPlayerEmail(),
 				activity.getElementPlayground(),
@@ -33,11 +33,10 @@ public abstract class AbsChangeElementStatusPlugin implements Plugin {
 		if (newAttributes == null) {
 			newAttributes = new HashMap<String, Object>();
 		}
-		newAttributes.put(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS, status);
-		newAttributes.put(PlaygroundConstants.ELEMENT_ATTRIBUTE_ASSIGNED_TO, userId);
+		newAttributes.put(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS, status);
+		newAttributes.put(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_ASSIGNED_TO, userId);
 		toUpdate.setAttributes(newAttributes);
-		elementsApi.updateElement(toUpdate, activity.getPlayerPlayground(),
-				activity.getPlayerEmail(), activity.getElementPlayground(), activity.getElementId());
-		return toUpdate;
+		
+		return elements.updateChoreElement(toUpdate, activity.getElementPlayground(), activity.getElementId());
 	}
 }

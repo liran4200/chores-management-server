@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import playground.layout.TOComponents.ElementTo;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
@@ -29,14 +30,17 @@ public class GetScoreBoardPlugin implements Plugin {
 	@Override
 	public Object execute(ActivityEntity command) throws Exception {
 		if (!elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD)) {
-			ElementEntity historyBoard = new ElementEntity();
-			historyBoard.setType("ScoreBoard");
+			ElementEntity scoreBoardElement = new ElementEntity();
+			scoreBoardElement.setType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
 			Map<String, Object> attributes = fetchScoreBoardToAttributes();
-			historyBoard.setAttributes(attributes);
-			elements.createNewElement(historyBoard);
-			return historyBoard;
+			scoreBoardElement.setAttributes(attributes);
+			scoreBoardElement.setName(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+			scoreBoardElement.setX(0.0);
+			scoreBoardElement.setY(0.0);
+			elements.createNewElement(scoreBoardElement);
+			return new ElementTo(scoreBoardElement);
 		} else {
-			return elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+			return new ElementTo(elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD));
 		}
 	}
 	

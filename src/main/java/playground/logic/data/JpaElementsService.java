@@ -98,9 +98,9 @@ public class JpaElementsService implements ElementsService {
 			existingElement.setY(element.getY());
 		}
 		//manager can update only the Score attribute of an Element
-		if (element.getAttributes() != null && element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE) 
-				&& existingElement.getAttributes() != null && existingElement.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE)) {	
-			if (!Objects.equals(element.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE), existingElement.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_SCORE))) {
+		if (element.getAttributes() != null && element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE) 
+				&& existingElement.getAttributes() != null && existingElement.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE)) {	
+			if (!Objects.equals(element.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE), existingElement.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE))) {
 				existingElement.setAttributes(element.getAttributes());
 			}
 		}
