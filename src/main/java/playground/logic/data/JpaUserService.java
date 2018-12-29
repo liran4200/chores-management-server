@@ -10,7 +10,6 @@ import playground.aop.logger.MyLog;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
 import playground.dal.UserDao;
-import playground.logic.exceptions.*;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
 import playground.logic.services.InValidConfirmationCodeException;

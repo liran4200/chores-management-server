@@ -3,7 +3,6 @@ package playground.logic.services;
 import java.util.List;
 
 import playground.logic.EntityComponents.UserEntity;
-import playground.logic.exceptions.*;
 
 public interface UserService {
 	
