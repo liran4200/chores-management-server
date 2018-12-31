@@ -196,7 +196,11 @@ public class JpaElementsService implements ElementsService {
 			}
 			
 			if (element.getAttributes() != null && !Objects.equals(existingElement.getAttributes(), element.getAttributes())) {
-				existingElement.setAttributes(element.getAttributes());
+				element.getAttributes().keySet().forEach(key -> {
+					if (existingElement.getAttributes().containsKey(key)) {
+						existingElement.getAttributes().put(key, element.getAttributes().get(key));
+					}
+				});
 			}
 			return this.elements.save(existingElement);
 		}
