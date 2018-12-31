@@ -158,7 +158,7 @@ public class ElementsServiceStub implements ElementsService {
 	}
 
 	@Override
-	public boolean isElementExistsByType(String type) throws ElementNotFoundException {
+	public boolean isElementExistsByType(String type) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -184,6 +184,24 @@ public class ElementsServiceStub implements ElementsService {
 
 	@Override
 	public List<ElementEntity> getChoreElementsWithStatusNotDone() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ElementEntity internalUpdateElement(ElementEntity element) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ElementEntity createScoreBoardElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ElementEntity createHistoryBoardElement() {
 		// TODO Auto-generated method stub
 		return null;
 	}

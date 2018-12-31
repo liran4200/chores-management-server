@@ -26,6 +26,7 @@ public class GetHistoryBoardPlugin implements Plugin {
 		this.activities = activities;
 	}
 	
+	@Autowired
 	public void setElements(ElementsService elements) {
 		this.elements = elements;
 	}

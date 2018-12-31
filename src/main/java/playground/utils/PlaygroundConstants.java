@@ -13,6 +13,7 @@ public class PlaygroundConstants {
 	public static final String ELEMENT_CHORE_ATTRIBUTE_STATUS = "Status";
 	public static final String ELEMENT_CHORE_ATTRIBUTE_ASSIGNED_TO = "Assigned to";
 	public static final String ELEMENT_ATTRIBUTE_MESSAGE = "Message";
+	
 	public static final String ELEMENT_CHORE_ATTRIBUTE_IS_RECURRING = "isRecurring";
 	public static final String ELEMENT_ATTRIBUTE_DESCRIPTION = "Description";
 	public static final String ELEMENT_CHORE_ASSIGNED_TO_NONE = "";
@@ -31,7 +32,5 @@ public class PlaygroundConstants {
 	public static final String ACTIVITY_TYPE_GET_HISTORY_BORD = "GetHistoryBoard";
 	public static final String ACTIVITY_ATTRIBUTE_MESSAGE = "Message";
 	
-	
-	
-	
+		
 }

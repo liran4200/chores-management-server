@@ -8,7 +8,7 @@ import playground.logic.services.ElementNotFoundException;
 import playground.utils.PlaygroundConstants;
 
 @Component
-public class MarkAsUnassigenedPlugin extends AbsChangeElementStatusPlugin {
+public class MarkAsUnassignedPlugin extends AbsChangeElementStatusPlugin {
 
 	@Override
 	public Object execute(ActivityEntity activity) throws ElementNotFoundException {

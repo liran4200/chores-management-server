@@ -8,11 +8,6 @@ import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
-import playground.logic.services.ElementNotFoundException;
-import playground.logic.services.ElementsService;
-import playground.logic.services.NoSuchAttributeException;
-import playground.logic.services.UserNotActiveException;
-import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserService;
 import playground.utils.PlaygroundConstants;
 
@@ -20,18 +15,12 @@ import playground.utils.PlaygroundConstants;
 public class MarkAsDonePlugin extends AbsChangeElementStatusPlugin {
 	
 	private UserService users;
-	private ElementsService elements;
 	
 	@Autowired
 	public void setUsers(UserService users) {
 		this.users = users;
 	}
 	
-	@Autowired
-	public void setElements(ElementsService elements) {
-		this.elements = elements;
-	}
-
 	@Override
 	public Object execute(ActivityEntity activity) throws Exception  {
 		// Create and update the element in DB
@@ -60,15 +49,21 @@ public class MarkAsDonePlugin extends AbsChangeElementStatusPlugin {
 		return activity;
 	}
 	
+	/**
+	 * updates the scoreBoard element in DB. create score board element if not exist
+	 * @param userEmail
+	 * @param userPoints
+	 * @throws Exception
+	 */
 	private void updateScoreBoard(String userEmail, Long userPoints) throws Exception {
 		ElementEntity scoreBoardElement;
-		if (elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD)) {
-			scoreBoardElement = elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+		if (this.elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD)) {
+			scoreBoardElement = this.elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
 			scoreBoardElement.getAttributes().put(userEmail, userPoints);
-			elements.internalUpdateElement(scoreBoardElement);
+			this.elements.internalUpdateElement(scoreBoardElement);
+		} else {
+			scoreBoardElement = this.elements.createScoreBoardElement();
+			scoreBoardElement.getAttributes().put(userEmail, userPoints);
 		}
-		
-		scoreBoardElement = elements.createScoreBoardElement();
-		scoreBoardElement.getAttributes().put(userEmail, userPoints);
 	}
 }

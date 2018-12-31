@@ -58,6 +58,8 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundManagerValidation
 	public ElementEntity createNewElement(ElementEntity element, String userPlayground, String email)
 			throws ElementAlreadyExistsException {
+		element.setCreatorPlayground(userPlayground);
+		element.setCreatorEmail(email);
 		return this.createNewElement(element);
 	}
 	
@@ -192,9 +194,7 @@ public class JpaElementsService implements ElementsService {
 			
 			if (element.getAttributes() != null && !Objects.equals(existingElement.getAttributes(), element.getAttributes())) {
 				element.getAttributes().keySet().forEach(key -> {
-					if (existingElement.getAttributes().containsKey(key)) {
-						existingElement.getAttributes().put(key, element.getAttributes().get(key));
-					}
+					existingElement.getAttributes().put(key, element.getAttributes().get(key));
 				});
 			}
 			return this.elements.save(existingElement);
@@ -218,8 +218,7 @@ public class JpaElementsService implements ElementsService {
 		if (element.getType().equals(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
 			if (!element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS)) {
 				return true;
-			}
-			else if (!element.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS).equals(PlaygroundConstants.ELEMENT_CHORE_STATUS_DONE)) {
+			} else if (!element.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS).equals(PlaygroundConstants.ELEMENT_CHORE_STATUS_DONE)) {
 				return true;
 			}
 		}

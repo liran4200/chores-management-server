@@ -29,6 +29,8 @@ public class AddChorePlugin implements Plugin {
 		if (activity.getAttributes().containsKey(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
 			String jsonStringChore = this.mapper.writeValueAsString(activity.getAttributes().get(PlaygroundConstants.ELEMENT_TYPE_CHORE));
 			ElementEntity elementToAdd = createChoreElement(jsonStringChore);
+			elementToAdd.setCreatorEmail(activity.getPlayerEmail());
+			elementToAdd.setCreatorPlayground(activity.getPlayerPlayground());
 			ElementEntity rv = elements.createNewElement(elementToAdd);
 			if (rv != null) {
 				// Set a message for this activity

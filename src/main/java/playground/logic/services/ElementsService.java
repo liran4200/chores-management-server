@@ -36,5 +36,11 @@ public interface ElementsService {
 	public ElementEntity updateChoreElement(ElementEntity element, String playground, String id) throws ElementNotFoundException;
 	
 	public List<ElementEntity> getChoreElementsWithStatusNotDone();
+	
+	public ElementEntity internalUpdateElement(ElementEntity element);
+	
+	public ElementEntity createScoreBoardElement();
+	
+	public ElementEntity createHistoryBoardElement();
 
 }

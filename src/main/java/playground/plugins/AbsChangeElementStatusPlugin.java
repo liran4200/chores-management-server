@@ -13,7 +13,7 @@ import playground.utils.PlaygroundConstants;
 
 public abstract class AbsChangeElementStatusPlugin implements Plugin {
 	
-	private ElementsService elements;
+	protected ElementsService elements;
 
 	@Autowired
 	public void setElements(ElementsService elements) {
@@ -24,8 +24,6 @@ public abstract class AbsChangeElementStatusPlugin implements Plugin {
 	
 	protected ElementEntity changeChoreElementStatus(ActivityEntity activity, String status, String userId) throws ElementNotFoundException {
 		ElementEntity toUpdate = elements.getElementById(
-				activity.getPlayerPlayground(),
-				activity.getPlayerEmail(),
 				activity.getElementPlayground(),
 				activity.getElementId());
 		//update element only if the type is "chore"
