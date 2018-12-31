@@ -1,6 +1,8 @@
 package playground.logic.data;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,13 +101,6 @@ public class JpaElementsService implements ElementsService {
 		if(element.getY() != null && !Objects.equals(existingElement.getY(), element.getY())) {
 			existingElement.setY(element.getY());
 		}
-		//manager can update only the Score attribute of an Element
-		if (element.getAttributes() != null && element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE) 
-				&& existingElement.getAttributes() != null && existingElement.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE)) {	
-			if (!Objects.equals(element.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE), existingElement.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_SCORE))) {
-				existingElement.setAttributes(element.getAttributes());
-			}
-		}
 		
 		this.elements.save(existingElement);
 	}
@@ -166,7 +161,7 @@ public class JpaElementsService implements ElementsService {
 	}
 
 	@Override
-	public boolean isElementExistsByType(String type) throws ElementNotFoundException {
+	public boolean isElementExistsByType(String type) {
 		if (!this.elements.findAllByTypeLike(type, null).isEmpty()) {
 			return true;
 		}
@@ -221,14 +216,42 @@ public class JpaElementsService implements ElementsService {
 	 */
 	private boolean isElementChoreNotDone(ElementEntity element) {
 		if (element.getType().equals(PlaygroundConstants.ELEMENT_TYPE_CHORE)) {
-			if (!element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS)) {
+			if (!element.getAttributes().containsKey(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS)) {
 				return true;
 			}
-			else if (!element.getAttributes().get(PlaygroundConstants.ELEMENT_ATTRIBUTE_STATUS).equals(PlaygroundConstants.ELEMENT_CHORE_STATUS_DONE)) {
+			else if (!element.getAttributes().get(PlaygroundConstants.ELEMENT_CHORE_ATTRIBUTE_STATUS).equals(PlaygroundConstants.ELEMENT_CHORE_STATUS_DONE)) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public ElementEntity internalUpdateElement(ElementEntity element) {
+		return elements.save(element);
+	}
+
+	@Override
+	public ElementEntity createScoreBoardElement() {
+		ElementEntity scoreBoard = new ElementEntity();
+		scoreBoard.setType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+		scoreBoard.setName(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+		scoreBoard.setX(0.0);
+		scoreBoard.setY(0.0);
+		scoreBoard.setAttributes(new HashMap<String, Object>());
+		return this.createNewElement(scoreBoard);
+		
+	}
+
+	@Override
+	public ElementEntity createHistoryBoardElement() {
+		ElementEntity historyBoard = new ElementEntity();
+		historyBoard.setType(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD);
+		historyBoard.setName(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD);
+		historyBoard.setX(0.0);
+		historyBoard.setY(0.0);
+		historyBoard.setAttributes(new HashMap<String, Object>());
+		return this.createNewElement(historyBoard);
 	}
 
 }

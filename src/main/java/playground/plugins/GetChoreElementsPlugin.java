@@ -22,7 +22,7 @@ public class GetChoreElementsPlugin implements Plugin {
 	}
 
 	@Override
-	public Object execute(ActivityEntity command) throws Exception {
+	public Object execute(ActivityEntity activity) throws Exception {
 		 List<ElementEntity> choreElements = this.elements.getChoreElementsWithStatusNotDone();
 		 return choreElements.stream()
 					.map(ElementTo::new)

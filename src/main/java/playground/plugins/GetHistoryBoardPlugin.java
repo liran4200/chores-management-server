@@ -8,7 +8,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import playground.dal.ActivityDao;
 import playground.layout.TOComponents.ElementTo;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ElementEntity;
@@ -19,14 +18,15 @@ import playground.utils.PlaygroundConstants;
 @Component
 public class GetHistoryBoardPlugin implements Plugin {
 	
-	private ActivityDao activitiesDal;
 	private ActivityService activities;
 	private ElementsService elements;
 	
 	@Autowired
-	public void setActivitiesDal(ActivityDao activitiesDal, ActivityService activities, ElementsService elements) {
-		this.activitiesDal = activitiesDal;
+	public void setActivities(ActivityService activities) {
 		this.activities = activities;
+	}
+	
+	public void setElements(ElementsService elements) {
 		this.elements = elements;
 	}
 
@@ -35,17 +35,15 @@ public class GetHistoryBoardPlugin implements Plugin {
 		ElementEntity historyBoard = new ElementEntity();
 		Map<String, Object> historyAttributes = fetchHistoryBoardToAttributes();
 		if (!elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD)) {
-			historyBoard.setType(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD);
+			historyBoard = this.elements.createHistoryBoardElement();
 			historyBoard.setAttributes(historyAttributes);
-			historyBoard.setName(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD);
-			historyBoard.setX(0.0);
-			historyBoard.setY(0.0);
-			elements.createNewElement(historyBoard);
-			return new ElementTo(historyBoard);
+			ElementEntity updatedHistoryBoard = this.elements.internalUpdateElement(historyBoard);
+			return new ElementTo(updatedHistoryBoard);
 		} else {
 			historyBoard = elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_HISTORY_BOARD);
 			historyBoard.setAttributes(historyAttributes);
-			return new ElementTo(historyBoard);
+			ElementEntity updatedHistoryBoard = this.elements.internalUpdateElement(historyBoard);
+			return new ElementTo(updatedHistoryBoard);
 		}
 	}
 

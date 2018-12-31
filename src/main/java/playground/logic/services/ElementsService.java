@@ -23,7 +23,7 @@ public interface ElementsService {
 	
 	public ElementEntity getElementById(String playground, String id) throws ElementNotFoundException;
 	
-	public boolean isElementExistsByType(String type) throws ElementNotFoundException;
+	public boolean isElementExistsByType(String type);
 	
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size);
 	

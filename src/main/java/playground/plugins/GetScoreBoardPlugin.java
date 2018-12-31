@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.context.support.UiApplicationContextUtils;
 
 import playground.layout.TOComponents.ElementTo;
 import playground.logic.EntityComponents.ActivityEntity;
@@ -22,23 +23,23 @@ public class GetScoreBoardPlugin implements Plugin {
 	private UserService	users;
 	
 	@Autowired
-	public void setElements(ElementsService elements, UserService users) {
+	public void setElements(ElementsService elements) {
 		this.elements = elements;
+	}
+	
+	@Autowired
+	public void setUsers(UserService users) {
 		this.users = users;
 	}
 
 	@Override
 	public Object execute(ActivityEntity command) throws Exception {
 		if (!elements.isElementExistsByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD)) {
-			ElementEntity scoreBoardElement = new ElementEntity();
-			scoreBoardElement.setType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
+			ElementEntity scoreBoardElement = elements.createScoreBoardElement();
 			Map<String, Object> attributes = fetchScoreBoardToAttributes();
 			scoreBoardElement.setAttributes(attributes);
-			scoreBoardElement.setName(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD);
-			scoreBoardElement.setX(0.0);
-			scoreBoardElement.setY(0.0);
-			elements.createNewElement(scoreBoardElement);
-			return new ElementTo(scoreBoardElement);
+			ElementEntity updatedScoreBoard = this.elements.internalUpdateElement(scoreBoardElement);
+			return new ElementTo(updatedScoreBoard);
 		} else {
 			return new ElementTo(elements.getConstantElementByType(PlaygroundConstants.ELEMENT_TYPE_SCORE_BOARD));
 		}
@@ -47,7 +48,7 @@ public class GetScoreBoardPlugin implements Plugin {
 	private Map<String, Object> fetchScoreBoardToAttributes() {
 		Map<String, Object> scoreBoard = new HashMap<>();
 		List<UserEntity> allUsers = this.users.getAllUsers();
-		allUsers.stream().forEach(user -> scoreBoard.put(user.getUserName(), user.getPoints()));
+		allUsers.stream().forEach(user -> scoreBoard.put(user.getUserId().getEmail(), user.getPoints()));
 		
 		return scoreBoard;
 	}
