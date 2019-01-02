@@ -17,6 +17,7 @@ import playground.logic.services.UserAlreadyExistsException;
 import playground.logic.services.UserNotActiveException;
 import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserService;
+import playground.utils.PlaygroundConstants;
 
 @Service
 public class JpaUserService implements UserService{
@@ -59,18 +60,28 @@ public class JpaUserService implements UserService{
 	@MyLog
 	public UserEntity getCustomUser(String email, String playground) throws UserNotFoundException, UserNotActiveException {
 		UserId key = new UserId(email);
-		
+		return this.getCustomUser(key);
+	}
+	
+	/**
+	 * 
+	 * @param key
+	 * @return user for key
+	 * @throws UserNotActiveException
+	 * @throws UserNotFoundException
+	 */
+	private UserEntity getCustomUser(UserId key) throws UserNotActiveException, UserNotFoundException {
 		Optional<UserEntity> op = this.users.findById(key);
 		if (op.isPresent()) {
-			if(op.get().getIsActive())
+			if (op.get().getIsActive())
 				return op.get();
 			else
-				throw new UserNotActiveException("User - " +email+ " is not active,"
+				throw new UserNotActiveException("User - " + key.getEmail() + " is not active,"
 						+ "please confirm your code before ");
 
 		}
 		else
-			throw new UserNotFoundException("User - "+email+" not found");	
+			throw new UserNotFoundException("User - " + key.getEmail() + " not found");	
 	}
 	
 	@Transactional
@@ -136,6 +147,31 @@ public class JpaUserService implements UserService{
 	public List<UserEntity> getAllUsers() {
 		return this.users.findAllByOrderByPointsDesc();
 		
+	}
+
+	@Override
+	public boolean isUserManager(String email, String playground) {
+		try {
+			UserEntity user = this.getCustomUser(email, playground);
+			return (user.getRole().equals(PlaygroundConstants.USER_ATTRIBUTE_ROLE_MANAGER));
+		} catch (UserNotFoundException | UserNotActiveException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isUserExistsAndConfirmed(String email, String playground) {
+		UserId userId = new UserId(playground, email);
+		if (this.users.existsById(userId)) {
+			 try {
+				this.getCustomUser(userId);
+				return true;
+			} catch (UserNotActiveException | UserNotFoundException e) {
+				return false;
+			}
+			 
+		}
+		return false;
 	}
 
 }

@@ -9,9 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import playground.aop.logger.LoggerAspect;
-import playground.logic.EntityComponents.UserEntity;
-import playground.logic.services.UserNotActiveException;
-import playground.logic.services.UserNotFoundException;
 import playground.logic.services.UserNotManagerException;
 import playground.logic.services.UserService;
 
@@ -35,16 +32,11 @@ public class ManagerValidationAspect {
 	
 	@Around("@annotation(playground.aop.userValidation.PlaygroundManagerValidation) && args (*, userPlayground, email,..)")
 	public Object validateManager(ProceedingJoinPoint jp, String userPlayground, String email) throws Throwable {
-		try {
-			log.info("******************** Manager Validation ********************");
-			 UserEntity user = users.getCustomUser(email, userPlayground);
-			 if (!user.getRole().equals("manager")) {
-				 throw new UserNotManagerException("user " + user.getUserName() + " is not Manager");
-			 }
-			 return jp.proceed();
-		} catch (UserNotFoundException | UserNotActiveException e) {
-			throw e;
-		}	
+		log.info("******************** Manager Validation ********************");
+		 if (!this.users.isUserManager(email, userPlayground)) {
+			 throw new UserNotManagerException("user " + email + " is not Manager");
+		 }
+		 return jp.proceed();	
 	}
 
 }

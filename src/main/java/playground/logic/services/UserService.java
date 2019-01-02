@@ -21,5 +21,9 @@ public interface UserService {
 			throws UserNotFoundException,UserNotActiveException;
 	
 	public List<UserEntity> getAllUsers();
+	
+	public boolean isUserManager(String email, String playground);
+	
+	public boolean isUserExistsAndConfirmed(String email, String playground);
 		
 }

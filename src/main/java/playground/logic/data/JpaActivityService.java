@@ -3,8 +3,6 @@ package playground.logic.data;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Service;
@@ -19,7 +17,6 @@ import playground.aop.logger.MyLog;
 import playground.aop.userValidation.PlaygroundUserValidation;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ActivityId;
-import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.services.ActivityAlreadyExistsException;
 import playground.logic.services.ActivityInvokeFailedException;
 import playground.logic.services.ActivityService;

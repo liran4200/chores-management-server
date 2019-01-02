@@ -1,8 +1,9 @@
 package playground.logic.data;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ import playground.logic.services.ElementAlreadyExistsException;
 import playground.logic.services.ElementNotFoundException;
 import playground.logic.services.ElementsService;
 import playground.logic.services.NoSuchAttributeException;
+import playground.logic.services.UserService;
 import playground.utils.PlaygroundConstants;
 
 /**
@@ -37,12 +39,14 @@ public class JpaElementsService implements ElementsService {
 	
 	private ElementDao elements;
 	private NumberGeneratorDao numberGenerator;
+	private UserService users;
 	
 	
 	@Autowired
-	public JpaElementsService(ElementDao elements, NumberGeneratorDao numberGenerator) {
+	public JpaElementsService(ElementDao elements, NumberGeneratorDao numberGenerator, UserService users) {
 		this.elements = elements;
 		this.numberGenerator = numberGenerator;
+		this.users = users;
 	}
 	
 	@Override
@@ -63,6 +67,11 @@ public class JpaElementsService implements ElementsService {
 		return this.createNewElement(element);
 	}
 	
+	/**
+	 * creates new ElementEntity and saves in DB
+	 * @param ElementEntity
+	 * @return ElementEntity
+	 */
 	public ElementEntity createNewElement(ElementEntity element) throws ElementAlreadyExistsException {
 		if (!this.elements.existsById(element.getElementId())) {
 			NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
@@ -112,9 +121,30 @@ public class JpaElementsService implements ElementsService {
 	@MyLog
 	@PlaygroundUserValidation
 	public ElementEntity getElementById(String userPlayground, String email, String playground, String id) throws ElementNotFoundException {
-		return this.getElementById(playground, id);
+		if (this.users.isUserManager(email, playground)) { 
+			return this.getElementById(playground, id);
+		} else {
+			return this.getNotExpiredElementById(playground, id);
+		}
 	}
 	
+	/**
+	 * 
+	 * @param playground
+	 * @param id
+	 * @return ElementEntity for id and playground - only if the element is not expired
+	 * @throws ElementNotFoundException
+	 */
+	private ElementEntity getNotExpiredElementById(String playground, String id) throws ElementNotFoundException {
+		ElementId uniqueId = new ElementId(id, playground);
+		Date now = new Date();
+		if (this.elements.existsById(uniqueId)) {
+			return this.elements.findByElementIdAndExpirationDateAfterOrExpirationDateIsNull(uniqueId, now);
+		} else {
+			throw new ElementNotFoundException("no element found for id " + id + " in playground " + playground);
+		}
+	}
+
 	@Override
 	public ElementEntity getElementById(String playground, String id) throws ElementNotFoundException {
 		ElementId uniqueId = new ElementId(id, playground);
@@ -131,7 +161,32 @@ public class JpaElementsService implements ElementsService {
 	@MyLog
 	@PlaygroundUserValidation
 	public List<ElementEntity> getAllElements(String userPlayground, String email, int page, int size) {
+		if (this.users.isUserManager(email, userPlayground)) {
+			return this.getAllElements(page, size);
+		} else {
+			return this.getAllNotExpiredElements(page, size);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param page
+	 * @param size
+	 * @return all elements in DB
+	 */
+	private List<ElementEntity> getAllElements(int page, int size) {
 		return this.elements.findAll(PageRequest.of(page, size, Direction.DESC, "creationDate")).getContent();
+	}
+	
+	/**
+	 * 
+	 * @param page
+	 * @param size
+	 * @return all elements in DB which are not expired
+	 */
+	private List<ElementEntity> getAllNotExpiredElements(int page, int size) {
+		Date now = new Date();
+		return this.elements.findAllByExpirationDateAfterOrExpirationDateIsNull(now, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 	}
 	
 	@Override
@@ -144,7 +199,42 @@ public class JpaElementsService implements ElementsService {
 		double yTop = y + distance;
 		double yBottom = y - distance;
 		
+		if (this.users.isUserManager(email, userPlaygeound)) {
+			return this.getAllNearElements(xBottom, xTop, yTop, yBottom, distance, page, size);
+		} else {
+			return this.getAllNearNotExpiredElements(xBottom, xTop, yTop, yBottom, distance, page, size);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param xBottom
+	 * @param xTop
+	 * @param yBottom
+	 * @param yTop
+	 * @param distance
+	 * @param page
+	 * @param size
+	 * @return all elements in distance between x and y range
+	 */
+	private List<ElementEntity> getAllNearElements(double xBottom, double xTop, double yBottom, double yTop, double distance, int page, int size) {
 		return this.elements.findAllByXBetweenAndYBetween(xBottom, xTop, yBottom, yTop, PageRequest.of(page, size, Direction.DESC, "creationDate"));
+	}
+	
+	/**
+	 * 
+	 * @param xBottom
+	 * @param xTop
+	 * @param yBottom
+	 * @param yTop
+	 * @param distance
+	 * @param page
+	 * @param size
+	 * @return all elements which are not expired in distance between x and y range
+	 */
+	private List<ElementEntity> getAllNearNotExpiredElements(double xBottom, double xTop, double yBottom, double yTop, double distance, int page, int size) {
+		Date now = new Date();
+		return this.elements.findAllByXBetweenAndYBetweenAndExpirationDateAfterOrExpirationDateIsNull(xBottom, xTop, yBottom, yTop, now, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 	}
 
 	@Override
@@ -153,10 +243,48 @@ public class JpaElementsService implements ElementsService {
 	@PlaygroundUserValidation
 	public List<ElementEntity> searchElement(String userPlaygeound, String email, String attributeName, String value,
 			int page, int size) throws NoSuchAttributeException {
+		if (this.users.isUserManager(email, userPlaygeound)) {
+			return this.searchElement(attributeName, value, page, size);
+		} else {
+			return this.searchNotExpiredElement(attributeName, value, page, size);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param attributeName
+	 * @param value
+	 * @param page
+	 * @param size
+	 * @return searched elements (by type or name)
+	 * @throws NoSuchAttributeException
+	 */
+	private List<ElementEntity> searchElement(String attributeName, String value, int page, int size) throws NoSuchAttributeException {
 		if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_NAME, attributeName)) {
 			return this.elements.findAllByNameLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 		} else if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_TYPE, attributeName)) {
 			return this.elements.findAllByTypeLike(value, PageRequest.of(page, size, Direction.DESC, "creationDate"));
+		} else {
+			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");
+		}
+	}
+	
+	/**
+	 * 
+	 * @param attributeName
+	 * @param value
+	 * @param page
+	 * @param size
+	 * @return search elements which are not expired
+	 * @throws NoSuchAttributeException
+	 */
+	private List<ElementEntity> searchNotExpiredElement(String attributeName, String value, int page, int size) throws NoSuchAttributeException {
+		Date now = new Date();
+		
+		if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_NAME, attributeName)) {
+			return this.elements.findAllByNameLikeAndExpirationDateAfterOrExpirationDateIsNull(value, now, PageRequest.of(page, size, Direction.DESC, "creationDate"));
+		} else if (Objects.equals(PlaygroundConstants.ELEMENT_MEMBER_TYPE, attributeName)) {
+			return this.elements.findAllByTypeLikeAndExpirationDateAfterOrExpirationDateIsNull(value, now, PageRequest.of(page, size, Direction.DESC, "creationDate"));
 		} else {
 			throw new NoSuchAttributeException("no " + attributeName + " attribute in elements");
 		}

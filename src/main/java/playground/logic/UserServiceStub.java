@@ -105,6 +105,18 @@ public class UserServiceStub implements UserService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean isUserManager(String email, String playground) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isUserExistsAndConfirmed(String email, String playground) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 	
 }

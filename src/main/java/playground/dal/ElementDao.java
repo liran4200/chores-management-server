@@ -1,5 +1,6 @@
 package playground.dal;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,19 @@ public interface ElementDao extends PagingAndSortingRepository<ElementEntity, El
 															@Param("yBottom") double yBottom,
 															@Param("yTop") double yTop,
 															Pageable pageable);
+	
+	public ElementEntity findByElementIdAndExpirationDateAfterOrExpirationDateIsNull(@Param("id") ElementId id, @Param("now") Date now);
+	
+	public List<ElementEntity> findAllByExpirationDateAfterOrExpirationDateIsNull(@Param("now") Date now, Pageable pageable);
+	
+	public List<ElementEntity> findAllByXBetweenAndYBetweenAndExpirationDateAfterOrExpirationDateIsNull(@Param("xBottom") double xBottom,
+																										@Param("xTop") double xTop,
+																										@Param("yBottom") double yBottom,
+																										@Param("yTop") double yTop,
+																										@Param("now") Date now,
+																										Pageable pageable);
+	
+	public List<ElementEntity> findAllByNameLikeAndExpirationDateAfterOrExpirationDateIsNull(@Param("value") String value, @Param("now") Date now, Pageable pageable);
+	
+	public List<ElementEntity> findAllByTypeLikeAndExpirationDateAfterOrExpirationDateIsNull(@Param("value") String value, @Param("now") Date now, Pageable pageable);
 }
