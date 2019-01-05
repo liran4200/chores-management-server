@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import playground.aop.logger.MyLog;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
+import playground.dal.RandomNumberGenerator;
+import playground.dal.RandomNumberGeneratorDao;
 import playground.dal.UserDao;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.EntityComponents.UserId;
@@ -23,10 +25,10 @@ import playground.utils.PlaygroundConstants;
 public class JpaUserService implements UserService{
 	
 	private UserDao users;
-	private NumberGeneratorDao numberGenerator;
+	private RandomNumberGeneratorDao numberGenerator;
 	
 	@Autowired
-	public JpaUserService(UserDao users, NumberGeneratorDao numberGenerator) {
+	public JpaUserService(UserDao users, RandomNumberGeneratorDao numberGenerator) {
 		this.users = users;
 		this.numberGenerator = numberGenerator;
 	}
@@ -47,7 +49,7 @@ public class JpaUserService implements UserService{
 		if(this.users.existsById(key))
 			throw new UserAlreadyExistsException("user - " + key.getEmail() + " already exists");
 		
-		NumberGenerator temp = this.numberGenerator.save(new NumberGenerator());
+		RandomNumberGenerator temp = this.numberGenerator.save(new RandomNumberGenerator());
 		
 		long code = temp.getNextNumber();
 		user.setConfirmCode(code);
@@ -59,7 +61,7 @@ public class JpaUserService implements UserService{
 	@Transactional(readOnly=true)
 	@MyLog
 	public UserEntity getCustomUser(String email, String playground) throws UserNotFoundException, UserNotActiveException {
-		UserId key = new UserId(email);
+		UserId key = new UserId(playground,email);
 		return this.getCustomUser(key);
 	}
 	
@@ -89,7 +91,7 @@ public class JpaUserService implements UserService{
 	@MyLog
 	public UserEntity getConfirmUser(String email, String playground, long code)
 			throws UserNotFoundException, InValidConfirmationCodeException {
-		UserId key = new UserId(email);	
+		UserId key = new UserId(playground ,email);	
 		Optional<UserEntity> op = this.users.findById(key);
 		UserEntity user= null;
 		if (op.isPresent()) {
@@ -111,7 +113,7 @@ public class JpaUserService implements UserService{
 	@Transactional
 	@MyLog
 	public void updateUser(String email, String playground, UserEntity user) throws UserNotFoundException, UserNotActiveException {
-		UserId key = user.getUserId();
+		UserId key = new UserId(playground, email);
 		if(!this.users.existsById(key))
 			throw new UserNotFoundException("User not exists");
 		
