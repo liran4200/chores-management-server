@@ -205,6 +205,12 @@ public class ElementsServiceStub implements ElementsService {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public ElementEntity createMessageBoardElement() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	
 

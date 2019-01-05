@@ -23,6 +23,7 @@ public class PlaygroundConstants {
 	public static final String ELEMENT_TYPE_CHORE = "chore";
 	public static final String ELEMENT_TYPE_SCORE_BOARD = "scoreBoard";
 	public static final String ELEMENT_TYPE_HISTORY_BOARD = "historyBoard";
+	public static final String ELEMENT_TYPE_MESSAGE_BOARD = "messageBoard";
 	
 
 	public static final String ACTIVITY_TYPE_MARK_AS_ASSIGENED = "MarkAsAssigened";
