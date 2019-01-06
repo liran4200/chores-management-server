@@ -42,5 +42,7 @@ public interface ElementsService {
 	public ElementEntity createScoreBoardElement();
 	
 	public ElementEntity createHistoryBoardElement();
+	
+	public ElementEntity createMessageBoardElement();
 
 }

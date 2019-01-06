@@ -13,7 +13,7 @@ import com.google.common.collect.Lists;
 import playground.dal.ActivityDao;
 import playground.dal.NumberGenerator;
 import playground.dal.NumberGeneratorDao;
-import playground.aop.logger.MyLog;
+import playground.aop.logger.MyLogActivity;
 import playground.aop.userValidation.PlaygroundUserValidation;
 import playground.logic.EntityComponents.ActivityEntity;
 import playground.logic.EntityComponents.ActivityId;
@@ -38,7 +38,7 @@ public class JpaActivityService implements ActivityService {
 	
 	@Override
 	@Transactional
-	@MyLog
+	@MyLogActivity
 	@PlaygroundUserValidation
 	public Object invokeActivity(String userPlayground, String email, ActivityEntity activity) throws ActivityInvokeFailedException {
 		Object content;

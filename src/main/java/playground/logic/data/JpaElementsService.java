@@ -381,4 +381,15 @@ public class JpaElementsService implements ElementsService {
 		return this.createNewElement(historyBoard);
 	}
 
+	@Override
+	public ElementEntity createMessageBoardElement() {
+		ElementEntity messageBoard = new ElementEntity();
+		messageBoard.setType(PlaygroundConstants.ELEMENT_TYPE_MESSAGE_BOARD);
+		messageBoard.setName(PlaygroundConstants.ELEMENT_TYPE_MESSAGE_BOARD);
+		messageBoard.setX(0.0);
+		messageBoard.setY(0.0);
+		messageBoard.setAttributes(new HashMap<String, Object>());
+		return this.createNewElement(messageBoard);
+	}
+
 }
