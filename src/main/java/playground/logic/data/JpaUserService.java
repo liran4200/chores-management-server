@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import playground.aop.logger.MyLog;
-import playground.dal.NumberGenerator;
-import playground.dal.NumberGeneratorDao;
 import playground.dal.RandomNumberGenerator;
 import playground.dal.RandomNumberGeneratorDao;
 import playground.dal.UserDao;
@@ -52,8 +50,10 @@ public class JpaUserService implements UserService{
 		RandomNumberGenerator temp = this.numberGenerator.save(new RandomNumberGenerator());
 		
 		long code = temp.getNextNumber();
+		code = code/10000; //the biggest Integer javaScript can reliably save is up to 15 digits
 		user.setConfirmCode(code);
 		this.users.save(user);
+		System.out.println(user);
 		return code;
 	}
 	
