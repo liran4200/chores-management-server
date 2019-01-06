@@ -5,11 +5,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.assertj.core.api.Java6AbstractStandardSoftAssertions;
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
@@ -23,15 +21,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 
-import net.bytebuddy.asm.Advice.This;
 import playground.layout.TOComponents.ActivityTo;
 import playground.layout.TOComponents.ElementTo;
 import playground.layout.TOComponents.NewUserForm;
 import playground.layout.TOComponents.UserTo;
-import playground.logic.EntityComponents.ActivityEntity;
-import playground.logic.EntityComponents.ActivityId;
+
 import playground.logic.EntityComponents.ElementEntity;
 import playground.logic.EntityComponents.UserEntity;
 import playground.logic.services.ActivityService;
@@ -268,7 +263,7 @@ public class ActivitiesTests {
 		String ChoreJson = new JSONObject()
                 .put("type", "EditChore")
                 .put("elementPlayground", element1.getElementId().getPlayground())
-                .put("elementId", element1.getElementId())
+                .put("elementId", element1.getElementId().getId())
                 .put("attributes", new JSONObject()
                 			.put("chore", new JSONObject()
                 					.put("name", "newChore1")
@@ -324,32 +319,6 @@ public class ActivitiesTests {
 		assertThat(responseElement)
 			.hasSize(3);
 	}
-	
-	@Test
-	public void testInvokeGetMessageBoardActivitySuccessfully() throws Exception {
-		
-		String ChoreJson = new JSONObject()
-				.put("type", "GetMessageBoard").toString();
-
-				
-		ActivityTo activityTo = this.jacksonMapper.readValue(ChoreJson, ActivityTo.class);
-		
-		//when POST /playground/activities with body
-		ElementTo[] responseElement = this.restTemplate.postForObject(
-				this.activities_url + "/" + theManagerPlayground  + "/"+ theManagerEmail, // url
-				activityTo, // object in the request body
-				ElementTo[].class // expected response body type
-					);
-		
-		for (ElementTo element : responseElement)
-		{
-			assertThat(element)
-				.isNotNull();
-		}
-		assertThat(responseElement)
-			.hasSize(3);
-	}
-
 
 	@Test
 	public void testInvokeGetScoreBoardActivitySuccessfully() throws Exception {
@@ -450,4 +419,124 @@ public class ActivitiesTests {
 		assertThat(responseElement.getAttributes().get("Message"))
 			.isEqualTo("User David.kric@gmail.com marked chore chore_1 as done");
 	}
-}
+
+@Test
+public void testInvokeMessageBoardAndPostMessageActivitySuccessfully() throws Exception {
+	
+	ActivityTo activityTo 	   = null;
+	ElementTo responseElement  = null;
+	
+	String PostMessageJson = new JSONObject()
+			.put("type", "PostMessage")
+			.put("attributes", new JSONObject()
+				.put("Message", "Test passed if this message shown in the message board")).toString();
+	
+	activityTo = this.jacksonMapper.readValue(PostMessageJson, ActivityTo.class);
+	
+	responseElement = this.restTemplate.postForObject(
+				this.activities_url + "/" + this.element1.getElementId().getPlayground()  + "/"+ this.element1.getCreatorEmail(), // url
+				activityTo, // object in the request body
+				ElementTo.class // expected response body type
+					);
+		
+	String MessageBoardJson = new JSONObject()
+			.put("type", "GetMessageBoard")
+			.put("elementPlayground", this.theManagerPlayground)
+			.put("elementId", this.element1.getElementId().getId()).toString();
+	
+	activityTo = this.jacksonMapper.readValue(MessageBoardJson, ActivityTo.class);
+	
+	responseElement = this.restTemplate.postForObject(
+			this.activities_url + "/" + this.element1.getElementId().getPlayground()  + "/"+ this.element1.getCreatorEmail(), // url
+			activityTo, // object in the request body
+			ElementTo.class // expected response body type
+				);
+
+	assertThat(responseElement)
+		.isNotNull();
+	assertThat(responseElement.getAttributes().get("Message").toString())
+		.isEqualTo("[David.kric@gmail.com: Test passed if this message shown in the message board]");
+	}
+
+@Test
+public void testInvokeHistoryBoardSuccessfully() throws Exception {
+	
+	ActivityTo activityTo 	   = null;
+	ElementTo responseElement  = null;
+	
+	String PostMessageJson = new JSONObject()
+			.put("type", "PostMessage")
+			.put("attributes", new JSONObject()
+				.put("Message", "Test passed if this message post is shown in the history board")).toString();
+	
+	activityTo = this.jacksonMapper.readValue(PostMessageJson, ActivityTo.class);
+	
+	responseElement = this.restTemplate.postForObject(
+				this.activities_url + "/" + this.element1.getElementId().getPlayground()  + "/"+ this.element1.getCreatorEmail(), // url
+				activityTo, // object in the request body
+				ElementTo.class // expected response body type
+					);
+		
+	String MessageBoardJson = new JSONObject()
+			.put("type", "GetMessageBoard")
+			.put("elementPlayground", this.theManagerPlayground)
+			.put("elementId", this.element1.getElementId().getId()).toString();
+	
+	activityTo = this.jacksonMapper.readValue(MessageBoardJson, ActivityTo.class);
+	
+	responseElement = this.restTemplate.postForObject(
+			this.activities_url + "/" + this.element1.getElementId().getPlayground()  + "/"+ this.element1.getCreatorEmail(), // url
+			activityTo, // object in the request body
+			ElementTo.class // expected response body type
+				);
+
+	String updateChoreJson = new JSONObject()
+            .put("type", "EditChore")
+            .put("elementPlayground", element1.getElementId().getPlayground())
+            .put("elementId", element1.getElementId().getId())
+            .put("attributes", new JSONObject()
+            			.put("chore", new JSONObject()
+            					.put("name", "newChore1")
+            					.put("type", "chore")
+            					.put("x", 0)
+            					.put("y", 0)
+            					.put("attributes", new JSONObject()
+            							.put("Score", 50)
+            							.put("Description", "blah")))).toString();
+            			
+	activityTo = this.jacksonMapper.readValue(updateChoreJson, ActivityTo.class);
+	
+	//when POST /playground/activities with body
+	responseElement = this.restTemplate.postForObject(
+			this.activities_url + "/" + element1.getElementId().getPlayground() + "/"+ element1.getCreatorEmail(), // url
+			activityTo, // object in the request body
+			ElementTo.class // expected response body type
+				);
+	
+	String HistoryBoardJson = new JSONObject()
+			.put("type", "GetHistoryBoard")
+			.put("elementPlayground", this.theManagerPlayground)
+			.put("elementId", this.element1.getElementId().getId()).toString();
+	
+	activityTo = this.jacksonMapper.readValue(HistoryBoardJson, ActivityTo.class);
+	
+	responseElement = this.restTemplate.postForObject(
+			this.activities_url + "/" + this.element1.getElementId().getPlayground()  + "/"+ this.element1.getCreatorEmail(), // url
+			activityTo, // object in the request body
+			ElementTo.class // expected response body type
+				);
+
+	assertThat(responseElement)
+		.isNotNull();
+	assertThat(responseElement.getAttributes().get("Message").toString())
+		.isEqualTo("[User David.kric@gmail.com updated chore 2019A.yuri$$1, "
+				+ "User David.kric@gmail.com marked chore chore_1 as done, "
+				+ "User David.kric@gmail.com marked chore chore_1 as unassigened, "
+				+ "User David.kric@gmail.com added new chore, "
+				+ "Test passed if this message shown in the message board, "
+				+ "User David.kric@gmail.com assigned chore_1 chore to himself, "
+				+ "Test passed if this message post is shown in the history board, "
+				+ "User David.kric@gmail.com updated chore 2019A.yuri$$38]");
+
+	}
+}	
