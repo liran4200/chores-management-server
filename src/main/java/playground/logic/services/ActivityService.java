@@ -10,4 +10,6 @@ public interface ActivityService {
 	
 	public List<ActivityEntity> getAllActivities();
 	
+	public void cleanup();
+	
 }

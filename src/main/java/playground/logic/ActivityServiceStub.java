@@ -31,4 +31,10 @@ public class ActivityServiceStub implements ActivityService {
 		return null;
 	}
 
+	@Override
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

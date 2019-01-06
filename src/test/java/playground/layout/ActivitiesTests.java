@@ -115,6 +115,7 @@ public class ActivitiesTests {
 	private void InitTestSetup() throws UserAlreadyExistsException {
 		this.users.cleanup();
 		this.elements.cleanup();
+		this.activities.cleanup();
 		
 		InitTestUsers();
 		InitTestElements();
@@ -512,6 +513,7 @@ public void testInvokeHistoryBoardSuccessfully() throws Exception {
 			activityTo, // object in the request body
 			ElementTo.class // expected response body type
 				);
+	String secondUpdateChoreId = responseElement.getId();
 	
 	String HistoryBoardJson = new JSONObject()
 			.put("type", "GetHistoryBoard")
@@ -525,18 +527,14 @@ public void testInvokeHistoryBoardSuccessfully() throws Exception {
 			activityTo, // object in the request body
 			ElementTo.class // expected response body type
 				);
+	
+	
 
 	assertThat(responseElement)
 		.isNotNull();
 	assertThat(responseElement.getAttributes().get("Message").toString())
-		.isEqualTo("[User David.kric@gmail.com updated chore 2019A.yuri$$1, "
-				+ "User David.kric@gmail.com marked chore chore_1 as done, "
-				+ "User David.kric@gmail.com marked chore chore_1 as unassigened, "
-				+ "User David.kric@gmail.com added new chore, "
-				+ "Test passed if this message shown in the message board, "
-				+ "User David.kric@gmail.com assigned chore_1 chore to himself, "
-				+ "Test passed if this message post is shown in the history board, "
-				+ "User David.kric@gmail.com updated chore 2019A.yuri$$38]");
+		.isEqualTo("[Test passed if this message post is shown in the history board, "
+				+ "User David.kric@gmail.com updated chore 2019A.yuri$$" + secondUpdateChoreId + "]");
 
 	}
 }	

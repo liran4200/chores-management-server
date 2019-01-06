@@ -75,4 +75,10 @@ public class JpaActivityService implements ActivityService {
 	public List<ActivityEntity> getAllActivities() {
 		return Lists.newArrayList(activitiesDal.findAll());
 	}
+
+	@Override
+	@MyLogActivity
+	public void cleanup() {
+		this.activitiesDal.deleteAll();
+	}
 }
